@@ -44,7 +44,6 @@ package com.townleyenterprises.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -79,7 +78,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * }
  * </pre>
  *
- * @version $Id: TextFileProcessor.java,v 1.2 2004/01/27 20:17:19 atownley Exp $
+ * @version $Id: TextFileProcessor.java,v 1.3 2004/01/30 11:50:42 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
