@@ -52,6 +52,7 @@
 	<property name="src.dir"	value="java"/>
 	<property name="tests.dir"	value="tests/java"/>
 	<property name="tests.lib.dir"	value="tests/lib"/>
+	<property name="tests.data.dir"	value="tests/data"/>
 	<property name="build.version"	value="${basedir}/version.properties"/>
 	<property name="build.date"	value="${basedir}/version.date"/>
 	<property name="build.count"	value="${basedir}/version.count"/>
@@ -142,7 +143,9 @@
 	</target>
 
 	<target name="jar" depends="compile">
-		<jar jarfile="${app.name}.jar" basedir="${build.dir}">
+		<jar jarfile="${app.name}.jar"
+			basedir="${build.dir}"
+			manifest="MANIFEST.MF">
 		</jar>
 	</target>
 
@@ -291,7 +294,7 @@
 				excludes="**/*.java"/>
 		</copy>
 		<javac srcdir="${tests.dir}" destdir="${build.tests}"
-			debug="on" deprecation="on">
+			debug="on" deprecation="off">
 			<classpath>
 				<path refid="build.cp"/>
 				<pathelement location="${app.name}.jar"/>
@@ -309,6 +312,7 @@
 				<pathelement location="${build.tests}"/>
 				<pathelement location="${app.name}.jar"/>
 			</classpath>
+			<sysproperty key="tests.data.dir" value="${tests.data.dir}"/>
 			
 			<formatter type="plain"/>
 
