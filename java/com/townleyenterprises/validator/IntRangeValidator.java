@@ -48,7 +48,7 @@ import java.util.Locale;
  * This validator takes a minimum and maximum integer value to be used
  * for validation purposes.
  *
- * @version $Id: IntRangeValidator.java,v 1.1 2004/07/29 18:35:48 atownley Exp $
+ * @version $Id: IntRangeValidator.java,v 1.2 2004/08/11 16:22:11 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -89,14 +89,13 @@ public class IntRangeValidator implements FieldValidator
 	 * This method validates the given value based on the
 	 * implementation-defined validation rules.
 	 *
-	 * @return the validated value
 	 * @exception Exception
 	 * 	if the validation fails
 	 */
 
-	public Object validate(Object value) throws Exception
+	public void validate(Object value) throws Exception
 	{
-		return validate(value, Locale.getDefault());
+		validate(value, Locale.getDefault());
 	}
 
 	/**
@@ -104,12 +103,11 @@ public class IntRangeValidator implements FieldValidator
 	 * implementation-defined validation rules and the specified
 	 * locale.
 	 *
-	 * @return the validated value
 	 * @exception Exception
 	 * 	if the validation fails
 	 */
 
-	public Object validate(Object value, Locale locale)
+	public void validate(Object value, Locale locale)
 				throws Exception
 	{
 		int x = 0;
@@ -152,8 +150,6 @@ public class IntRangeValidator implements FieldValidator
 			op = (_mininc ? "<=" : "<");
 			throw new Exception(Strings.format("sIntRangeValidationFailed", new Object[] { value, op, new Integer(_min) } ));
 		}
-
-		return value;
 	}
 
 	private int 	_max;

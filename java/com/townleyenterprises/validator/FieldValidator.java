@@ -49,7 +49,7 @@ import java.util.Locale;
  * validation operation.  It is essentially a function object which
  * can optionally mutate the value being validated.
  *
- * @version $Id: FieldValidator.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
+ * @version $Id: FieldValidator.java,v 1.3 2004/08/11 16:22:11 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -60,23 +60,21 @@ public interface FieldValidator extends Serializable
 	 * This method validates the given value based on the
 	 * implementation-defined validation rules.
 	 *
-	 * @return the validated value
 	 * @exception Exception
 	 * 	if the validation fails
 	 */
 
-	Object validate(Object value) throws Exception;
+	void validate(Object value) throws Exception;
 
 	/**
 	 * This method validates the given value based on the
 	 * implementation-defined validation rules and the specified
 	 * locale.
 	 *
-	 * @return the validated value
 	 * @exception Exception
 	 * 	if the validation fails
 	 */
 
-	Object validate(Object value, Locale locale)
+	void validate(Object value, Locale locale)
 				throws Exception;
 }
