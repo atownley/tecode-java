@@ -41,16 +41,69 @@
 
 package com.townleyenterprises.command;
 
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
  * This class provides support for defining command-line arguments.
  *
- * @version $Id: CommandOption.java,v 1.5 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: CommandOption.java,v 1.6 2004/07/30 16:24:14 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
 
 public class CommandOption
 {
+	/**
+	 * This method is used to break up a <code>key=val</code>
+	 * string into a 2 element array of <code>arr[0] = key</code>
+	 * and <code>arr[1] = val</code>.
+	 *
+	 * @param str the string to process
+	 * @return an array containing the values or an empty array
+	 * (still with 2 elements) if the string does not have an
+	 * equals.
+	 * @since 3.0
+	 */
+
+	public static String[] parseOption(String str)
+	{
+		String[] rez = new String[2];
+
+		int cut = str.indexOf("=");
+		if(cut == -1)
+			return rez;
+
+		rez[0] = str.substring(0, cut - 1);
+		rez[1] = str.substring(cut);
+
+		return rez;
+	}
+
+	/**
+	 * This method is used to parse a list options of the form
+	 * <code>key=val</code> into a map which is easier to
+	 * manipulate.
+	 *
+	 * @param list the list of options
+	 * @return a map of the options
+	 * @since 3.0
+	 */
+
+	public static Map parseOptions(List list)
+	{
+		HashMap map = new HashMap();
+		for(Iterator i = list.iterator(); i.hasNext(); )
+		{
+			String[] ray = parseOption((String)i.next());
+			map.put(ray[0], ray[1]);
+		}
+
+		return map;
+	}
+
 	/**
 	 * The class is fully initialized by the constructor and each
 	 * argument is immutable once it has been set.
@@ -247,6 +300,37 @@ public class CommandOption
 	public Object getArgValue()
 	{
 		return getArg();
+	}
+
+	/**
+	 * This method is used to allow the class to implement the GoF
+	 * Command pattern fully.  Derived classes should override
+	 * this method to perform any specific actions.  The default
+	 * implementation does nothing.
+	 *
+	 * @exception Exception
+	 * 	if something fails.
+	 */
+
+	public void execute() throws Exception
+	{
+	}
+
+	/**
+	 * This method is used to return some sort of normailzed name
+	 * for the option.
+	 *
+	 * @return a name
+	 * @since 3.0
+	 */
+
+	public String getName()
+	{
+		String s = _longName;
+		if(s == null)
+			s = _shortName.toString();
+
+		return s;
 	}
 
 	private final boolean	_hasarg;
