@@ -48,7 +48,7 @@ package com.townleyenterprises.filter;
  * objects, depending on how the object is configured when it is
  * created.
  *
- * @version $Id: StringFilter.java,v 1.3 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: StringFilter.java,v 1.4 2004/12/04 17:28:16 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -73,7 +73,20 @@ public class StringFilter extends QueryFilter
 		_ignorecase = ignorecase;
 	}
 
+	/**
+	 * @deprecated As of the 3.0 release, the {@link
+	 * #execute} method should be used to more accurately
+	 * reflect the relationship to the GoF Command
+	 * pattern.  This method will be removed in a future
+	 * version of the library.
+	 */
+
 	public boolean doFilter(Object o)
+	{
+		return execute(o);
+	}
+
+	public boolean execute(Object o)
 	{
 		String s = (String)getPropertyValue(getProperty(), o);
 		String val = (String)getValue();

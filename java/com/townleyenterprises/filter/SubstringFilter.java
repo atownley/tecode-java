@@ -47,7 +47,7 @@ package com.townleyenterprises.filter;
  * which it is applied.  It supports both case sensitive and case
  * insensitive searching.
  *
- * @version $Id: SubstringFilter.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: SubstringFilter.java,v 1.5 2004/12/04 17:28:16 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -86,7 +86,20 @@ public class SubstringFilter extends StringFilter
 		super(klass, property, value, ignorecase);
 	}
 
+	/**
+	 * @deprecated As of the 3.0 release, the {@link
+	 * #execute} method should be used to more accurately
+	 * reflect the relationship to the GoF Command
+	 * pattern.  This method will be removed in a future
+	 * version of the library.
+	 */
+
 	public boolean doFilter(Object o)
+	{
+		return execute(o);
+	}
+
+	public boolean execute(Object o)
 	{
 		String s = (String)getPropertyValue(getProperty(), o);
 		String val = (String)getValue();

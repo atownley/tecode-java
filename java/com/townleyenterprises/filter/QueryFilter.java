@@ -51,7 +51,7 @@ import com.townleyenterprises.common.PropertyProxy;
  * using Filters with database systems as they can be easily
  * translated into SQL.
  *
- * @version $Id: QueryFilter.java,v 1.7 2004/11/28 20:12:52 atownley Exp $
+ * @version $Id: QueryFilter.java,v 1.8 2004/12/04 17:28:16 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -79,7 +79,20 @@ public class QueryFilter extends PropertyProxy
 		_value = val;
 	}
 
+	/**
+	 * @deprecated As of the 3.0 release, the {@link
+	 * #execute} method should be used to more accurately
+	 * reflect the relationship to the GoF Command
+	 * pattern.  This method will be removed in a future
+	 * version of the library.
+	 */
+
 	public boolean doFilter(Object o)
+	{
+		return execute(o);
+	}
+
+	public boolean execute(Object o)
 	{
 		boolean result = false;
 		Comparable rez = (Comparable)getPropertyValue(_prop, o);

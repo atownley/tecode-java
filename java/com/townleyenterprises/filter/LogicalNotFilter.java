@@ -47,7 +47,7 @@ import java.util.Iterator;
  * This class provides an implementation of the Filter interface that
  * implements the NOT operation.
  *
- * @version $Id: LogicalNotFilter.java,v 1.5 2004/11/28 20:14:36 atownley Exp $
+ * @version $Id: LogicalNotFilter.java,v 1.6 2004/12/04 17:28:16 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -72,11 +72,31 @@ public class LogicalNotFilter implements Filter
 	 * @param o the object to be tested
 	 * @return true if the object should be included in the
 	 * 	result; false if the object should not
+	 * @deprecated As of the 3.0 release, the {@link
+	 * #execute} method should be used to more accurately
+	 * reflect the relationship to the GoF Command
+	 * pattern.  This method will be removed in a future
+	 * version of the library.
 	 */
 
 	public boolean doFilter(Object o)
 	{
-		return !(_filter.doFilter(o));
+		return execute(o);
+	}
+
+	/**
+	 * This method actually performs the operation that will
+	 * determine if the parameter object should be included in the
+	 * "result" or not.
+	 *
+	 * @param o the object to be tested
+	 * @return true if the object should be included in the
+	 * 	result; false if the object should not
+	 */
+
+	public boolean execute(Object o)
+	{
+		return !(_filter.execute(o));
 	}
 
 	/**

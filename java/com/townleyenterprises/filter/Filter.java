@@ -45,7 +45,7 @@ package com.townleyenterprises.filter;
  * This interface provides the base operation common to all filters
  * within the system.
  *
- * @version $Id: Filter.java,v 1.3 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: Filter.java,v 1.4 2004/12/04 17:28:16 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -59,7 +59,24 @@ public interface Filter
 	 * @param o the object to be tested
 	 * @return true if the object should be included in the
 	 * 	result; false if the object should not
+	 * @deprecated As of the 3.0 release, the {@link
+	 * #execute} method should be used to more accurately
+	 * reflect the relationship to the GoF Command
+	 * pattern.  This method will be removed in a future
+	 * version of the library.
 	 */
 
 	public boolean doFilter(Object o);
+
+	/**
+	 * This method actually performs the operation that will
+	 * determine if the parameter object should be included in the
+	 * "result" or not.
+	 *
+	 * @param o the object to be tested
+	 * @return true if the object should be included in the
+	 * 	result; false if the object should not
+	 */
+
+	public boolean execute(Object o);
 }

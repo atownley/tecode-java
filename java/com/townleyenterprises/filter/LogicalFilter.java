@@ -48,7 +48,7 @@ import java.util.Iterator;
  * This package class provides the base operation common to all logical
  * comparison filters within the system.
  *
- * @version $Id: LogicalFilter.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: LogicalFilter.java,v 1.5 2004/12/04 17:28:16 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -87,7 +87,26 @@ public abstract class LogicalFilter implements Filter
 	 * 	result; false if the object should not
 	 */
 
-	public abstract boolean doFilter(Object o);
+	public abstract boolean execute(Object o);
+
+	/**
+	 * This method actually performs the operation that will
+	 * determine if the parameter object should be included in the
+	 * "result" or not.
+	 *
+	 * @param o the object to be tested
+	 * @return true if the object should be included in the
+	 * 	result; false if the object should not
+	 * @deprecated  As of the 3.0 release, the {@link
+	 * #execute} method shold be used instead.  This
+	 * method will be removed in a future version of the
+	 * library.
+	 */
+
+	public boolean doFilter(Object o)
+	{
+		return execute(o);
+	}
 
 	/**
 	 * This method returns the number of filters in the compound
