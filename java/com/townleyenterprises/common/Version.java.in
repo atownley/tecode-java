@@ -48,7 +48,7 @@ import java.util.StringTokenizer;
  * It allows easy version checking from client user applications to
  * enforce dependency checking on a particular release (if required).
  *
- * @version $Id: Version.java.in,v 1.5 2004/02/04 18:37:14 atownley Exp $
+ * @version $Id: Version.java.in,v 1.6 2004/02/04 19:33:33 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -59,10 +59,10 @@ public final class Version
 	public static final String	PROJECT = "@build.version.project@";
 
 	/** this is the major version number of the build */
-	public static final String	MAJOR	= "@build.version.major@";
+	public static final int		MAJOR	= @build.version.major@;
 
 	/** this is the minor version number of the build. */
-	public static final String	MINOR	= "@build.version.minor@";
+	public static final int		MINOR	= @build.version.minor@;
 
 	/** this is the release number of the build in question */
 	public static final String	RELEASE	= "@build.version.release@";
@@ -148,12 +148,14 @@ public final class Version
 	 * 	numbers
 	 */
 
-	public static void require(String rmaj, String rmin,
-				String rrel, String rbuild)
+	public static void require(int rmaj, int rmin,
+				int rrel, int rbuild)
 			throws VersionMismatchException
 	{
 		if(compare(MAJOR, MINOR, RELEASE, BUILD,
-				rmaj, rmin, rrel, rbuild) < 0)
+				rmaj, rmin,
+				Integer.toString(rrel),
+				Integer.toString(rbuild)) < 0)
 			throw new VersionMismatchException(rmaj,
 					rmin, rrel, rbuild);
 	}
@@ -178,8 +180,8 @@ public final class Version
 	 * 	the second
 	 */
 
-	public static int compare(String maj1, String min1, String rel1,
-				String bld1, String maj2, String min2,
+	public static int compare(int maj1, int min1, String rel1,
+				String bld1, int maj2, int min2,
 				String rel2, String bld2)
 	{
 		if("DEVELOPER".equals(bld1))
@@ -193,22 +195,18 @@ public final class Version
 			return -1;
 		}
 
-		int imaj1 = Integer.parseInt(maj1);
-		int imin1 = Integer.parseInt(min1);
 		int irel1 = getReleaseNumber(rel1);
-		int ibld1 = Integer.parseInt(bld1);
+		int ibld1 = (bld1 == null) ? 0 : Integer.parseInt(bld1);
 		
-		int imaj2 = Integer.parseInt(maj2);
-		int imin2 = Integer.parseInt(min2);
 		int irel2 = getReleaseNumber(rel2);
-		int ibld2 = Integer.parseInt(bld2);
+		int ibld2 = (bld2 == null) ? 0 : Integer.parseInt(bld2);
 	
 		// perform the check
-		int diff = imaj1 - imaj2;
+		int diff = maj1 - maj2;
 		if(diff != 0)
 			return diff;
 
-		diff = imin1 - imin2;
+		diff = min1 - min2;
 		if(diff != 0)
 			return diff;
 
@@ -230,8 +228,12 @@ public final class Version
 
 	public static int compare(String[] ver1, String[] ver2)
 	{
-		return compare(ver1[0], ver1[1], ver1[2], ver1[3],
-				ver2[0], ver2[1], ver2[2], ver2[3]);
+		return compare(Integer.parseInt(ver1[0]), 
+				Integer.parseInt(ver1[1]),
+				ver1[2], ver1[3],
+				Integer.parseInt(ver2[0]),
+				Integer.parseInt(ver2[1]),
+				ver2[2], ver2[3]);
 	}
 
 	/**
@@ -291,9 +293,8 @@ public final class Version
 	public static class VersionMismatchException
 			extends RuntimeException
 	{
-		public VersionMismatchException(String rmaj,
-					String rmin, String rrel,
-					String rbuild)
+		public VersionMismatchException(int rmaj, int rmin,
+					int rrel, int rbuild)
 		{
 			super("Required version:  " + rmaj + "." +
 					rmin + "." + rrel + " (Build " +
@@ -310,6 +311,9 @@ public final class Version
 
 	private static int getReleaseNumber(String release)
 	{
+		if(release == null)
+			return 0;
+
 		int rel = 0;
 
 		int didx = release.indexOf("-");
