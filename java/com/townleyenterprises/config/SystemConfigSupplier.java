@@ -51,7 +51,7 @@ import java.util.TreeSet;
  * This class provides a ConfigSupplier interface for the
  * system properties for the Java VM.
  *
- * @version $Id: SystemConfigSupplier.java,v 1.1 2004/12/26 20:35:18 atownley Exp $
+ * @version $Id: SystemConfigSupplier.java,v 1.2 2004/12/27 23:18:54 atownley Exp $
  * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -117,6 +117,19 @@ public final class SystemConfigSupplier implements ConfigSupplier
 			throws UnsupportedOperationException
 	{
 		System.setProperty(key, value);
+	}
+
+	/**
+	 * This method is used to convert the contents of the instance
+	 * to a Java Properties object.  This conversion is necessary
+	 * for easy interoperation with existing Java APIs.
+	 *
+	 * @return the settings as a Properties object
+	 */
+
+	public Properties getProperties()
+	{
+		return System.getProperties();
 	}
 
 	/**

@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import com.townleyenterprises.common.OverrideManager;
@@ -57,8 +58,15 @@ import com.townleyenterprises.common.UseLastOverrideStrategy;
  * application into a common place.  It is an evolution of the
  * {@link com.townleyenterprises.common.AppConfig} class and
  * should be used in place of it for all new code.
+ * <p>
+ * Like the previous version, this version allows the system property
+ * values to override any value specified in the application's
+ * configuration settings.  There are many, many useful reasons for
+ * this.  This version does <em>not</em> provide a mechanism to change
+ * the behavior.
+ * </p>
  *
- * @version $Id: AppConfig.java,v 1.1 2004/12/26 20:35:18 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.2 2004/12/27 23:18:54 atownley Exp $
  * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -75,7 +83,6 @@ public final class AppConfig implements ConfigSupplier
 	public AppConfig(String name)
 	{
 		_name = name;
-		registerConfigSupplier(ConfigRegistry.getSystemConfig());
 	}
 
 	/**
@@ -133,7 +140,13 @@ public final class AppConfig implements ConfigSupplier
 
 	public String get(String key)
 	{
-		return (String)_manager.get(key);
+		// FIXME:  what do we do in the case where the value
+		// is changed somewhere else?
+		String s = ConfigRegistry.getSystemConfig().get(key);
+		if(s == null)
+			return (String)_manager.get(key);
+
+		return s;
 	}
 
 	/**
@@ -155,6 +168,27 @@ public final class AppConfig implements ConfigSupplier
 	}
 
 	/**
+	 * This method is used to convert the contents of the instance
+	 * to a Java Properties object.  This conversion is necessary
+	 * for easy interoperation with existing Java APIs.
+	 *
+	 * @return the settings as a Properties object
+	 */
+
+	public Properties getProperties()
+	{
+		Properties props = new Properties();
+		
+		for(Iterator i = _suppliers.iterator(); i.hasNext(); )
+		{
+			ConfigSupplier cs = (ConfigSupplier)i.next();
+			props.putAll(cs.getProperties());
+		}
+
+		return props;
+	}
+
+	/**
 	 * This method determines if the instance of the
 	 * supplier supports case-sensitive key lookups.
 	 *
@@ -164,36 +198,6 @@ public final class AppConfig implements ConfigSupplier
 
 	public boolean isCaseSensitive()
 	{
-		return true;
-	}
-
-	/**
-	 * This method checks to see if the supplier contains
-	 * the specified key and it is readable.
-	 *
-	 * @param key the key to check
-	 * @return true if the key can be read; false
-	 * otherwise
-	 */
-
-	public boolean canRead(String key)
-	{
-		// FIXME:  permission check?
-		return _manager.getKeys().contains(key);
-	}
-
-	/**
-	 * This method checks to see if the supplier supports
-	 * setting the value for the specific key.
-	 *
-	 * @param key the key to check
-	 * @return true if the key can be written; false
-	 * otherwise
-	 */
-
-	public boolean canWrite(String key)
-	{
-		// FIXME:  permission check?
 		return true;
 	}
 

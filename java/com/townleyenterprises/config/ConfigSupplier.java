@@ -42,13 +42,14 @@
 package com.townleyenterprises.config;
 
 import java.io.IOException;
+import java.util.Properties;
 import java.util.Set;
 
 /**
  * This interface defines the operations common to all
  * configuration suppliers.
  *
- * @version $Id: ConfigSupplier.java,v 1.1 2004/12/26 20:35:18 atownley Exp $
+ * @version $Id: ConfigSupplier.java,v 1.2 2004/12/27 23:18:54 atownley Exp $
  * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -95,6 +96,16 @@ public interface ConfigSupplier
 
 	void put(String key, String value)
 			throws UnsupportedOperationException;
+
+	/**
+	 * This method is used to convert the contents of the instance
+	 * to a Java Properties object.  This conversion is necessary
+	 * for easy interoperation with existing Java APIs.
+	 *
+	 * @return the settings as a Properties object
+	 */
+
+	Properties getProperties();
 
 	/**
 	 * This method determines if the instance of the
