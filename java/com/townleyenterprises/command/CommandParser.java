@@ -41,14 +41,15 @@
 
 package com.townleyenterprises.command;
 
-import java.util.HashMap;
-import java.util.Vector;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.7 2004/01/25 18:35:53 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.8 2004/01/26 09:21:19 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -123,6 +124,8 @@ public final class CommandParser implements CommandListener
 	 * 	may be supplied to the application
 	 * @param sSwitch the single character option switch
 	 * @param lSwitch the long option switch
+	 * @exception RuntimeException
+	 * 	if a single character is used for the long switch
 	 */
 
 	public CommandParser(String appName, String argHelp,
@@ -132,6 +135,11 @@ public final class CommandParser implements CommandListener
 		_arghelp = argHelp;
 		_sswitch = sSwitch;
 		_lswitch = lSwitch;
+
+		if(_lswitch.length() == 1)
+		{
+			throw new RuntimeException("long switch must be at least 2 characters");
+		}
 	}
 
 	/**
@@ -161,6 +169,10 @@ public final class CommandParser implements CommandListener
 
 	public void addCommandListener(CommandListener listener)
 	{
+		// prevent adding the same listener more than once
+		if(_listeners.contains(listener))
+			return;
+
 		CommandOption[] opts = listener.getOptions();
 
 		for(int i = 0; i < opts.length; ++i)
@@ -215,6 +227,9 @@ public final class CommandParser implements CommandListener
 			removeCommandListener(this);
 		}
 
+		// reset all the options (fix for multiple parse bug)
+		resetOptions();
+
 		OptionHolder val = null;
 
 		_leftovers = new Vector();
@@ -250,7 +265,7 @@ public final class CommandParser implements CommandListener
 						(_sswitch != c1))
 				{
 					System.err.println("error:  combined options are not yet supported (" + s + ")");
-					return;
+					continue;
 				}
 				else if(s.length() == 2 &&
 						_sswitch == c0)
@@ -487,28 +502,39 @@ public final class CommandParser implements CommandListener
 		OptionHolder holder = new OptionHolder(opt, l);
 	
 		String lname = opt.getLongName();
+		Character c = opt.getShortName();
 
 		// sanity check for existing options
-		OptionHolder obj = (OptionHolder)_longOpts.get(lname);
-		if(obj != null)
+		OptionHolder lobj = (OptionHolder)_longOpts.get(lname);
+		OptionHolder sobj = (OptionHolder)_shortOpts.get(c);
+		if(lobj != null || sobj != null)
 		{
+			String desc = null;
 			System.err.print("warning:  overriding option");
 			System.err.print(" '");
-			System.err.print(lname);
+			if(lobj != null)
+			{
+				System.err.print(lname);
+				desc = lobj.listener.getDescription();
+			}
+			else if(sobj != null)
+			{
+				System.err.print(c);
+				desc = sobj.listener.getDescription();
+			}
 			System.err.print("' from '");
-			System.err.print(obj.listener.getDescription());
+			System.err.print(desc);
 			System.err.print("' by '");
 			System.err.print(l.getDescription());
 			System.err.println("'.");
 		}
 
 		// set up the maps
-		_longOpts.put(opt.getLongName(), holder);
+		_longOpts.put(lname, holder);
 
-		Character c = opt.getShortName();
 		if(c.charValue() != 0)
 		{
-			_shortOpts.put(opt.getShortName(), holder);
+			_shortOpts.put(c, holder);
 		}
 	}
 
@@ -706,6 +732,22 @@ public final class CommandParser implements CommandListener
 	{
 		_longOpts.remove(opt.getLongName());
 		_shortOpts.remove(opt.getShortName());
+	}
+
+	/**
+	 * This method is used to reset the option state prior to parsing.
+	 * It is necessary to ensure that each time the parse is
+	 * performed, the correct results are returned.
+	 */
+
+	private void resetOptions()
+	{
+		Iterator i = _longOpts.values().iterator();
+		while(i.hasNext())
+		{
+			OptionHolder holder = (OptionHolder)i.next();
+			holder.option.reset();
+		}
 	}
 
 	/** the name of our application */
