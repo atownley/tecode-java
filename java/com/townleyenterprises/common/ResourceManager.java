@@ -58,7 +58,7 @@ import javax.swing.ImageIcon;
  * com.townleyenterprises.common.UseLastOverrideStrategy} which should
  * "do the right thing" in almost all of the cases.
  *
- * @version $Id: ResourceManager.java,v 1.1 2004/07/29 18:32:04 atownley Exp $
+ * @version $Id: ResourceManager.java,v 1.2 2004/08/11 16:19:39 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -108,9 +108,18 @@ public class ResourceManager extends OverrideManager
 		setOverrideStrategy(new UseLastOverrideStrategy());
 	}
 
+	/**
+	 * This method will return the value for the key or the key if
+	 * the value does not exist.
+	 */
+
 	public String getString(String key)
 	{
-		return (String)get(key);
+		Object obj = get(key);
+		if(obj == null)
+			return key;
+
+		return (String)obj;
 	}
 
 	public String getString(String key, Locale locale)
@@ -122,7 +131,7 @@ public class ResourceManager extends OverrideManager
 		ResourceProvider rp = (ResourceProvider)on.get();
 
 		if(rp == null)
-			return null;
+			return key;
 
 		return rp.getString(key, locale);
 	}
