@@ -46,8 +46,9 @@ package com.townleyenterprises.common;
  * It allows easy version checking from client user applications to
  * enforce dependency checking on a particular release (if required).
  *
- * @version $Id: Version.java.in,v 1.2 2004/01/25 19:14:18 atownley Exp $
+ * @version $Id: Version.java.in,v 1.3 2004/02/04 17:19:32 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @since 2.1
  */
 
 public final class Version
@@ -123,11 +124,136 @@ public final class Version
 		return buf.toString();
 	}
 
+	/**
+	 * This method is used to require the specific minimum
+	 * version of the library be available.   If the requested
+	 * version or newer is not available, an exception is thrown.
+	 * <p>
+	 * In this case, <strong><em>newer</em></strong> means
+	 * numerically later with the special exception of DEVELOPER
+	 * builds, which will automatically always succeed.  For
+	 * prerelease builds, the <code>-pre#</code> suffix should be
+	 * omitted and the build number should be used instead.
+	 *
+	 * @param rmaj the required major version
+	 * @param rmin the required minor version
+	 * @param rrel the required release number
+	 * @param rbuild the required build number
+	 * @exception VersionMismatchException
+	 * 	if the requested version is not available
+	 * @exception NumberFormatException
+	 * 	if the required numeric values can't be converted to
+	 * 	numbers
+	 */
+
+	public static void require(String rmaj, String rmin,
+				String rrel, String rbuild)
+			throws VersionMismatchException
+	{
+		if(compare(MAJOR, MINOR, RELEASE, BUILD,
+				rmaj, rmin, rrel, rbuild) < 0)
+			throw new VersionMismatchException(rmaj,
+					rmin, rrel, rbuild);
+	}
+
+	/**
+	 * This utility method is used to compare two sets of version
+	 * values and report how they relate to each other.  If any of
+	 * the version strings contain a release of
+	 * <code>DEVELOPER</code>, that version will always be greater
+	 * than the other.
+	 *
+	 * @arg maj1 the fist major version
+	 * @arg min1 the fist minor version
+	 * @arg rel1 the fist release number
+	 * @arg bld1 the fist build number
+	 * @arg maj2 the fist major version
+	 * @arg min2 the fist minor version
+	 * @arg rel2 the fist release number
+	 * @arg bld2 the fist build number
+	 * @return &lt; 0 if the first is less than the second; 0 if
+	 * 	they are equal or &gt; 0 if the first is greater than
+	 * 	the second
+	 */
+
+	public static int compare(String maj1, String min1, String rel1,
+				String bld1, String maj2, String min2,
+				String rel2, String bld2)
+	{
+		if("DEVELOPER".equals(bld1))
+			return 1;
+		else if("DEVELOPER".equals(bld2))
+			return -1;
+
+		int imaj1 = Integer.parseInt(maj1);
+		int imin1 = Integer.parseInt(min1);
+		int irel1 = getReleaseNumber(rel1);
+		int ibld1 = Integer.parseInt(bld1);
+		
+		int imaj2 = Integer.parseInt(maj2);
+		int imin2 = Integer.parseInt(min2);
+		int irel2 = getReleaseNumber(rel2);
+		int ibld2 = Integer.parseInt(bld2);
+	
+		// perform the check
+		int diff = imaj1 - imaj2;
+		if(diff != 0)
+			return diff;
+
+		diff = imin1 - imin2;
+		if(diff != 0)
+			return diff;
+
+		diff = irel1 - irel2;
+		if(diff != 0)
+			return diff;
+
+		return ibld1 - ibld2;
+	}
+
 	public static void main(String[] args)
 	{
 		System.out.print(PROJECT);
 		System.out.print(": ");
 		System.out.println(getFullVersion());
+	}
+
+	/**
+	 * This exception is used to report version requirement
+	 * failures.
+	 */
+
+	public static class VersionMismatchException
+			extends RuntimeException
+	{
+		public VersionMismatchException(String rmaj,
+					String rmin, String rrel,
+					String rbuild)
+		{
+			super("Required version:  " + rmaj + "." +
+					rmin + "." + rrel + " (Build " +
+					rbuild + "); have version:  " +
+					getFullVersion());
+		}
+	}
+
+	/**
+	 * This method returns the integer value of a release number.
+	 *
+	 * @param release the release string
+	 */
+
+	private static int getReleaseNumber(String release)
+	{
+		int rel = 0;
+
+		int didx = release.indexOf("-");
+		if(didx != -1)
+			rel = Integer.parseInt(release.substring(0, didx));
+		else
+			rel = Integer.parseInt(release);
+
+		return rel;
 	}
 
 	/** prevent instantiation */
