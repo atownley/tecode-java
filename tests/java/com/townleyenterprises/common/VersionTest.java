@@ -47,7 +47,7 @@ import junit.framework.TestCase;
  * Basic unit tests for the Version class.  Note, require() method
  * must be tested manually.
  *
- * @version $Id: VersionTest.java,v 1.1 2004/02/04 18:41:59 atownley Exp $
+ * @version $Id: VersionTest.java,v 1.2 2004/02/04 19:34:55 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -60,38 +60,38 @@ public final class VersionTest extends TestCase
 
 	public void testVersionCompareEqual()
 	{
-		assertEquals(0, Version.compare("2", "1", "0", "69", 
-					"2", "1", "0", "69"));
+		assertEquals(0, Version.compare(2, 1, "0", "69", 
+					2, 1, "0", "69"));
 	}
 
 	public void testVersionCompareEqualPreRelease()
 	{
-		assertEquals(0, Version.compare("2", "1", "0", "69", 
-					"2", "1", "0-pre5", "69"));
+		assertEquals(0, Version.compare(2, 1, "0", "69", 
+					2, 1, "0-pre5", "69"));
 	}
 
 	public void testVersionCompareLess()
 	{
-		assertTrue(Version.compare("2", "1", "0", "68", 
-					"2", "1", "0-pre5", "69") < 0);
-		assertTrue(Version.compare("2", "0", "100", "70", 
-					"2", "1", "0-pre5", "69") < 0);
-		assertTrue(Version.compare("0", "0", "100", "70", 
-					"2", "1", "0-pre5", "69") < 0);
-		assertTrue(Version.compare("9", "0", "0", "2070", 
-					"0", "0", "0", "DEVELOPER") < 0);
+		assertTrue(Version.compare(2, 1, "0", "68", 
+					2, 1, "0-pre5", "69") < 0);
+		assertTrue(Version.compare(2, 0, "100", "70", 
+					2, 1, "0-pre5", "69") < 0);
+		assertTrue(Version.compare(0, 0, "100", "70", 
+					2, 1, "0-pre5", "69") < 0);
+		assertTrue(Version.compare(9, 0, "0", "2070", 
+					0, 0, "0", "DEVELOPER") < 0);
 	}
 
 	public void testVersionCompareGreater()
 	{
-		assertTrue(Version.compare("2", "1", "0", "70", 
-					"2", "1", "0-pre5", "69") > 0);
-		assertTrue(Version.compare("2", "1", "1", "69", 
-					"2", "1", "0-pre5", "69") > 0);
-		assertTrue(Version.compare("3", "0", "100", "24", 
-					"2", "1", "0-pre5", "69") > 0);
-		assertTrue(Version.compare("0", "0", "0", "DEVELOPER", 
-					"2", "1", "0-pre5", "69") > 0);
+		assertTrue(Version.compare(2, 1, "0", "70", 
+					2, 1, "0-pre5", "69") > 0);
+		assertTrue(Version.compare(2, 1, "1", "69", 
+					2, 1, "0-pre5", "69") > 0);
+		assertTrue(Version.compare(3, 0, "100", "24", 
+					2, 1, "0-pre5", "69") > 0);
+		assertTrue(Version.compare(0, 0, "0", "DEVELOPER", 
+					2, 1, "0-pre5", "69") > 0);
 	}
 
 	public void testVersionParse()
