@@ -1,0 +1,58 @@
+2003-06-08 Andrew S. Townley <atownley@sourceforge.net>
+
+	* java/src/com/townleyenterprises/filter/package.html
+
+	  Updated the JavaDoc for the package to actually
+	  reflect reality and put in some more appropriate
+	  examples.
+
+	* java/src/com/townleyenterprises/command/CommandParser.java
+
+	  Fixed several small bugs with supporting only
+	  options with short versions, printing usage for
+	  obscenely long description text.
+
+	  Changed behavior on unknown options or other
+	  problems detected by the parser to use usage
+	  method rather than help to reduce the output in
+	  these cases.
+
+	  Added mechanism to force CommandParser to exit on
+	  error if an option requiring a value was missing
+	  an argument.
+
+	* java/src/com/townleyenterprises/command/RepeatableCommandOption.java
+	  java/src/com/townleyenterprises/command/DelimitedCommandOption.java
+
+	  Actually implemented real versions of these based
+	  on further thinking after writing the examples for
+	  the site.  The delimited one was necessary for
+	  easily migrating some existing work.
+	
+	* java/src/com/townleyenterprises/filter/StringFilter.java
+	  java/src/com/townleyenterprises/filter/SubstringFilter.java
+
+	  Added StringFilter to deal with case sensitivity.
+	  Changed SubstringFilter to be derived from
+	  StringFilter to also deal with case insensitive
+	  searches.
+
+	  Fixed potential bugs in the way properties were
+	  being checked if any of the values were null.
+
+	* java/src/com/townleyenterprises/filter/Logical*Filter.java
+	  java/src/com/townleyenterprises/filter/QueryFilter.java
+
+	  Added toString() implementations so that they
+	  could be printed for debugging.
+
+	* java/src/com/townleyenterprises/common/PropertyProxy.java
+
+	  Renamed getProxyClass method to getSubjectClass
+	  since you're getting the class of the thing being
+	  proxied, not the proxy proper.
+
+2003-06-07 Andrew S. Townley <atownley@sourceforge.net>
+
+	*  2.0-Beta2 initial code release via SourceForge
+
