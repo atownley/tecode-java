@@ -49,7 +49,7 @@ import java.util.Iterator;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.17 2004/07/30 16:22:56 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.18 2004/11/21 20:40:35 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -517,7 +517,10 @@ public final class CommandParser implements CommandListener
 			try
 			{
 				CommandOption opt = (CommandOption)i.next();
-				opt.execute();
+				if(opt.getMatched())
+				{
+					opt.execute();
+				}
 			}
 			catch(Exception e)
 			{
