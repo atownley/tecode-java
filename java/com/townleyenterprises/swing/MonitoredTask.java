@@ -41,12 +41,17 @@
 
 package com.townleyenterprises.swing;
 
+import java.util.List;
+
+import com.townleyenterprises.swing.event.TaskEvent;
+import com.townleyenterprises.swing.event.TaskListener;
+
 /**
  * The interface which provides monitoring feedback for long running
  * operations.
  *
  * @since 2.1
- * @version $Id: MonitoredTask.java,v 1.1 2003/11/20 16:40:44 atownley Exp $
+ * @version $Id: MonitoredTask.java,v 1.2 2003/11/24 02:23:05 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -70,6 +75,14 @@ public interface MonitoredTask
 	boolean isComplete();
 
 	/**
+	 * This method returns true if the task encountered any errors.
+	 *
+	 * @return true if errors; false if no
+	 */
+
+	boolean hasError();
+
+	/**
 	 * This method returns the length of the current task.
 	 *
 	 * @return an integer indicating the length of the task
@@ -86,6 +99,15 @@ public interface MonitoredTask
 	 */
 
 	int getCurrentProgress();
+
+	/**
+	 * This method is used to return a reference to the throwable
+	 * encountered during the performing of the task.
+	 *
+	 * @return the Throwable
+	 */
+
+	Throwable getError();
 
 	/**
 	 * This method is used to return the last status message
@@ -108,4 +130,28 @@ public interface MonitoredTask
 	 */
 
 	void requestStop();
+	
+	/**
+	 * This method is used to register a new task listener.
+	 *
+	 * @param listener the listener to add
+	 */
+
+	public void addTaskListener(TaskListener listener);
+
+	/**
+	 * This method is used to return the list of task listeners.
+	 *
+	 * @return the list of listeners
+	 */
+
+	public List getTaskListeners();
+
+	/**
+	 * This method is used to remove a specific listener.
+	 *
+	 * @param listener the listener to remove
+	 */
+
+	public void removeTaskListener(TaskListener listener);
 }

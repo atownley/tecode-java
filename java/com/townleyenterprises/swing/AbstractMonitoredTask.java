@@ -41,12 +41,20 @@
 
 package com.townleyenterprises.swing;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import com.townleyenterprises.swing.event.TaskEvent;
+import com.townleyenterprises.swing.event.TaskListener;
+
 /**
  * This is an implementation of the MonitoredTask interface which
  * requires only that a single method be implemneted.
  *
  * @since 2.1
- * @version $Id: AbstractMonitoredTask.java,v 1.1 2003/11/20 16:40:44 atownley Exp $
+ * @version $Id: AbstractMonitoredTask.java,v 1.2 2003/11/24 02:23:05 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -76,6 +84,20 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	}
 
 	/**
+	 * This method returns true if the task encountered any errors.
+	 *
+	 * @return true if errors; false if no
+	 */
+
+	public boolean hasError()
+	{
+		if(_throwable != null)
+			return true;
+
+		return false;
+	}
+
+	/**
 	 * This method returns the length of the current task.
 	 *
 	 * @return an integer indicating the length of the task
@@ -84,6 +106,18 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	public int getTaskLength()
 	{
 		return _length;
+	}
+
+	/**
+	 * This method is used to return a reference to the throwable
+	 * encountered during the performing of the task.
+	 *
+	 * @return the Throwable
+	 */
+
+	public Throwable getError()
+	{
+		return _throwable;
 	}
 
 	/**
@@ -127,8 +161,14 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 				_shouldStop = false;
 				return performTask();
 			}
+
+			public void finished()
+			{
+				fireTaskCompleted();
+			}
 		};
 		worker.start();
+		fireTaskStarted();
 	}
 
 	/**
@@ -138,6 +178,45 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	public void requestStop()
 	{
 		_shouldStop = true;
+	}
+
+	/**
+	 * This method is used to register a new task listener.
+	 *
+	 * @param listener the listener to add
+	 */
+
+	public void addTaskListener(TaskListener listener)
+	{
+		if(listener == null)
+			return;
+
+		_listeners.add(listener);
+	}
+
+	/**
+	 * This method is used to return the list of task listeners.
+	 *
+	 * @return the list of listeners
+	 */
+
+	public List getTaskListeners()
+	{
+		return Collections.unmodifiableList(_listeners);
+	}
+
+	/**
+	 * This method is used to remove a specific listener.
+	 *
+	 * @param listener the listener to remove
+	 */
+
+	public void removeTaskListener(TaskListener listener)
+	{
+		if(listener == null)
+			return;
+
+		_listeners.remove(listener);
 	}
 
 	/**
@@ -158,7 +237,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 
 	private Object performTask()
 	{
-		while(!isComplete())
+		while(!isComplete() && !hasError())
 		{
 			_progress += performWork(shouldStop());
 			if(getCurrentProgress() >= getTaskLength())
@@ -182,6 +261,18 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	protected void setComplete(boolean val)
 	{
 		_done = val;
+	}
+
+	/**
+	 * This method is used to set the error encountered by the
+	 * task.
+	 *
+	 * @param error the throwable
+	 */
+
+	protected void setError(Throwable error)
+	{
+		_throwable = error;
 	}
 
 	/**
@@ -218,18 +309,69 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 		_status = s;
 	}
 
+	/**
+	 * This method is used to fire the task started event.
+	 */
+
+	protected void fireTaskStarted()
+	{
+		TaskEvent te = new TaskEvent(this,
+				getStatus(), getCurrentProgress());
+		for(Iterator i = _listeners.iterator(); i.hasNext();)
+		{
+			TaskListener tl = (TaskListener)i.next();
+			tl.taskStarted(te);
+		}
+	}
+
+	/**
+	 * This method is used to fire the task aborted event.
+	 */
+
+	protected void fireTaskAborted()
+	{
+		TaskEvent te = new TaskEvent(this,
+				getStatus(), getCurrentProgress());
+		for(Iterator i = _listeners.iterator(); i.hasNext();)
+		{
+			TaskListener tl = (TaskListener)i.next();
+			tl.taskAborted(te);
+		}
+	}
+
+	/**
+	 * This method is used to fire the task completed event.
+	 */
+
+	protected void fireTaskCompleted()
+	{
+		TaskEvent te = new TaskEvent(this,
+				getStatus(), getCurrentProgress());
+		for(Iterator i = _listeners.iterator(); i.hasNext();)
+		{
+			TaskListener tl = (TaskListener)i.next();
+			tl.taskCompleted(te);
+		}
+	}
+
 	/** indicates if the task is complete */
-	private boolean _done = false;
+	private boolean		_done = false;
 
 	/** indicates if we received a request to stop */
-	private boolean _shouldStop = false;
+	private boolean		_shouldStop = false;
 
 	/** the length of the task */
-	private int	_length = 0;
+	private int		_length = 0;
 
 	/** our current progress */
-	private int	_progress = 0;
+	private int		_progress = 0;
 
 	/** the last status message */
-	private String	_status = "";
+	private String		_status = "";
+
+	/** our error, if any */
+	private Throwable	_throwable;
+
+	/** our registerd task listeners */
+	private List		_listeners = new ArrayList();
 }
