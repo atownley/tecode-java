@@ -42,13 +42,13 @@
 package com.townleyenterprises.common;
 
 /**
- * This class represents a generic object container which maintains
- * override relationships between objects.  The main uses of this
- * class are tracking property values from various sources as well as
- * resource entries.
+ * This class maintains a pointer to the source object in an override
+ * list.  The list maintains the order of the objects being overridden
+ * which means that this class is really nothing more than a pointer
+ * to an object.
  *
- * @version $Id: OverrideNode.java,v 1.1 2004/07/29 18:29:20 atownley Exp $
- * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
+ * @version $Id: OverrideNode.java,v 1.2 2004/12/26 19:41:47 atownley Exp $
+ * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  */
 
 public class OverrideNode
@@ -86,36 +86,17 @@ public class OverrideNode
 	}
 
 	/**
-	 * This method is used to retrieve the previous reference so
-	 * that the override list can be maintained.
-	 *
-	 * @return a node containing the previous reference
-	 */
-
-	public OverrideNode getPrevious()
-	{
-		return _prev;
-	}
-
-	/**
 	 * This method is used to set the object reference tracked by
-	 * this node.  The current reference (if any) is tracked by
-	 * the previous property.
+	 * this node.
 	 *
 	 * @param obj the object
 	 */
 
 	public void set(Object obj)
 	{
-		if(_object != null)
-			_prev = new OverrideNode(_object);
-
 		_object = obj;
 	}
 
 	/** the current object */
 	private Object		_object = null;
-
-	/** a node containing the object we replaced */
-	private OverrideNode	_prev = null;
 }
