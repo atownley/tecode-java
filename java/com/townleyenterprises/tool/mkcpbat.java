@@ -42,6 +42,7 @@
 package com.townleyenterprises.tool;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -49,6 +50,7 @@ import java.io.PrintStream;
 import com.townleyenterprises.command.AbstractCommandListener;
 import com.townleyenterprises.command.CommandOption;
 import com.townleyenterprises.command.CommandParser;
+import com.townleyenterprises.common.Path;
 
 /**
  * This is a simple utility to automatically generate an MS-DOS
@@ -71,7 +73,7 @@ import com.townleyenterprises.command.CommandParser;
  * </pre>
  * </p>
  *
- * @version $Id: mkcpbat.java,v 1.1 2004/02/09 16:07:25 atownley Exp $
+ * @version $Id: mkcpbat.java,v 1.2 2004/02/09 18:58:03 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -94,6 +96,7 @@ public final class mkcpbat
 		_parser = new CommandParser("mkcpbat", "FILE...");
 		_parser.setExitOnMissingArg(true, -1);
 		_parser.addCommandListener(new OptionHandler());
+		_parser.setExtraHelpText("This utility is used to automatically generate the necessary commands to set the classpath on DOS/Windows.  No easy way exists to do this without doing a lot of cut-n-paste, so this utility makes Java development a little easier if you must do it with DOS/Windows.", "Examples:\n  mkcpbat --outfile buildcp.bat lib\\*.jar\n  mkcpbat lib\\*.jar > buildcp.bat\nBoth of the above examples will create an executable batch file with appropriate 'SET CLASSPATH=' commands for all the jar files in the specified list of files.\n\nCopyright 2004, Andrew S. Townley.\nAll Rights Reserved.\nReport bugs to <te-code-users@sourceforge.net>.");
 
 		_parser.parse(args);
 
@@ -101,11 +104,26 @@ public final class mkcpbat
 		{
 			try
 			{
+				File ofname = new File(_ofname.getArg());
+				if(ofname.exists() && _overwrite.getMatched())
+				{
+					if(_verbose.getMatched())
+					{
+						System.err.println("Deleteting existing file:  '" + ofname.getName() + "'");
+					}
+
+					ofname.delete();
+				}
+
 				_writer = new PrintStream(new FileOutputStream(_ofname.getArg()));
 			}
 			catch(IOException e)
 			{
 				System.err.println("error:  " + e.getMessage());
+				if(_verbose.getMatched())
+				{
+					e.printStackTrace();
+				}
 				System.exit(-1);
 			}
 		}
@@ -131,20 +149,99 @@ public final class mkcpbat
 
 	private void processArgs(String[] args)
 	{
+		boolean verbose = _verbose.getMatched();
+
+		// disable console echo
+		_writer.println("@echo off");
+
 		for(int i = 0; i < args.length; ++i)
 		{
 			try
 			{
-				File pc = new File(args[i]);
-				_writer.print("set CLASSPATH=%CLASSPATH%;");
-				_writer.println(pc.getCanonicalPath());
+				// try and expand any wildcards not handled by DOS/Windows
+				String[] xargs = expandArg(args[i]);
+
+				for(int j = 0; j < xargs.length; ++j)
+				{
+					if(verbose)
+					{
+						System.err.println("Processing argument:  '" + xargs[j] + "'");
+					}
+
+					File pc = new File(xargs[j]);
+					_writer.print("set CLASSPATH=%CLASSPATH%;");
+					_writer.println(pc.getCanonicalPath());
+				}
 			}
 			catch(IOException e)
 			{
 				System.err.println("error:  " + e.getMessage());
+				
+				if(verbose)
+				{
+					e.printStackTrace();
+				}
+
 				System.exit(-1);
 			}
 		}
+	}
+
+	/**
+	 * This is a method which attempts to expand the path given it if
+	 * it contains the standard wildcards <code>*</code> or
+	 * <code>?</code>.
+	 *
+	 * @param path some sort of path
+	 * @return the expanded list of names
+	 * @exception IOException
+	 * 	if anything happens resolving the path
+	 */
+
+	private String[] expandArg(String arg) throws IOException
+	{
+		boolean verbose = _verbose.getMatched();
+
+		if(verbose)
+			System.err.println("expanding arg:  '" + arg + "'");
+
+		int idxs = arg.indexOf("*");
+		int idxq = arg.indexOf("?");
+
+		if(idxs == -1 && idxs == -1)
+		{
+			if(verbose)
+				System.err.println("no expansion for:  '" + arg + "'");
+
+			return new String[] { arg };
+		}
+
+		// if we get here, we need to perform some regex magic.  Note,
+		// we're not going to support full filename expansion, but we
+		// will take care of the simple cases
+		String bname = Path.basename(arg, File.separator);
+		String dirname = Path.dirname(arg);
+
+		if(verbose)
+		{
+			System.err.println("basename('" + arg + "'):  " + bname);
+			System.err.println("dirname('" + arg + "'):  " + dirname);
+		}
+
+		idxs = dirname.indexOf("*");
+		idxq = dirname.indexOf("?");
+		if(idxq != -1 || idxs != -1)
+		{
+			System.err.println("error:  expansion of directory names not currently supported.");
+			System.exit(-1);
+		}
+
+		bname = bname.replaceAll("\\*", ".*");
+		bname = bname.replaceAll("\\?", ".");
+		bname = bname.toLowerCase();
+
+		File dir = new File(dirname);
+		return dir.list(new RegexFilenameFilter(bname));
 	}
 
 	/** our command parser */
@@ -156,8 +253,12 @@ public final class mkcpbat
 	/** specify the output file */
 	private static CommandOption	_ofname = new CommandOption("outfile", (char)0, true, "FILE", "place the batch commands in the named file rather than to the console");
 
+	private static CommandOption	_overwrite = new CommandOption("overwrite", (char)0, false, null, "overwrite the value of outfile, if it already exists");
+
+	private static CommandOption	_verbose = new CommandOption("verbose", (char)0, false, null, "print verbose processing information to stderr");
+
 	/** the command line options */
-	private static CommandOption[]	_options = { _ofname };
+	private static CommandOption[]	_options = { _ofname, _overwrite, _verbose };
 
 	/**
 	 * This static class is responsible for handling the
@@ -168,12 +269,31 @@ public final class mkcpbat
 	{
 		public String getDescription()
 		{
-			return "mmcpbat options";
+			return "mkcpbat options";
 		}
 
 		public CommandOption[] getOptions()
 		{
 			return _options;
 		}
+	}
+
+	/**
+	 * This class is a regular expression filename filter.
+	 */
+
+	private static class RegexFilenameFilter implements FilenameFilter
+	{
+		public RegexFilenameFilter(String regex)
+		{
+			_regex = regex;
+		}
+
+		public boolean accept(File dir, String name)
+		{
+			return name.toLowerCase().matches(_regex);
+		}
+		
+		private final String _regex;
 	}
 }
