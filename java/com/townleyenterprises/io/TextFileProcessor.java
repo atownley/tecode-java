@@ -55,7 +55,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * This class provides a pluggable mechanism for processing line-based
  * text files with a given character encoding.  The class breaks up
  * the input file into lines of text.  The actual processing of the
- * line is provided by providing an instance of @{link LineProcessor}
+ * line is provided by providing an instance of {@link LineProcessor}
  * apropriate for the task.
  * <p>
  * An example of echoing the file to the console:
@@ -79,7 +79,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * }
  * </pre>
  *
- * @version $Id: TextFileProcessor.java,v 1.1 2004/01/26 18:49:36 atownley Exp $
+ * @version $Id: TextFileProcessor.java,v 1.2 2004/01/27 20:17:19 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
