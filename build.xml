@@ -196,6 +196,9 @@
 				</present>
 			</fileset>
 		</delete>
+		<delete>
+			<fileset dir="${basedir}" includes="${app.name}*.zip"/>
+		</delete>
 		<delete file="${build.date}"/>
 	</target>
 </project>
