@@ -49,7 +49,7 @@ import java.lang.reflect.Method;
  * values similar to the way it is handled in the Jakarta Struts
  * package.
  *
- * @version $Id: PropertyProxy.java,v 1.1 2003/06/07 18:42:30 atownley Exp $
+ * @version $Id: PropertyProxy.java,v 1.2 2003/06/08 21:57:37 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -112,12 +112,12 @@ public class PropertyProxy
 	}
 
 	/**
-	 * Retrieves the class for the proxy instance.
+	 * Retrieves the class of the subject of this proxy instance.
 	 *
 	 * @return the Java class
 	 */
 
-	public Class getProxyClass()
+	public Class getSubjectClass()
 	{
 		return _klass;
 	}

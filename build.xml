@@ -78,6 +78,8 @@
 		<mkdir dir="${dist.dir}/lib" />
 		<mkdir dir="${dist.dir}/examples" />
 		
+		<copy file="LICENSE" todir="${dist.dir}" />
+		<copy file="RELEASE-NOTES" todir="${dist.dir}" />
 		<copy todir="${dist.dir}/lib">
 			<fileset dir="${lib.dir}"
 				includes="**/*.jar"/>
@@ -105,7 +107,6 @@
 			<fileset dir="java"/>
 		</copy>
 		<copy file="build.xml" todir="${dist.dir}" />
-		<copy file="LICENSE" todir="${dist.dir}" />
 		<zip destfile="${dist.dir}-src.zip"
 			basedir="."
 			includes="${dist.dir}/**" />
@@ -119,7 +120,7 @@
 			destdir="docs/api"
 			classpathref="build.cp">
 			<doctitle><![CDATA[<center><h3>Townley Enterprises Common Public API, v 2.0 Beta 2<br/>API Reference</h3><br/><br/></center>]]></doctitle>
-			<bottom><![CDATA[<center>Copyright &#169; 2002-2003, Andrew S. Townley and Townley Enterprises.  All Rights Reserved.<br/>This project is hosted on <a href="http://te-code.sourceforge.net/">http://te-code.sourceforge.net</a>.</center>]]></bottom>
+			<bottom><![CDATA[<center>Copyright &#169; 2002-2003, Andrew S. Townley and Townley Enterprises.  All Rights Reserved.<br/>This project is hosted on <a target="_top" href="http://te-code.sourceforge.net/">http://te-code.sourceforge.net</a>.</center>]]></bottom>
 		</javadoc>
 	</target>
 

@@ -17,6 +17,7 @@ public class cltest implements CommandListener
 		new CommandOption("really-long", 'r', true, "<param>,<param2>,<param3>,<param4>,<param5>", "this option has a really, really, long description that will wrap accross more that two lines so that we can see of the bug with multi-line text wrapping has been fixed.  The quick brown fox jumped over the lazy dog.  I'm a pepper, he's a pepper, she's a pepper.  Wouldn't you like to be a pepper too?"),
 		new CommandOption("bar", 'b', true, "name", "specifies the bar"),
 		new CommandOption("onlylong", (char)0, true, "<whee>", "check to see how to handle the option"),
+		new CommandOption(null, 'X', true, "<super secret option>", "Only short options are supported as well"),
 		toggle,
 		oomatch
 	};
@@ -35,6 +36,9 @@ public class cltest implements CommandListener
 				break;
 			case 'b':
 				System.out.println("matched bar:  " + arg);
+				break;
+			case 'X':
+				System.out.println("matched X:  " + arg);
 				break;
 			default:
 				if("onlylong".equals(opt.getLongName()))

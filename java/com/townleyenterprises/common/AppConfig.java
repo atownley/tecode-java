@@ -46,10 +46,9 @@ import java.util.Properties;
 
 /**
  * This file provides a generalized mechanism for centralizing access
- * to application configuration information.  Specific applications
- * are supported by calling the
+ * to application configuration information.
  *
- * @version $Id: AppConfig.java,v 1.1 2003/06/07 18:42:30 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.2 2003/06/08 21:57:37 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 

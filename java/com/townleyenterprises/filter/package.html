@@ -40,7 +40,7 @@
 // Author:	Andrew S. Townley (adz1092@netscape.net)
 // Created: 	Wed May  7 18:40:00 IST 2003
 //
-// $Id: package.html,v 1.1 2003/06/07 18:42:35 atownley Exp $
+// $Id: package.html,v 1.2 2003/06/08 21:57:37 atownley Exp $
 //
 //////////////////////////////////////////////////////////////////////
 -->
@@ -56,38 +56,65 @@ com.townleyenterprises.filter Package Documentation
 </head>
 <body>
 <p>
-This class provides a generic filter mechanism for the
-system.
+This class provides generic filtering and sorting
+capabilities which are compatible with the standard Java
+collections.
 </p>
 
+<center>
+<a href="#Concepts">Concepts</a> |
+<a href="#CollectionFilters">Collection Filters</a> |
+<a href="#DynamicFilters">Dynamic Filters</a> |
+<a href="#Sorting">Sorting</a> 
+</center>
+
 <h3>
+<a name="Concepts">
 Concepts
+</a>
 </h3>
 <p>
 Filtering is a fairly straightforward concept.  Given a
-collection of objects, iterate over the collections and
-determine based on specific filter criteria if the specific
-object should be included or discarded.
+collection of objects, iterate over the collection and
+determine if the specific object should be included or
+discarded based on specific filter criteria.
+</p>
+<p>
+Sorting is also pretty straightforward.  Given an ordered
+collection of objects, reorder the objects such that each
+one is relative to the others based on specific criteria.
+The Java collections already support basic sorting via the
+<code>java.lang.Comparable</code> and
+<code>java.util.Comparator</code> interfaces.  This package
+provides a way to dynamically order collections without
+actually writing the comparison routines, based on the
+values of given object properties.
 </p>
 
 <h3>
+<a name="CollectionFilters">
 Collection Filters
+</a>
 </h3>
 <p>
 This package supports different types of filtering, depending on
 where the filtering should occur.  The first, and simplest,
-type of filter allows the user to simply provide a class
-that implements the Filter interface and provides a specific
-test.  For example, given an List containing String objects,
-the following code can be used to apply the filter to the
-objects in the list by using the FilteredIterator Decorator.
-In this case, we only want to see strings that start with
-the literal "filterme":
+type of filter allows the user to provide a class implementing
+the Filter interface to provide a specific, hard-coded test.
+</p>
+<p>
+For example, given a List instance containing String
+instances, the application would like to only display those
+strings which start with the literal 'filterme'.  While the
+{@link com.townleyenterprises.filter.Filters} class provides
+a static method to encapsulate the details, an alternate
+solution to the problem could be provided by the following
+code:
 
 <pre>
 	Iterator collIterator = stringList.iterator();
 	FilteredIterator fi = new FilteredIterator(collIterator,
-		new Filter {
+		new Filter() {
 			public boolean doFilter(Object o)
 			{
 				if(!(o instanceof String))
@@ -101,51 +128,208 @@ the literal "filterme":
 	// print our strings
 	while(fi.hasNext())
 		System.out.println(fi.next());
+
 </pre>
+<center><strong><em>Example 1:  A Simple Filter</em></strong></center>
 </p>
 
 <p>
-This mechansim is simple to use and very powerful, but
-sometimes more complex filtering is necessary.  In this
-case, the package provides several pre-defined filters to
-implement logical comparisons.  For example, if the
-application had predefined filters to work on a specific
-type of object, to find all the objects within a given
-collection where filter1 and filter2 were true, something
-like the following would be used:
+The mechanics of applying the filter are encapsulated in the
+{@link com.townleyenterprises.filter.FilteredIterator}
+instance which is used to provide a Decorator or Wrapper for
+a standard Java Iterator instance.  Internally, the
+<code>FilteredIterator</code> is accessing the next element
+and applying the filter.  If the filter succeeds, the
+element is returned when the user of the iterator calls the
+<code>next</code> method.
+</p>
+
+<p>
+The full power of the filtering mechanism in the package
+comes from the various logical filters.  Using
+combinations of the AND, OR and NOT filters, complicated
+expression parse trees may be created and applied as easily
+as the simple filter shown in Example 1.
+</p>
+
+<p>
+To apply the logical filters to a collection of user defined
+objects in order to select only a part of the collection,
+the same procedure is employed as for the simple filters.
+This approach is illustrated in Example 2 below:
 
 <pre>
-	// filter1, filter2 are defined earlier
-	Iterator collIterator = stringList.iterator();
-	FilteredIterator fi = new FilteredIterator(collIterator,
-		new LogicalAndFilter ( new Object[]{filter1, filter2} );
-	
+	// filter1 and filter2 are defined earlier
+	LogicalAndFilter and = new LogicalAndFilter();
+	and.addFilter(filter1);
+	and.addFilter(filter2);
+	FilteredIterator fi = new FilteredIterator(list.iterator(), and);
+
 	while(fi.hasNext())
 		System.out.println(fi.next());
+
 </pre>
+<center><strong><em>Example 2:  Applying Logical Filters</em></strong></center>
 </p>
 
 <p>
-The above code uses the array constructor of the
-LogicalAndFilter class to specify that only objects where
-<em>filter1.doFilter(obj) == true && filter2.doFilter(obj) == true</em> should be
-printed.  There are also logical filter classes to perform
-logical OR and logical NOT operations.  All of these can be
-combined to perform fairly complex filters which are
-dynamically defined during the execution of the application.
+In Example 2, only those objects in the collection where
+both filter1 and filter2 return true will be printed.  The
+logical OR filter is equivalent in setup and use to the
+logical AND filter, but it will include objects in the
+results if either filter evaluates true.
 </p>
 
 <h3>
-Persistence Filters
+<a name="DynamicFilters">
+Dynamic Filters
+</a>
 </h3>
 
 <p>
-Persistence filters, as their name implies, are applied to
-the persistence layer rather than to the in-memory
-collections returned from a persistence layer or otherwise
-created during the execution of an application.  By their
-very nature, peristence filters are more complicated than
-their in-memory counterparts.
+The filters described in Example 1 and Example 2 are tightly
+bound to the application in which they are used.  The filter
+implementation must know the underlying structure of the
+objects so that it can perform the filtering.  This approach
+is not always desirable for general use selections such as a
+string property being equal to another.  For this reason,
+the package provides an implementation of the QueryObject
+design pattern to address these general cases.
+</p>
+
+<p>
+The dynamic filters rely heavily on the java.lang.Comparable
+interface and can only be used with classes which implement
+it.  Fortunately, all of the interesting types in the J2SDK
+implement it, so it works automatically with all of the
+primitive and built in wrappers for the primitive types.
+The {@link com.townleyenterprises.filter.QueryFilter} class
+can be used for all but substring searches if exact matches
+are required.  For example, given a custom class with
+properties <code>code</code> and <code>value</code>, to find
+all of the objects which had a code of <code>'EUR'</code>
+and values of less than 1000.00, a filter could be created
+and applied to the collection as illustrated in Example 3.
+
+<pre>
+	QueryFilter code = new QueryFilter(Widget.class,
+				"code", QueryOperator.EQ, "EUR");
+	QueryFilter value = new QueryFilter(Widget.class,
+				"value", QueryOperator.LT,
+				new BigDecimal("1000.00"));
+	LogicalAndFilter and = new LogicalAndFilter();
+	and.addFilter(code);
+	and.addFilter(value);
+
+	Collection widgets = Filters.filter(list, and);
+
+</pre>
+<center><strong><em>Example 3:  Using Dynamic Filters</em></strong></center>
+</p>
+
+<p>
+The resulting collection of widgets would all have currency
+codes of 'EUR' and have values of less than 1000.00.
+</p>
+
+<h3>
+<a name="Sorting">
+Sorting
+</a>
+</h3>
+
+<p>
+Sorting is often used in conjunction with filtering, but the
+sorting facilities do not depend on the filtering
+mechanisms.  Like the <code>QueryFilter</code>, the {@link
+com.townleyenterprises.filter.PropertySorter} class depends
+on the underlying objects implementing the
+<code>java.lang.Comparable</code> interface.  Like the
+<code>QueryFilter</code>, the <code>PropertySorter</code>
+automatically works with any of the base types provided by
+the Java language.
+</p>
+
+<p>
+An example of using the sorting facilities outside of
+filtering would be when working with a Java Swing table
+whose underlying table model is represented by a list of
+custom objects.  For simplicity, take the Widget class used
+for Example 3.  If the Widget instances were displayed in a
+sortable table. The available properties are <code>Stock
+No</code>, <code>Description</code>, <code>Quantity</code>
+and <code>Color</code> in addition to the <code>Code</code>
+and <code>Value</code> from above.  In order to sort the
+columns to see which ones should be discounted, the
+following code could be used:
+
+<pre>
+	// define the sort so we can se the largest quantity
+	// on hand at the top of the list
+
+	SortSpecification[] sort = {
+		new SortSpecification("quantity", SortOrder.DESCENDING),
+		new SortSpecification("description"),
+		new SortSpecification("code"),
+		new SortSpecification("value")
+	};
+
+	Collections.sort(tableData, new PropertySorter(Widget.class, sort));
+
+</pre>
+<center><strong><em>Example 4:  Sorting Collections</em></strong></center>
+</p>
+
+<p>
+Additionally, filtering and sorting can be done at the same
+time using the static {@link com.townleyenterprises.filter.Filters}
+utility class.  To combine Examples 3 and 4, only the
+following changes would need to be made:
+
+<pre>
+	QueryFilter code = new QueryFilter(Widget.class,
+				"code", QueryOperator.EQ, "EUR");
+	QueryFilter value = new QueryFilter(Widget.class,
+				"value", QueryOperator.LT,
+				new BigDecimal("1000.00"));
+	LogicalAndFilter and = new LogicalAndFilter();
+	and.addFilter(code);
+	and.addFilter(value);
+
+	// define the sort so we can se the largest quantity
+	// on hand at the top of the list
+
+	SortSpecification[] sort = {
+		new SortSpecification("quantity", SortOrder.DESCENDING),
+		new SortSpecification("description"),
+		new SortSpecification("code"),
+		new SortSpecification("value")
+	};
+
+	List widgets = Filters.filter(list, and, sort);
+
+</pre>
+<center><strong><em>Example 5:  Dynamic Filtering and Sorting</em></strong></center>
+</p>
+
+<h3>
+<a name="Limitations">
+Limitations
+</a>
+</h3>
+
+<p>
+At the present time, the following limitations/issues are
+present in the package:
+
+<ul>
+<li><strong>Lack of support for nested properties</strong>
+-- There is currently no way to perform filtering or sorting
+based on "nested" property values of the property accessor
+returns an object.  A suitable object for comparison must be
+supplied.  This feature will be present in a future release.
+</li>
+</ul>
 </p>
 </body>
 </html>

@@ -53,7 +53,7 @@ import com.townleyenterprises.filter.*;
  * This class is responsible for generating SQL given a filter and
  * optional sort specification.
  *
- * @version $Id: SQLFilterAdapter.java,v 1.1 2003/06/07 18:42:34 atownley Exp $
+ * @version $Id: SQLFilterAdapter.java,v 1.2 2003/06/08 21:57:37 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -325,7 +325,7 @@ public final class SQLFilterAdapter
 		else if(filter instanceof SubstringFilter)
 		{
 			SubstringFilter sf = (SubstringFilter)filter;
-			Class proxy = sf.getProxyClass();
+			Class proxy = sf.getSubjectClass();
 			String tabname = getTable(proxy);
 			String prop = tabname + "." + 
 				getColumnName(proxy, sf.getProperty());
@@ -338,7 +338,7 @@ public final class SQLFilterAdapter
 		else if(filter instanceof QueryFilter)
 		{
 			QueryFilter qf = (QueryFilter)filter;
-			Class proxy = qf.getProxyClass();
+			Class proxy = qf.getSubjectClass();
 			String tabname = getTable(proxy);
 			String prop = tabname + "." +
 				getColumnName(proxy, qf.getProperty());
