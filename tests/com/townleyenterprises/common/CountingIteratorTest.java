@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2002-2004, Andrew S. Townley
+// Copyright (c) 2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ import junit.framework.TestCase;
 /**
  * Basic unit tests for the CountingIterator class
  *
- * @version $Id: CountingIteratorTest.java,v 1.1 2004/01/25 19:39:18 atownley Exp $
+ * @version $Id: CountingIteratorTest.java,v 1.2 2004/01/26 09:25:39 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
