@@ -62,9 +62,15 @@ import com.townleyenterprises.common.ResourceProvider;
  * JFC/Swing Notepad demo.  This class uses the same approach (and
  * even methods), but abstracts this functionality from a particular
  * application.
+ * <p>
+ * It is important to note that this class assumes that the values for
+ * each of the labels, etc. are resource keys which will be resolved
+ * by the registered resource bundles.  String literals should not
+ * normally be used for these values.
+ * </p>
  *
  * @since 2.1
- * @version $Id: ResourceUIBuilder.java,v 1.8 2004/07/29 18:35:01 atownley Exp $
+ * @version $Id: ResourceUIBuilder.java,v 1.9 2004/08/11 16:20:16 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -119,7 +125,7 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 		_loader = loader;
 		_statusListener = menuStatusListener;
 
-		String p = System.getProperty("te-common.resourceuibuilder.debug");
+		String p = System.getProperty("te-code.swing.resourceuibuilder.debug");
 		if(p != null && (p.toLowerCase().charAt(0) == 'y'
 				|| p.toLowerCase().charAt(0) == 't'))
 		{
@@ -178,6 +184,7 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 		skey = key + LABEL_SUFFIX;
 		s = _loader.getString(skey);
 		
+		debug("actual Label:  '" + _loader.getString(s) + "'");
 		// assuming the key is there
 		JMenu menu = new JMenu(_loader.getString(s));
 		skey = key + MNEMONIC_SUFFIX;
