@@ -119,7 +119,7 @@
 			sourcepath="${src.dir}"
 			destdir="docs/api"
 			classpathref="build.cp">
-			<doctitle><![CDATA[<center><h3>Townley Enterprises Common Public API, v 2.0 Beta 2<br/>API Reference</h3><br/><br/></center>]]></doctitle>
+			<doctitle><![CDATA[<center><h3>Townley Enterprises Common Public API, v 2.1-pre1<br/>API Reference</h3><br/><br/></center>]]></doctitle>
 			<bottom><![CDATA[<center>Copyright &#169; 2002-2003, Andrew S. Townley and Townley Enterprises.  All Rights Reserved.<br/>This project is hosted on <a target="_top" href="http://te-code.sourceforge.net/">http://te-code.sourceforge.net</a>.</center>]]></bottom>
 		</javadoc>
 	</target>

@@ -54,7 +54,7 @@ import com.townleyenterprises.swing.event.TaskListener;
  * requires only that a single method be implemneted.
  *
  * @since 2.1
- * @version $Id: AbstractMonitoredTask.java,v 1.3 2003/11/24 03:29:03 atownley Exp $
+ * @version $Id: AbstractMonitoredTask.java,v 1.4 2003/11/27 00:03:03 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -176,9 +176,9 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	 * This method is used to request that the task be stopped.
 	 */
 
-	public void requestStop()
+	synchronized public void requestStop()
 	{
-		_shouldStop = true;
+			_shouldStop = true;
 	}
 
 	/**
@@ -268,7 +268,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	 * @param val true to indicate task is finished
 	 */
 
-	protected void setComplete(boolean val)
+	synchronized protected void setComplete(boolean val)
 	{
 		_done = val;
 	}
@@ -280,7 +280,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	 * @param error the throwable
 	 */
 
-	protected void setError(Throwable error)
+	synchronized protected void setError(Throwable error)
 	{
 		_throwable = error;
 	}
@@ -292,7 +292,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	 * @param progress the new value
 	 */
 
-	protected void setProgress(int progress)
+	synchronized protected void setProgress(int progress)
 	{
 		_progress = progress;
 	}
@@ -303,7 +303,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	 * @parm length the new length
 	 */
 
-	protected void setTaskLength(int length)
+	synchronized protected void setTaskLength(int length)
 	{
 		_length = length;
 	}
@@ -314,7 +314,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	 * @param text the text
 	 */
 
-	protected void setStatus(String s)
+	synchronized protected void setStatus(String s)
 	{
 		_status = s;
 	}
@@ -327,6 +327,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	{
 		TaskEvent te = new TaskEvent(this,
 				getStatus(), getCurrentProgress());
+
 		for(Iterator i = _listeners.iterator(); i.hasNext();)
 		{
 			TaskListener tl = (TaskListener)i.next();

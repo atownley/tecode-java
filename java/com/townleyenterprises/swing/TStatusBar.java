@@ -69,7 +69,7 @@ import javax.swing.UIManager;
  * an attempt to solve those issues.
  *
  * @since 2.1
- * @version $Id: TStatusBar.java,v 1.2 2003/11/24 03:29:03 atownley Exp $
+ * @version $Id: TStatusBar.java,v 1.3 2003/11/27 00:03:03 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -104,6 +104,7 @@ public class TStatusBar extends JPanel
 		_content.add(_statusText);
 		_statusText.setEditable(false);
 		_statusText.setRequestFocusEnabled(false);
+		_statusText.setFocusable(false);
 		_statusText.setBackground(UIManager.getColor("Button.background"));
 
 		add(_content, BorderLayout.CENTER);
@@ -195,13 +196,18 @@ public class TStatusBar extends JPanel
 						_progress.setIndeterminate(false);
 					}
 				}
-				
-				_progress.setValue(task.getCurrentProgress());
+				else
+				{
+					_progress.setMaximum(task.getTaskLength());
+				}
+			
+				int val = task.getCurrentProgress();
+				_progress.setValue(val);
 				_monitorLabel.setText(task.getStatus());
 
-				if(task.isComplete())
+				if(task.isComplete() || task.hasError())
 				{
-					_progress.setValue(task.getTaskLength());
+					_progress.setValue(_progress.getMaximum());
 					_timer.stop();
 					restore();
 				}
