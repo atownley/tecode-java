@@ -68,7 +68,7 @@ import java.util.Locale;
  * </ol>
  * </p>
  *
- * @version $Id: FormValidator.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
+ * @version $Id: FormValidator.java,v 1.3 2004/08/11 16:24:22 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -77,16 +77,16 @@ public interface FormValidator extends Serializable
 {
 	/**
 	 * This method is used to determine the mode of the form
-	 * validator.  If it returns true, the validator will attempt
-	 * to perform all of the registered validations once and
-	 * notify the listeners of any failures.  If it returns false,
-	 * the validation operation will stop after the first
-	 * validation failure.
+	 * validator.  If it returns <code>false</code>, the validator
+	 * will attempt to perform all of the registered validations
+	 * once and notify the listeners of any failures.  If it 
+	 * returns <code>true</code>, the validation operation will
+	 * stop after the first validation failure.
 	 *
-	 * @return true if all fields will be validated; false if not
+	 * @return false if all fields will be validated; true if not
 	 */
 
-	boolean getValidateAll();
+	boolean getAbortOnFailure();
 
 	/**
 	 * This method is used to set the validation mode of the form.
@@ -97,7 +97,7 @@ public interface FormValidator extends Serializable
 	 * @param val the value of the flag
 	 */
 
-	void setValidateAll(boolean val);
+	void setAbortOnFailure(boolean val);
 
 	/**
 	 * This method will perform the validation of the supplied
@@ -112,25 +112,73 @@ public interface FormValidator extends Serializable
 
 	void validate(Form form) throws Exception;
 
+	/**
+	 * This method performs the same validation as the {@link
+	 * #validate} method except for taking a specific locale
+	 * rather than using the default.
+	 *
+	 * @param form the form to validate
+	 * @param locale the specific locale to use
+	 * @exception Exception
+	 * 	if any of the validations fail
+	 */
+
 	void validate(Form form, Locale locale) throws Exception;
+
+	/**
+	 * This method is used to add a new validator for a specific
+	 * field of the form.
+	 *
+	 * @param name the field name
+	 * @param validator the validator instance
+	 */
 
 	void addFieldValidator(String name, FieldValidator validator);
 
+	/**
+	 * This method is used to remove a specific validator
+	 * instance.
+	 *
+	 * @param validator the validator to remove
+	 */
+
 	void removeFieldValidator(FieldValidator validator);
+
+	/**
+	 * This method is used to add a new field set validator
+	 *
+	 * @param validator the validator to add
+	 */
 
 	void addFieldSetValidator(FieldSetValidator validator);
 
+	/**
+	 * This method is used to remove a new field set validator
+	 *
+	 * @param validator the validator to remove
+	 */
+
 	void removeFieldSetValidator(FieldSetValidator validator);
 
+	/**
+	 * This method returns the currently configured field
+	 * validators as an array.
+	 */
+
 	FieldValidator[] getFieldValidators();
+
+	/**
+	 * This method returns the currently configured field set
+	 * validators as an array.
+	 */
 
 	FieldSetValidator[] getFieldSetValidators();
 
 	// define the listener support
-	
-	void addFormValidationListener(FormValidationListener listener);
 
-	void removeFormValidationListener(FormValidationListener listener);
+	void addValidationListener(ValidationListener listener);
 
-	FormValidationListener[] getFormValidationListeners();
+	void removeValidationListener(ValidationListener listener);
+
+	ValidationListener[] getValidationListeners();
 }
