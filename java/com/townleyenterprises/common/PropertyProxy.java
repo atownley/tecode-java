@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // File:	PropertyProxy.java
-// Created:	Sat May 17 13:41:32 IST 2003
+// Created:	Sat May 17 13:41:32 IST 2004
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -49,7 +49,7 @@ import java.lang.reflect.Method;
  * values similar to the way it is handled in the Jakarta Struts
  * package.
  *
- * @version $Id: PropertyProxy.java,v 1.2 2003/06/08 21:57:37 atownley Exp $
+ * @version $Id: PropertyProxy.java,v 1.3 2004/01/25 19:10:54 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -85,6 +85,8 @@ public class PropertyProxy
 	 * @param property the case-insensitive name of the property
 	 * 	to retrieve from the object
 	 * @param o the object to access
+	 * @exception RuntimeException if the property is not valid
+	 * 	for the class
 	 */
 
 	public Object getPropertyValue(String property, Object o)
