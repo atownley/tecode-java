@@ -55,9 +55,6 @@
 	<property name="build.version"	value="${basedir}/version.properties"/>
 	<property name="build.date"	value="${basedir}/version.date"/>
 	<property name="build.count"	value="${basedir}/version.count"/>
-	<property file="${build.version}" />
-	<property name="version"	value="${build.version.major}.${build.version.minor}.${build.version.release}"/>
-	<property name="dist.dir"	value="${app.name}-${version}"/>
 
 	<target name="builddate">
 		<propertyfile file="${build.date}"
@@ -70,6 +67,10 @@
 	</target>
 
 	<target name="verstamp" depends="builddate" >
+		<property file="${build.version}" />
+		<property name="version"	value="${build.version.major}.${build.version.minor}.${build.version.release}"/>
+		<property name="dist.dir"	value="${app.name}-${version}"/>
+		
 		<filter filtersfile="${build.version}"/>
 		<filter filtersfile="${build.date}"/>
 		
@@ -101,6 +102,11 @@
 
 		<!-- perform the build -->
 		<property file="${build.count}" />
+		<property file="${build.date}" />
+		<property file="${build.version}" />
+		<property name="version"	value="${build.version.major}.${build.version.minor}.${build.version.release}"/>
+		<property name="dist.dir"	value="${app.name}-${version}"/>
+
 		<echo message="Building ${build.version.project}: ${build.version.major}.${build.version.minor}.${build.version.release} (Build ${build.version.count}; ${build.version.date})"/>
 
 		<!-- these must be called in this order -->
