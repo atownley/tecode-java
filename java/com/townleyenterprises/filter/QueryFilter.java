@@ -51,7 +51,7 @@ import com.townleyenterprises.common.PropertyProxy;
  * using Filters with database systems as they can be easily
  * translated into SQL.
  *
- * @version $Id: QueryFilter.java,v 1.5 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: QueryFilter.java,v 1.6 2004/11/28 14:41:48 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -88,15 +88,21 @@ public class QueryFilter extends PropertyProxy
 
 		int rc = rez.compareTo(_value);
 
-		if(QueryOperator.LT.equals(_op) ||
-				QueryOperator.GE.equals(_op))
+		if(QueryOperator.LT.equals(_op))
 		{
 			result = (rc < 0);
 		}
-		else if(QueryOperator.GT.equals(_op) ||
-				QueryOperator.LE.equals(_op))
+		else if(QueryOperator.GE.equals(_op))
+		{
+			result = (rc >= 0);
+		}
+		else if(QueryOperator.GT.equals(_op))
 		{
 			result = (rc > 0);
+		}
+		else if(QueryOperator.LE.equals(_op))
+		{
+			result = (rc <= 0);
 		}
 		else if(QueryOperator.EQ.equals(_op))
 		{
