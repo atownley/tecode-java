@@ -48,7 +48,7 @@ import junit.framework.TestCase;
  * with successfully parsing the options.  Manual verification of the
  * formatting of the usage and help output will still be necessary.
  *
- * @version $Id: CommandParserTest.java,v 1.2 2004/07/28 10:34:00 atownley Exp $
+ * @version $Id: CommandParserTest.java,v 1.3 2004/07/30 16:19:33 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -222,7 +222,7 @@ public final class CommandParserTest extends TestCase
 		}
 		catch(RuntimeException e)
 		{
-			assertEquals("long switch must be at least 2 characters", e.getMessage());
+			assertEquals("long switch must be at least 2 characters.", e.getMessage());
 		}
 	}
 
