@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,7 @@ import java.util.Enumeration;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.6 2003/06/08 16:39:24 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.7 2004/01/25 18:35:53 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -485,7 +485,23 @@ public final class CommandParser implements CommandListener
 	private void addOption(CommandOption opt, CommandListener l)
 	{
 		OptionHolder holder = new OptionHolder(opt, l);
-		
+	
+		String lname = opt.getLongName();
+
+		// sanity check for existing options
+		OptionHolder obj = (OptionHolder)_longOpts.get(lname);
+		if(obj != null)
+		{
+			System.err.print("warning:  overriding option");
+			System.err.print(" '");
+			System.err.print(lname);
+			System.err.print("' from '");
+			System.err.print(obj.listener.getDescription());
+			System.err.print("' by '");
+			System.err.print(l.getDescription());
+			System.err.println("'.");
+		}
+
 		// set up the maps
 		_longOpts.put(opt.getLongName(), holder);
 
