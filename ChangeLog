@@ -1,3 +1,66 @@
+2004-01-28 Andrew S. Townley <atownley>
+	* java/com/townleyenterprises/command/CommandParser.java
+
+	  Added support for arbitrary header and footer blocks
+	  to be printed when the help message is printed.
+	
+	* java/com/townleyenterprises/command/CommandParser.java
+	  java/com/townleyenterprises/command/JoinedCommandOption.java
+	  java/com/townleyenterprises/command/PosixCommandOption.java
+
+	  Added first round of support for handling POSIX-compliant
+	  command options, including joined options and option
+	  expansion of combined options.
+
+2004-01-27 Andrew S. Townley <atownley>
+	* java/com/townleyenterprises/command/CommandOption.java
+
+	  Fixed default option handling.  Options now return
+	  default values even when not matched.
+	  
+	  Added support for encapsulating the parsing of option
+	  values using getArgValue() instead of getArg().
+
+2004-01-26 Andrew S. Townley <atownley>
+	* Added JUnit unit tests for everything in the
+	  com.townleyenterprises.common package
+	
+	* Added unit tests for the
+	  com.townleyenterprises.command.CommandParser class
+
+	* java/com/townleyenterprises/command/CommandOption.java
+	  java/com/townleyenterprises/command/CommandParser.java
+	  java/com/townleyenterprises/command/RepeatableCommandOption.java
+
+	  Added support for parsing multiple argument lists with
+	  the same set of options.  Previously, state was set once,
+	  but you could parse multiple times.  Now accurate results
+	  are reported for each argument list.
+
+	  Added warning message for registering options that will
+	  override options already registered.  The last one
+	  registered will get matched, but at least it doesn't
+	  silently continue.
+
+	  Added RuntimeException when trying to create a CommandParser
+	  with a long switch with length 1.  This doesn't work right
+	  now and was too difficult to allow.  This will be fixed
+	  when we properly handle "traditional" UNIX arguments.
+	  
+2004-01-22 Andrew S. Townley <atownley>
+	* build.xml
+
+	  Removed dynamic javadoc title stuff because it doesn't
+	  get processed by ant.  Now have to manually update the
+	  javadoc title for each release -- yuck.
+
+	* java/com/townleyenterprises/filter/SubstringFilter.java
+
+	  Added backward-compatible constructor for case-sensitive
+	  comparisons.
+	
+	* 2.1.0-pre3 Released internally.
+
 2004-01-21 Andrew S. Townley <atownley>
 	* build.xml
 	  
