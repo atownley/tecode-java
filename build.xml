@@ -277,6 +277,7 @@
 			<fileset dir="${basedir}" includes="${app.name}*.zip"/>
 		</delete>
 		<delete file="${build.date}"/>
+		<delete dir="clover"/>
 	</target>
 
 	<target name="compile-tests" depends="jar">
@@ -313,4 +314,27 @@
 			</batchtest>
 		</junit>
 	</target>
+
+	<!-- clover support -->
+	<taskdef resource="clovertasks"/>
+
+	<target name="with-clover">
+		<mkdir dir="clover"/>
+		<clover-setup initString="clover/te-common.db"
+				flushpolicy="interval"
+				flushinterval="200">
+			<fileset dir="${src.dir}"/>
+		</clover-setup>
+	</target>
+
+	<target name="clover-report" depends="with-clover">
+		<clover-report>
+			<current outfile="clover/report" title="TE-Common">
+				<format type="html"/>
+			</current>
+		</clover-report>
+	</target>
+
+	<target name="clover" depends="clean,with-clover,jar,junit,clover-report"/>
+
 </project>
