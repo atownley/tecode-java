@@ -119,6 +119,9 @@
 		<!--fileset dir="${lib.dir}">
 			<include name="**/*.jar"/>
 		</fileset-->
+	</path>
+
+	<path id="tests.cp">
 		<fileset dir="${tests.lib.dir}">
 			<include name="**/*.jar"/>
 		</fileset>
@@ -302,6 +305,7 @@
 		<junit printsummary="yes" haltonfailure="no">
 			<classpath>
 				<path refid="build.cp"/>
+				<path refid="tests.cp"/>
 				<pathelement location="${build.tests}"/>
 				<pathelement location="${app.name}.jar"/>
 			</classpath>
