@@ -1,4 +1,24 @@
-2004-01-30 Andrew S. Twonley <atownley>
+2004-11-28 Andrew S. Townley <atownley>
+	* build.xml
+	  
+	  Changed junit task to fail on errors or failures since the
+	  tests are much more well behaved than they used to be.
+
+	* Added tests for the filter package
+
+	* java/com/townleyenterprises/filter/QueryFilter.java
+	 
+	  Fixed bug in both the GE and LE tests.
+
+	* java/com/townleyenterprises/filter/QueryFilter.java
+	  java/com/townleyenterprises/filter/LogicalNotFilter.java
+
+	  Added minor fixes to toString() method.
+
+2004-11-27 Andrew S. Townley <atownley>
+	* Merged in Java version of the te-trace package.
+
+2004-01-30 Andrew S. Townley <atownley>
 	* Moved tests to allow separate library directory for test
 	  support vs. actual build support (and thus distribution).
 
