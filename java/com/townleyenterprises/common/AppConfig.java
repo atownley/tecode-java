@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2002-2003, Andrew S. Townley
+// Copyright (c) 2002-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -49,9 +49,19 @@ import java.util.Properties;
 
 /**
  * This file provides a generalized mechanism for centralizing access
- * to application configuration information.
+ * to application configuration information.  By default, any system
+ * property will override any value provided by the application.
+ * <p>
+ * The runtime behavior of this class may be configured using the
+ * following properties:
+ * <ul>
+ * <li><code>te-common.appconfig.overridesystemproperties</code> - set to
+ * yes or true to allow overiding of the system property values from
+ * registered {@link ConfigSupplier} instances.</li>
+ * </ul>
+ * </p>
  *
- * @version $Id: AppConfig.java,v 1.5 2004/01/21 21:52:46 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.6 2004/01/25 18:43:26 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -73,6 +83,9 @@ public final class AppConfig
 	public static void registerAppSupplier(ConfigSupplier s)
 				throws IOException
 	{
+		if(s == null)
+			return;
+
 		supplier = s;
 
 		String appName = s.getAppName();
@@ -87,8 +100,11 @@ public final class AppConfig
 //		System.out.println("**** defprefs:  " + defprefs);
 
 		ConfigLoader cl = new ConfigLoader(s.getClass(), defprefs, prefs);
-		props.putAll(cl.getProperties());
-		loaders.add(cl);
+		if(!loaders.contains(cl))
+		{
+			props.putAll(cl.getProperties());
+			loaders.add(cl);
+		}
 	}
 
 	/**
@@ -115,7 +131,7 @@ public final class AppConfig
 			new RuntimeException("AppConfig not initialized!  Please register a ConfigSupplier.");
 		}
 		
-		return props.getProperty(name);
+		return resolveProperty(name);
 	}
 
 	/**
@@ -135,7 +151,7 @@ public final class AppConfig
 		}
 	
 		// necessary since we're not using the config loader directly
-		return props.getProperty(prefix.concat(".").concat(name));
+		return resolveProperty(prefix.concat(".").concat(name));
 	}
 
 	/**
@@ -175,6 +191,39 @@ public final class AppConfig
 		return Collections.unmodifiableList(loaders);
 	}
 
+	/**
+	 * This is a utility method to perform the appropriate override
+	 * checking for a given property value.
+	 *
+	 * @param name the property name
+	 * @return the appropriate value based on the configuration
+	 * settings
+	 */
+
+	private static String resolveProperty(String name)
+	{
+		String val = null;
+
+		if(pparser.booleanValue(SYSOVERRIDE))
+		{
+			val = props.getProperty(name);
+			if(val == null)
+			{
+				val = System.getProperty(name);
+			}
+		}
+		else
+		{
+			val = System.getProperty(name);
+			if(val == null)
+			{
+				val = props.getProperty(name);
+			}
+		}
+
+		return val;
+	}
+
 	/** this is our global list of properties */
 	private static Properties	props = new Properties();
 
@@ -186,4 +235,10 @@ public final class AppConfig
 
 	/** track our list of config loaders */
 	private static List		loaders = new ArrayList();	
+
+	/** the property name */
+	private static final String	SYSOVERRIDE = "te-common.appconfig.overridesystemproperties";
+
+	/** our property parser */
+	private static PropertyParser	pparser = new PropertyParser();
 }
