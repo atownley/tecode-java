@@ -49,8 +49,20 @@ import java.io.IOException;
  * This class provides the main mechanism of loading configuration
  * files so that I don't have to have the exact same code in more than
  * one place.
+ * <p>
+ * <em>
+ * <strong>
+ * NOTE:  Though this class has not been deprecated, it probably isn't
+ * nearly as useful as it used to be.  All of the hierarchical loading
+ * of properties/settings/resources has been refactored to use the
+ * {@link OverrideManager} class instead.  This class may dissappear
+ * at some point, depending on usage patterns and further thought by
+ * the development team.
+ * </strong>
+ * </em>
+ * </p>
  *
- * @version $Id: ConfigLoader.java,v 1.5 2004/07/29 18:34:07 atownley Exp $
+ * @version $Id: ConfigLoader.java,v 1.6 2004/12/27 23:13:50 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
