@@ -47,7 +47,7 @@ import java.util.Iterator;
  * This class provides an implementation of the Filter interface that
  * implements the NOT operation.
  *
- * @version $Id: LogicalNotFilter.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: LogicalNotFilter.java,v 1.5 2004/11/28 20:14:36 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -90,7 +90,7 @@ public class LogicalNotFilter implements Filter
 
 	public String toString()
 	{
-		StringBuffer buf = new StringBuffer("( !(");
+		StringBuffer buf = new StringBuffer("( !( ");
 		buf.append(_filter.toString());
 		buf.append(" ) )");
 

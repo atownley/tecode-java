@@ -51,7 +51,7 @@ import com.townleyenterprises.common.PropertyProxy;
  * using Filters with database systems as they can be easily
  * translated into SQL.
  *
- * @version $Id: QueryFilter.java,v 1.6 2004/11/28 14:41:48 atownley Exp $
+ * @version $Id: QueryFilter.java,v 1.7 2004/11/28 20:12:52 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -134,7 +134,7 @@ public class QueryFilter extends PropertyProxy
 	public String toString()
 	{
 		StringBuffer buf = new StringBuffer("( ");
-		buf.append(getSubjectClass());
+		buf.append(getSubjectClass().getName());
 		buf.append(".");
 		buf.append(getProperty());
 		buf.append(" ");
@@ -150,7 +150,17 @@ public class QueryFilter extends PropertyProxy
 		}
 		
 		buf.append(" ");
-		buf.append(getValue());
+		Object val = getValue();
+		if(val instanceof String)
+		{
+			buf.append("'");
+			buf.append(val);
+			buf.append("'");
+		}
+		else
+		{
+			buf.append(val);
+		}
 		buf.append(" )");
 
 		return buf.toString();
