@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@ package com.townleyenterprises.command;
 /**
  * This class provides support for defining command-line arguments.
  *
- * @version $Id: CommandOption.java,v 1.1 2003/06/07 18:42:39 atownley Exp $
+ * @version $Id: CommandOption.java,v 1.2 2004/01/25 18:34:32 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -192,7 +192,8 @@ public class CommandOption
 	}
 
 	private final boolean	_hasarg;
-	private final boolean	_show; final Character	_shortName;
+	private final boolean	_show;
+	private final Character	_shortName;
 	private final String	_default;
 	private final String	_desc;
 	private final String	_help;
