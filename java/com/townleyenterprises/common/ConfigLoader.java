@@ -41,9 +41,12 @@
 
 package com.townleyenterprises.common;
 
-import java.util.Properties;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This class provides the main mechanism of loading configuration
@@ -62,7 +65,7 @@ import java.io.IOException;
  * </em>
  * </p>
  *
- * @version $Id: ConfigLoader.java,v 1.6 2004/12/27 23:13:50 atownley Exp $
+ * @version $Id: ConfigLoader.java,v 1.7 2004/12/28 21:45:34 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -163,6 +166,26 @@ public class ConfigLoader
 	public Properties getProperties()
 	{
 		return (Properties)props.clone();
+	}
+
+	/**
+	 * This method is used to return the keys managed by this
+	 * loader.
+	 *
+	 * @return the keys as a set
+	 * @since 3.0
+	 */
+
+	public Set getKeys()
+	{
+		Set s = new TreeSet();
+
+		for(Enumeration e = props.propertyNames(); e.hasMoreElements();)
+		{
+			s.add(e.nextElement());
+		}
+
+		return s;
 	}
 
 	/**
