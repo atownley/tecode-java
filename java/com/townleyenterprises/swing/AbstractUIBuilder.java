@@ -53,12 +53,19 @@ import javax.swing.JMenuItem;
  * implementations of the UIBuilder interface.
  *
  * @since 2.1
- * @version $Id: AbstractUIBuilder.java,v 1.1 2003/11/20 10:47:52 atownley Exp $
+ * @version $Id: AbstractUIBuilder.java,v 1.2 2003/12/12 12:21:52 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
 public abstract class AbstractUIBuilder implements UIBuilder
 {
+	/**
+	 * this is the property name used to look up the main menu
+	 * bar description
+	 */
+
+	public static final String	MAINMENU = "menubar";
+
 	/**
 	 * The constructor takes a map of Action instances which are
 	 * to be associated with the menu items.  The keys of the map
@@ -71,15 +78,28 @@ public abstract class AbstractUIBuilder implements UIBuilder
 	{
 		_actions = actions;
 	}
+	
+	/**
+	 * This method will build a completely initialized menu bar
+	 * from the input source using the default MANIMENU key.
+	 *
+	 * @return a JMenuBar instance
+	 */
+
+	public JMenuBar buildMenuBar()
+	{
+		return buildMenuBar(MAINMENU);
+	}
 
 	/**
 	 * This method will build a completely initialized menu bar
 	 * from the input source.
 	 *
+	 * @param key the menu bar key
 	 * @return a JMenuBar instance
 	 */
 
-	public abstract JMenuBar buildMenuBar();
+	public abstract JMenuBar buildMenuBar(String key);
 
 	/**
 	 * This method builds a given menu based on the appropriate

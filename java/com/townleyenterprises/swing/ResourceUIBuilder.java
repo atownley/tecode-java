@@ -62,19 +62,12 @@ import javax.swing.KeyStroke;
  * application.
  *
  * @since 2.1
- * @version $Id: ResourceUIBuilder.java,v 1.4 2003/12/11 03:13:12 atownley Exp $
+ * @version $Id: ResourceUIBuilder.java,v 1.5 2003/12/12 12:21:52 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
 public class ResourceUIBuilder extends AbstractUIBuilder
 {
-	/**
-	 * this is the property name used to look up the main menu
-	 * bar description
-	 */
-
-	public static final String	MAINMENU = "menubar";
-
 	/** this is the suffix used when looking up various labels */
 	public static final String	LABEL_SUFFIX = "Label";
 
@@ -141,13 +134,14 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 	 * The key used for the menu bar is <code>menubar</code>.
 	 * </p>
 	 *
+	 * @param key the menubar key
 	 * @return a JMenuBar instance
 	 */
 
-	public JMenuBar buildMenuBar()
+	public JMenuBar buildMenuBar(String key)
 	{
 		JMenuBar menubar = new JMenuBar();
-		String[] keys = tokenize(_loader.getString(MAINMENU));
+		String[] keys = tokenize(_loader.getString(key));
 		
 		debug("keys.length:  " + keys.length);
 
@@ -234,6 +228,8 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 	{
 		String skey;
 		String s;
+		String accel = "";
+		String mnem = "";
 
 		debug("buildMenuItemHelper:  " + key);
 
@@ -260,6 +256,7 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 		{
 			item.setMnemonic(s.charAt(0));
 			debug("mnemonic:  " + item.getMnemonic());
+			mnem = s;
 		}
 
 		// set the shortcut
@@ -268,14 +265,29 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 		if(!skey.equals(s))
 		{
 			item.setAccelerator(KeyStroke.getKeyStroke(s));
+			accel = s;
 		}
 
 		// set the menu action if we can
 		Action action = getAction(key);
 		if(action != null)
-			item.addActionListener(action);
+		{
+			//item.addActionListener(action);
+			String label = item.getText();
+			item.setAction(action);
+
+			// FIXME:  figure out why this isn't working automatically
+			item.setMnemonic(mnem.charAt(0));
+			item.setAccelerator(KeyStroke.getKeyStroke(accel));
+			if(action.getValue(Action.NAME) == null)
+			{
+				action.putValue(Action.NAME, label);
+			}
+		}
 		else
+		{
 			item.setEnabled(false);
+		}
 
 		debug("item:  " + item);
 

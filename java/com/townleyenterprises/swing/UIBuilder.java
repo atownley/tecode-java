@@ -61,7 +61,7 @@ import javax.swing.JMenuItem;
  * </p>
  *
  * @since 2.1
- * @version $Id: UIBuilder.java,v 1.1 2003/11/20 10:47:52 atownley Exp $
+ * @version $Id: UIBuilder.java,v 1.2 2003/12/12 12:21:52 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -75,6 +75,18 @@ public interface UIBuilder
 	 */
 
 	JMenuBar buildMenuBar();
+
+	/**
+	 * This method will build a completely initialized menu bar from
+	 * the input source with the specified key.  This method is mainly
+	 * used when more than one menubar needs to be built from the saem
+	 * resource loader.
+	 *
+	 * @param key the resource key for the menubar
+	 * @return a JMenuBar instance
+	 */
+
+	JMenuBar buildMenuBar(String key);
 
 	/**
 	 * This method builds a given menu based on the appropriate
