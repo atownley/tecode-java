@@ -1,13 +1,79 @@
 
-Release Notes for te-common 2.0-Beta2 (June 7, 2003)
+Release Notes for te-common 3.0-pre1
 ====================================================
 
-This is the initial release of the SourceForge hosted codebase.
+This is the first pre-release version of the new 3.0 codebase.  There
+are a number of differences between the 2.0-Beta2 (which was the last
+public release) and the 3.0 release.
 
-The 2.0-Beta2 release includes both binary and source versions of the
-project.  Also included with each of the distribution files should
-have been a copy of the software LICENSE.
+There were unofficial releases where are currently used in at least
+three very large commercial projects, but I didn't want to release
+it to the world until I was sure the API was stable and that I was
+happy with the way things were going.
 
+The highlights of differences are:
+
+General:
+
+* Provide i18n support for all user-visible strings
+* JUnit unit tests
+* Clover code coverage
+
+Build System:
+
+* Automatic version stamping of the builds
+* Support for official and developer version builds
+* Better source and binary distribution packages
+
+com.townleyenterprises.common:
+
+* Replacement of the AppConfig and ConfigSupplier classes with classes
+  in the config package
+* Added path manipulation utility class
+* Generalized resource management for strings, messages and icons
+
+com.townleyenterprises.command:
+
+* Added abstract and default implementations of the CommandListener
+  interface to reduce the amount of boilerplate code for a CLI
+* Added joined, delimited and POSIX command option parsing
+* Added execute method to the CommandOption to make it fully implement
+  the GoF Command pattern
+* Added command option constraints to further reduce boilerplate code
+* Added support for preamble and postamble messages to the autohelp
+
+com.townleyenterprises.filter:
+
+* Added generic string filter class
+
+com.townleyenterprises.io:
+
+* Added generic text file utility parsing classes
+
+com.townleyenterprises.persistence:
+
+* Eliminated the dependencies on a pre-release version of Jaxor
+* Provide backwards-compatible persistence classes for previous Jaxor
+  snapshots
+* Added generic ConnectionFactory interface
+* Added generic configuration handling for common options
+
+com.townleyenterprises.swing:
+
+* Added a number of common classes:  Monitored task, about box, status
+  bar, resource UI builder
+* Property-based Swing themes which go beyond the standard MetalTheme
+  capabilities
+
+com.townleyenterprises.tool:
+
+* Added example tool which is useful for generating classpath
+  environment variables under Windows
+
+com.townleyenterprises.validator:
+
+* Added generic validator capabilites which provide more control
+  than those present in the Jakarta Commons Validator package.
 
 Using the Binary Release
 ------------------------
@@ -32,7 +98,7 @@ Unix:
 
 Windows:
 
-	C:\te-common-2.0-Beta2> ant
+	C:\te-common-3.0-pre1> ant
 
 Once the project has been built, it may be used by following the
 instructions in the 'Using the Binary Release' section.
