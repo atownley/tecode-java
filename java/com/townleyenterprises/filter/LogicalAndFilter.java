@@ -47,12 +47,17 @@ import java.util.Iterator;
  * This class provides an implementation of the Filter interface that
  * implements the AND conjunction.
  *
- * @version $Id: LogicalAndFilter.java,v 1.1 2003/06/07 18:42:35 atownley Exp $
+ * @version $Id: LogicalAndFilter.java,v 1.2 2003/06/08 19:58:31 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
 public class LogicalAndFilter extends LogicalFilter
 {
+	public LogicalAndFilter()
+	{
+		super("&&");
+	}
+
 	/**
 	 * This method actually performs the operation that will
 	 * determine if the parameter object should be included in the

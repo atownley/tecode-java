@@ -48,12 +48,24 @@ import java.util.Iterator;
  * This package class provides the base operation common to all logical
  * comparison filters within the system.
  *
- * @version $Id: LogicalFilter.java,v 1.1 2003/06/07 18:42:35 atownley Exp $
+ * @version $Id: LogicalFilter.java,v 1.2 2003/06/08 19:58:31 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
 public abstract class LogicalFilter implements Filter
 {
+	/**
+	 * The constructor is used simply to provide an operator
+	 * string description which is used in the toString() method.
+	 *
+	 * @param op the operator string which should be displayed
+	 */
+
+	protected LogicalFilter(String op)
+	{
+		_opstr = op;
+	}
+
 	/**
 	 * Adds a new filter to this compound filter.
 	 *
@@ -109,6 +121,29 @@ public abstract class LogicalFilter implements Filter
 	{
 		return _filters.iterator();
 	}
+
+	public String toString()
+	{
+		StringBuffer buf = new StringBuffer("(");
+
+		for(Iterator i = iterator(); i.hasNext();)
+		{
+			buf.append(" ");
+			buf.append(i.next());
+			if(i.hasNext())
+			{
+				buf.append(" ");
+				buf.append(_opstr);
+			}
+		}
+
+		buf.append(" )");
+
+		return buf.toString();
+	}
+
+	/** our operator string */
+	private final String		_opstr;
 
 	/** the list of filters to be executed over the object */
 	protected final ArrayList	_filters = new ArrayList();
