@@ -81,7 +81,7 @@
 		</copy>
 	</target>
 
-	<target name="cmbuild" depends="clean,builddate">
+	<target name="cmbuild" depends="distclean,builddate">
 		<!-- increment the build counter -->
 		<propertyfile file="${build.count}"
 			comment=" Official build file.  DO NOT EDIT.">
