@@ -59,7 +59,7 @@ import javax.swing.ImageIcon;
  * com.townleyenterprises.common.UseLastOverrideStrategy} which should
  * "do the right thing" in almost all of the cases.
  *
- * @version $Id: ResourceManager.java,v 1.4 2004/12/26 19:44:46 atownley Exp $
+ * @version $Id: ResourceManager.java,v 1.5 2004/12/28 21:47:07 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -249,6 +249,7 @@ public class ResourceManager extends OverrideManager
 
 		return locale;
 	}
+
 	/**
 	 * This method is used to retrieve the property keys from the
 	 * specified object.  The current assumption is that all
