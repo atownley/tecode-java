@@ -53,6 +53,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import com.townleyenterprises.common.ResourceProvider;
+
 /**
  * This class provides a concrete implementation of the UIBuilder
  * interface which reads the UI descriptions from a resource bundle.
@@ -62,7 +64,7 @@ import javax.swing.KeyStroke;
  * application.
  *
  * @since 2.1
- * @version $Id: ResourceUIBuilder.java,v 1.7 2004/07/28 10:33:59 atownley Exp $
+ * @version $Id: ResourceUIBuilder.java,v 1.8 2004/07/29 18:35:01 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 

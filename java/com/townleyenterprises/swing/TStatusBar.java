@@ -61,6 +61,8 @@ import javax.swing.text.JTextComponent;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
+import com.townleyenterprises.common.ResourceProvider;
+
 /**
  * This is a GUI class representing a status bar common to most
  * applications.  A simple status bar is pretty easy to manage with
@@ -69,7 +71,7 @@ import javax.swing.UIManager;
  * an attempt to solve those issues.
  *
  * @since 2.1
- * @version $Id: TStatusBar.java,v 1.6 2004/07/28 10:33:59 atownley Exp $
+ * @version $Id: TStatusBar.java,v 1.7 2004/07/29 18:35:01 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 

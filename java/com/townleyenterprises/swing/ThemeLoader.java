@@ -54,13 +54,13 @@ import javax.swing.UIDefaults;
 
 /**
  * This class is similar to the {@link
- * com.townleyenterprises.swing.ResourceLoader}, but it isn't
+ * com.townleyenterprises.common.ResourceLoader}, but it isn't
  * dealing with the same sort of information.  For themes, arbitrary
  * properties files (with a '.theme' suffix) are used rather than
  * properties.  These are also not localized, so the locale concept
  * doesn't apply in this case.
  *
- * @version $Id: ThemeLoader.java,v 1.4 2004/07/28 10:33:59 atownley Exp $
+ * @version $Id: ThemeLoader.java,v 1.5 2004/07/29 18:35:01 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
