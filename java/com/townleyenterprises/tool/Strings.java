@@ -51,7 +51,7 @@ import com.townleyenterprises.common.ResourceLoader;
  * This class is used to track all of the localized strings used for
  * messages in this package.
  *
- * @version $Id: Strings.java,v 1.4 2004/08/04 10:37:43 atownley Exp $
+ * @version $Id: Strings.java,v 1.5 2004/08/04 11:05:52 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -68,6 +68,19 @@ final class Strings
 		{
 			// ignored
 		}
+	}
+
+	/**
+	 * This method is used to return the resource manager.  It is
+	 * intended to be used in applications which use mostly
+	 * localized strings, but need to load a few localized images.
+	 *
+	 * @return the resource manager
+	 */
+
+	static ResourceManager getManager()
+	{
+		return _resources;
 	}
 
 	static String get(String key)
