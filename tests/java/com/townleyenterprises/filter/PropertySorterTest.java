@@ -51,7 +51,7 @@ import com.townleyenterprises.common.ResourceManager;
 /**
  * This class exercises the PropertySorter class.
  *
- * @version $Id: PropertySorterTest.java,v 1.1 2004/12/12 00:57:05 atownley Exp $
+ * @version $Id: PropertySorterTest.java,v 1.2 2004/12/12 01:00:41 atownley Exp $
  * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  */
 
@@ -117,6 +117,49 @@ public class PropertySorterTest extends TestCase
 		assertEquals("\u00e4pple", ((Data)_list.get(6)).getName());
 	}
 
+	public void testCollateDescNonASCIILocaleEn()
+	{
+		Collections.sort(_list, new PropertySorter(Data.class,
+				ResourceManager.getLocale("en"), _dss));
+
+		assertEquals("a\u00e9roport", ((Data)_list.get(6)).getName());
+		assertEquals("A\u00e9roport", ((Data)_list.get(5)).getName());
+		assertEquals("\u00e4pple", ((Data)_list.get(4)).getName());
+		assertEquals("Axelro", ((Data)_list.get(3)).getName());
+		assertEquals("banan", ((Data)_list.get(2)).getName());
+		assertEquals("orange", ((Data)_list.get(1)).getName());
+		assertEquals("p\u00e4ron", ((Data)_list.get(0)).getName());
+	}
+
+	public void testCollateDescNonASCIILocaleDe()
+	{
+		Collections.sort(_list, new PropertySorter(Data.class,
+				ResourceManager.getLocale("de"), _dss));
+
+		assertEquals("a\u00e9roport", ((Data)_list.get(6)).getName());
+		assertEquals("A\u00e9roport", ((Data)_list.get(5)).getName());
+		assertEquals("\u00e4pple", ((Data)_list.get(4)).getName());
+		assertEquals("Axelro", ((Data)_list.get(3)).getName());
+		assertEquals("banan", ((Data)_list.get(2)).getName());
+		assertEquals("orange", ((Data)_list.get(1)).getName());
+		assertEquals("p\u00e4ron", ((Data)_list.get(0)).getName());
+	}
+
+	public void testCollateDescNonASCIILocaleSv()
+	{
+		Collections.sort(_list, new PropertySorter(Data.class,
+				ResourceManager.getLocale("sv"), _dss));
+
+		assertEquals("a\u00e9roport", ((Data)_list.get(6)).getName());
+		assertEquals("A\u00e9roport", ((Data)_list.get(5)).getName());
+		assertEquals("Axelro", ((Data)_list.get(4)).getName());
+		assertEquals("banan", ((Data)_list.get(3)).getName());
+		assertEquals("orange", ((Data)_list.get(2)).getName());
+		assertEquals("p\u00e4ron", ((Data)_list.get(1)).getName());
+		assertEquals("\u00e4pple", ((Data)_list.get(0)).getName());
+	}
+
 	ArrayList _list = null;
 	SortSpecification[] _ss = { new SortSpecification("name") };
+	SortSpecification[] _dss = { new SortSpecification("name", SortOrder.DESCENDING) };
 }
