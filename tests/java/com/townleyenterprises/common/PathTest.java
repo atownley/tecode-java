@@ -46,7 +46,7 @@ import junit.framework.TestCase;
 /**
  * Basic unit tests for the Path class
  *
- * @version $Id: PathTest.java,v 1.2 2004/07/28 10:34:00 atownley Exp $
+ * @version $Id: PathTest.java,v 1.3 2004/07/29 18:36:47 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -96,6 +96,26 @@ public final class PathTest extends TestCase
 		assertEquals("PathTest", Path.classname(getClass().getName()));
 	}
 
+	public void testStripExtension()
+	{
+		assertEquals("a", Path.stripExtension("a.bat"));
+	}
+
+	public void testStripExtensionNone()
+	{
+		assertEquals("a", Path.stripExtension("a"));
+	}
+
+	public void testGetExtension()
+	{
+		assertEquals("bar", Path.getExtension("foo.bar"));
+	}
+
+	public void testGetExtensionNone()
+	{
+		assertEquals("", Path.getExtension("foo"));
+	}
+	
 	public static void main(String[] args)
 	{
 		junit.textui.TestRunner.run(PathTest.class);
