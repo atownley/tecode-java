@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2002-2004, Andrew S. Townley
+// Copyright (c) 2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,7 @@ import junit.framework.TestCase;
  * with successfully parsing the options.  Manual verification of the
  * formatting of the usage and help output will still be necessary.
  *
- * @version $Id: CommandParserTest.java,v 1.1 2004/01/25 19:39:17 atownley Exp $
+ * @version $Id: CommandParserTest.java,v 1.2 2004/01/26 09:27:07 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -58,6 +58,19 @@ public final class CommandParserTest extends TestCase
 	public CommandParserTest(String testname)
 	{
 		super(testname);
+	}
+
+	public void testAllOptionsRegistered()
+	{
+		parser.addCommandListener(this);
+		String[] args = new String[] { "--one", "value",
+					"--onlylong", "value3",
+					"--three" };
+		parser.parse(args);
+
+		assertTrue(opt1.getMatched());
+		assertTrue(opt2.getMatched());
+		assertTrue(opt3.getMatched());
 	}
 
 	public void testOptionOneWithSpaces()
@@ -99,7 +112,6 @@ public final class CommandParserTest extends TestCase
 		assertFalse(opt1.getMatched());
 		assertFalse(opt2.getMatched());
 		assertFalse(opt3.getMatched());
-		assertFalse(opt4.getMatched());
 	}
 
 	public void testOptionOneMissingArg()
@@ -142,10 +154,87 @@ public final class CommandParserTest extends TestCase
 				return options2;
 			}
 		});
-		String[] args = new String[] { "--one", "two" };
+		String[] args = new String[] { "--one", "two", "-t" };
 		parser.parse(args);
 		assertFalse(opt1.getMatched());
+		assertFalse(opt3.getMatched());
+		assertTrue(opt4.getMatched());
 		assertTrue(opt5.getMatched());
+	}
+
+	public void testUnregisterListener()
+	{
+		parser.addCommandListener(this);
+		String[] args = new String[] { "--one", "value",
+					"--onlylong", "value3",
+					"--three" };
+		parser.parse(args);
+
+		assertTrue(opt1.getMatched());
+		assertTrue(opt2.getMatched());
+		assertTrue(opt3.getMatched());
+		
+		// now unregister and try to parse
+		parser.removeCommandListener(this);
+
+		// manually reset our option's state
+		opt1.reset();
+		opt2.reset();
+		opt3.reset();
+
+		// re-parse the argument list
+		parser.parse(args);
+
+		assertFalse(opt1.getMatched());
+		assertFalse(opt2.getMatched());
+		assertFalse(opt3.getMatched());
+	}
+
+	public void testAlternateSwitches()
+	{
+		CommandParser altp = new CommandParser("altp", null,
+						'/', "^^");
+		altp.addCommandListener(this);
+		String[] args = new String[] { "^^one", "value",
+					"^^onlylong", "value3",
+					"/t" };
+		altp.parse(args);
+
+		assertTrue(opt1.getMatched());
+		assertEquals("value", opt1.getArg());
+		assertTrue(opt2.getMatched());
+		assertEquals("value3", opt2.getArg());
+		assertTrue(opt3.getMatched());
+	}
+
+	public void testSameSwitches()
+	{
+		try
+		{
+			CommandParser altp = new CommandParser("altp",
+						null, '/', "/");
+		}
+		catch(RuntimeException e)
+		{
+			assertEquals("long switch must be at least 2 characters", e.getMessage());
+		}
+	}
+
+	public void testLongLongSwitch()
+	{
+		CommandParser altp = new CommandParser("altp", null,
+						'*', "*****");
+		altp.addCommandListener(this);
+		String[] args = new String[] { "*****one", "value",
+					"*****onlylong", "value3",
+					"*t" };
+		altp.parse(args);
+
+		assertTrue(opt1.getMatched());
+		assertEquals("value", opt1.getArg());
+		assertTrue(opt2.getMatched());
+		assertEquals("value3", opt2.getArg());
+		assertTrue(opt3.getMatched());
 	}
 
 	public static void main(String[] args)
@@ -175,13 +264,13 @@ public final class CommandParserTest extends TestCase
 			true, "ARG", "option 2 text");
 	CommandOption opt3 = new CommandOption("three", 't', false,
 			null, "some descriptive text");
-	CommandOption opt4 = new CommandOption("four", 'f', false,
+	CommandOption opt4 = new CommandOption("one", 'X', false,
 			null, "descriptive text 4");
-	CommandOption opt5 = new CommandOption("one", 'X', false,
+	CommandOption opt5 = new CommandOption("ixx", 't', false,
 			null, "descriptive text 5");
 	
 	CommandOption[] options1 = 
-		new CommandOption[] { opt1, opt2, opt3, opt4 };
+		new CommandOption[] { opt1, opt2, opt3 };
 	CommandOption[] options2 = 
 		new CommandOption[] { opt1, opt2, opt3, opt4, opt5 };
 }
