@@ -42,13 +42,16 @@
 package com.townleyenterprises.common;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 /**
  * This file provides a generalized mechanism for centralizing access
  * to application configuration information.
  *
- * @version $Id: AppConfig.java,v 1.4 2003/12/17 13:05:16 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.5 2004/01/21 21:52:46 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -85,6 +88,7 @@ public final class AppConfig
 
 		ConfigLoader cl = new ConfigLoader(s.getClass(), defprefs, prefs);
 		props.putAll(cl.getProperties());
+		loaders.add(cl);
 	}
 
 	/**
@@ -159,6 +163,18 @@ public final class AppConfig
 		return props;
 	}
 
+	/**
+	 * This method is used to provide access to the list of
+	 * registered ConfigLoader instances.
+	 *
+	 * @return the list
+	 */
+
+	public static List getConfigLoaders()
+	{
+		return Collections.unmodifiableList(loaders);
+	}
+
 	/** this is our global list of properties */
 	private static Properties	props = new Properties();
 
@@ -167,4 +183,7 @@ public final class AppConfig
 	
 	/** this is our config supplier for the persistence layer */
 	private static ConfigSupplier	persistenceSupplier = null;
+
+	/** track our list of config loaders */
+	private static List		loaders = new ArrayList();	
 }

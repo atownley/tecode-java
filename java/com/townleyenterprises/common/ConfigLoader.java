@@ -50,7 +50,7 @@ import java.io.IOException;
  * files so that I don't have to have the exact same code in more than
  * one place.
  *
- * @version $Id: ConfigLoader.java,v 1.1 2003/06/07 18:42:30 atownley Exp $
+ * @version $Id: ConfigLoader.java,v 1.2 2004/01/21 21:52:46 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -76,6 +76,10 @@ public class ConfigLoader
 	public ConfigLoader(Class cls, String primaryloc, String secondaryloc)
 			throws IOException
 	{
+		klass = cls;
+		primary = primaryloc;
+		secondary = secondaryloc;
+
 		props = new Properties();
 //		System.err.println(cls.getResource(primaryloc));
 		InputStream is = cls.getResourceAsStream(primaryloc);
@@ -148,6 +152,35 @@ public class ConfigLoader
 		return (Properties)props.clone();
 	}
 
+	/**
+	 * This method prints information about this configuration
+	 * loader instance.
+	 */
+
+	public String toString()
+	{
+		StringBuffer buf = new StringBuffer("[");
+		buf.append(getClass().getName());
+		buf.append(": primary = '");
+		buf.append(klass.getPackage().getName().replaceAll("\\.", "/"));
+		buf.append("/");
+		buf.append(primary);
+		buf.append("'; secondary = '");
+		buf.append(secondary);
+		buf.append("' ]");
+
+		return buf.toString();
+	}
+
 	/** this is our global list of properties */
 	private Properties	props = null;
+
+	/** the class used as the base for the configuration */
+	private Class		klass = null;
+
+	/** the primary location for the properties */
+	private String		primary = null;
+
+	/** the secondary location for the properies */
+	private String		secondary = null;
 }
