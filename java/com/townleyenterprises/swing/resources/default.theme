@@ -1,0 +1,105 @@
+######################################################################
+##
+## Copyright (c) 2003, Andrew S. Townley
+## All rights reserved.
+## 
+## Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions
+## are met:
+## 
+##     * Redistributions of source code must retain the above
+##     copyright notice, this list of conditions and the following
+##     disclaimer.
+## 
+##     * Redistributions in binary form must reproduce the above
+##     copyright notice, this list of conditions and the following
+##     disclaimer in the documentation and#or other materials provided
+##     with the distribution.
+## 
+##     * Neither the names Andrew Townley and Townley Enterprises,
+##     Inc. nor the names of its contributors may be used to endorse
+##     or promote products derived from this software without specific
+##     prior written permission.  
+## 
+## THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+## "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+## LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+## FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+## COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+## INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+## (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+## SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+## HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+## ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+## OF THE POSSIBILITY OF SUCH DAMAGE.
+##
+## File:	default.theme
+## Created:	Thu Nov 13 23:01:40 GMT 2003
+## Author:	Andrew S. Townley (adz1092@netscape.net)
+##
+## $Id: default.theme,v 1.1 2003/11/20 10:47:52 atownley Exp $
+##
+######################################################################
+
+######################################################################
+# These are the overall Swing L&F settings
+#
+# lookandfeel.name - this is either the fully-qualified name of the
+#                    look and feel class or the value 'system' which
+#                    will use the platform defaults
+#
+# lookandfeel.decoratedframes - this value indicates if the window
+#                    frames will be decorated using the current L&F
+#
+# The following settings are completely described in the Java Look &
+# Feel guidelines book.  It's difficult to explain how they're all
+# used without using pictures.  NOTE:  the following settings only
+# affect the Metal Look & Feel and have no bearing on any other
+# L&F.
+#
+# color.primary1 - this is the color to be used for primary1
+#
+# color.primary2 - this is the color to be used for primary2
+#
+# color.primary3 - this is the color to be used for primary3
+#
+# color.secondary1 - this is the color to be used for secondary1
+#
+# color.secondary2 - this is the color to be used for secondary2
+#
+# color.secondary3 - this is the color to be used for secondary3
+#
+# color.black - this is the color used for black (set to white for
+#                     reverse video themes)
+#
+# color.white - this is the color used for white (set to black for
+#                     reverse video themes)
+#
+#---------------------------------------------------------------------
+#
+# For Metal's fonts, the following general configuration options are
+# used:
+#
+# font.*.name - the name to be used for the specific font
+#
+# font.*.style - the style to be used (one of: plain, bold, italic,
+#                     or bolditalic)
+#
+# font.*.size - the font size, in points
+#
+# Each of the following fonts may be specified:
+#
+# controltext - the font used for control labels and text
+#
+# menutext - the font used for menus
+#
+# subtextfont - ??
+#
+# systemtextfont - ??
+#
+# windowtitlefont - the font used for drawing frame window titles
+#
+######################################################################
+lookandfeel.name=javax.swing.plaf.metal.MetalLookAndFeel
+font.controltext.style=plain
