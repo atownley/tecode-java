@@ -49,13 +49,18 @@ import com.townleyenterprises.common.ResourceLoader;
  * This class is used to track all of the localized strings used for
  * messages in this package.
  *
- * @version $Id: Strings.java,v 1.1 2004/07/29 18:28:28 atownley Exp $
+ * @version $Id: Strings.java,v 1.2 2004/07/30 16:39:05 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
 
 final class Strings
 {
+	static void addResources(Object obj, String name)
+	{
+		_resources.manage(new ResourceLoader(obj.getClass(), name));
+	}
+
 	static String get(String key)
 	{
 		return _resources.getString(key);
