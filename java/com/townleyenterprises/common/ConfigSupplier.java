@@ -45,7 +45,13 @@ package com.townleyenterprises.common;
  * This interface must be implemneted by applications that wish to use
  * the general configuration mechanism.
  *
- * @version $Id: ConfigSupplier.java,v 1.3 2004/07/28 10:33:58 atownley Exp $
+ * @deprecated This interface has been augmented and re-implemented to
+ * support a more generic configuration mechanism.  Use the {@link
+ * com.townleyenterprises.config.ConfigSupplier} interface for all new
+ * development.  This interface will be removed from a future version
+ * of the library.
+ *
+ * @version $Id: ConfigSupplier.java,v 1.4 2004/12/27 23:14:43 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
