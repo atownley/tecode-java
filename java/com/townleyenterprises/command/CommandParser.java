@@ -41,15 +41,15 @@
 
 package com.townleyenterprises.command;
 
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.16 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.17 2004/07/30 16:22:56 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -81,8 +81,10 @@ public final class CommandParser implements CommandListener
 	// FIXME:  needs l10n support!!
 	
 	private static CommandOption[] ahopts = {
-		new CommandOption("help", '?', false, null, "show this help message"),
-		new CommandOption("usage", (char)0, false, null, "show brief usage message")
+		new CommandOption("help", '?', false, null, 
+			Strings.get("sParserOptionHelp")),
+		new CommandOption("usage", (char)0, false, null,
+			Strings.get("sParserUsageHelp"))
 	};
 
 	/**
@@ -167,7 +169,8 @@ public final class CommandParser implements CommandListener
 
 		if(_lswitch.length() == 1)
 		{
-			throw new RuntimeException("long switch must be at least 2 characters");
+			throw new RuntimeException(
+				Strings.get("sParserLswitchError"));
 		}
 	}
 
@@ -183,7 +186,8 @@ public final class CommandParser implements CommandListener
 	 * 	arguments; false to require at least one argument
 	 */
 
-	public void enableAutohelp(boolean autohelp, boolean allowZeroArgs)
+	public void enableAutohelp(boolean autohelp,
+				boolean allowZeroArgs)
 	{
 		_autohelp = autohelp;
 		_zeroarg = allowZeroArgs;
@@ -262,7 +266,7 @@ public final class CommandParser implements CommandListener
 		OptionHolder val = null;
 
 		boolean copyargs = false;
-		_leftovers = new Vector();
+		_leftovers = new ArrayList();
 		
 		for(int i = 0; i < args.length; ++i)
 		{
@@ -290,158 +294,6 @@ public final class CommandParser implements CommandListener
 			i = processArg(i, args);
 		}
 	}
-
-//	/**
-//	 * This is the main parsing function that should be called to
-//	 * trigger the parsing of the command-line arguments
-//	 * registered with the parser.
-//	 *
-//	 * @param args the command-line arguments to parse
-//	 */
-//
-//	public void parse(String[] args)
-//	{
-//		if(args.length == 0 && !_zeroarg)
-//		{
-//			usage();
-//			return;
-//		}
-//		
-//		if(_autohelp)
-//		{
-//			addCommandListener(this);
-//		}
-//		else
-//		{
-//			removeCommandListener(this);
-//		}
-//
-//		// reset all the options (fix for multiple parse bug)
-//		resetOptions();
-//
-//		OptionHolder val = null;
-//
-//		boolean copyargs = false;
-//		_leftovers = new Vector();
-//		
-//		for(int i = 0; i < args.length; ++i)
-//		{
-//			String	s = args[i];
-//
-//			// executive decision:  if the argument is
-//			// empty, it's silently ignored
-//
-//			if(s == null || s.length() == 0)
-//				continue;
-//
-//			if(s.equals(_eoargs))
-//			{
-//				copyargs = true;
-//				continue;
-//			}
-//
-//			if(copyargs)
-//			{
-//				_leftovers.add(s);
-//				continue;
-//			}
-//
-//			// take care of the normal processing
-//
-//			char	c0 = s.charAt(0);
-//			char	c1 = 0;
-//			int	idx = s.indexOf('=');
-//
-//			if(s.length() > 1)
-//				c1 = s.charAt(1);
-//
-//			// FIXME:  there may be better ways to do
-//			// this, but I'm going to do the easy way
-//			// first.
-//			
-//			if((_sswitch == c0) || (s.startsWith(_lswitch)))
-//			{
-//				// it is supposed to be an option
-//				// is it a combined short option?
-//				if(s.length() > 2 && _sswitch == c0 &&
-//						(_sswitch != c1))
-//				{
-//					System.err.println("error:  combined options are not yet supported (" + s + ")");
-//					continue;
-//				}
-//				else if(s.length() == 2 &&
-//						_sswitch == c0)
-//				{
-//					// should be in the short map
-//					val = (OptionHolder)_shortOpts.get(new Character(s.charAt(1)));
-//				}
-//				else
-//				{
-//					// must be a long option
-//					String key;
-//					if(idx != -1)
-//					{
-//						key = s.substring(_lswitch.length(), idx);
-//					}
-//					else
-//					{
-//						key = s.substring(_lswitch.length());
-//					}
-//
-//					val = (OptionHolder)_longOpts.get(key);
-//				}
-//			}
-//			else
-//			{
-//				_leftovers.add(s);
-//				continue;
-//			}
-//
-//			// if we get here should have a value
-//			if(val == null)
-//			{
-//				System.err.println("error:  unknown option specified (" + s + ")");
-//				usage();
-//				break;
-//			}
-//
-//			String arg = null;
-//
-//			// handle the option
-//			if(val.option.getExpectsArgument())
-//			{
-//				// check to make sure that there's no
-//				// '=' sign.
-//				if(idx != -1)
-//				{
-//					arg = s.substring(idx + 1);
-//					if(arg.length() == 0)
-//					{
-//						handleMissingArg(val);
-//					}
-//				}
-//				else
-//				{
-//					if(++i < args.length)
-//					{
-//						arg = args[i];
-//					}
-//					else
-//					{
-//						handleMissingArg(val);
-//						continue;
-//					}
-//				}
-//			}
-//
-//			// give the option a chance to do what it
-//			// wants
-//			val.option.optionMatched(arg);
-//			
-//			// notify the listeners
-//			val.listener.optionMatched(val.option, arg);
-//		}
-//	}
 
 	/**
 	 * This method allows the client of the argument parser to
@@ -486,7 +338,7 @@ public final class CommandParser implements CommandListener
 
 	public String getDescription()
 	{
-		return "Help options";
+		return Strings.get("sParserHelpOptionsDesc");
 	}
 
 	/**
@@ -496,7 +348,8 @@ public final class CommandParser implements CommandListener
 
 	public void help()
 	{
-		System.out.print("Usage:  " + _appname + " [OPTION...]");
+		System.out.print(Strings.format("fParserUsage",
+					new Object[] { _appname }));
 		if(_arghelp != null && _arghelp.length() != 0)
 		{
 			System.out.print(" " + _arghelp);
@@ -509,9 +362,9 @@ public final class CommandParser implements CommandListener
 			printWrappedText(_preamble, ' ', 80, 0);
 		}
 
-		for(Enumeration e = _listeners.elements(); e.hasMoreElements(); )
+		for(Iterator e = _listeners.iterator(); e.hasNext(); )
 		{
-			CommandListener l = (CommandListener)e.nextElement();
+			CommandListener l = (CommandListener)e.next();
 			System.out.println("\n" + l.getDescription() + ":");
 
 			printOptionsHelp(l.getOptions());
@@ -530,12 +383,12 @@ public final class CommandParser implements CommandListener
 
 	public void usage()
 	{
-		StringBuffer buf = new StringBuffer("Usage:  ");
+		StringBuffer buf = new StringBuffer(Strings.get("sParserUsage"));
 		buf.append(_appname);
 
-		for(Enumeration e = _listeners.elements(); e.hasMoreElements(); )
+		for(Iterator e = _listeners.iterator(); e.hasNext(); )
 		{
-			CommandListener l = (CommandListener)e.nextElement();
+			CommandListener l = (CommandListener)e.next();
 			CommandOption[] opts = l.getOptions();
 			for(int i = 0; i < opts.length; ++i)
 			{
@@ -582,7 +435,7 @@ public final class CommandParser implements CommandListener
 					}
 					else
 					{
-						buf.append("<arg>");
+						buf.append(Strings.get("sParserDefaultArg"));
 					}
 				}
 				
@@ -618,6 +471,20 @@ public final class CommandParser implements CommandListener
 	}
 
 	/**
+	 * This method is used to configure the command parser to stop
+	 * executing commands when an unhandled exeception is thrown
+	 * by an option.
+	 *
+	 * @param val toggles the behavior
+	 * @since 3.0
+	 */
+
+	public void setAbortExecuteOnError(boolean val)
+	{
+		_abortExecOnError = val;
+	}
+
+	/**
 	 * This method is used to set optional text which can be
 	 * printed before and after the command option descriptions.
 	 *
@@ -631,6 +498,88 @@ public final class CommandParser implements CommandListener
 	{
 		_preamble = preamble;
 		_postamble = postamble;
+	}
+
+	/**
+	 * This method is used to check all of the command constraints
+	 * and execute all of the options.
+	 *
+	 * @exception Exception if anything bad happens
+	 * @since 3.0
+	 */
+
+	public void executeCommands() throws Exception
+	{
+		checkConstraints();
+
+		for(Iterator i = _commands.iterator(); i.hasNext(); )
+		{
+			try
+			{
+				CommandOption opt = (CommandOption)i.next();
+				opt.execute();
+			}
+			catch(Exception e)
+			{
+				if(!_abortExecOnError)
+				{
+					System.err.println(e);
+				}
+				else
+				{
+					throw e;
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method is used to add an option constraint to the
+	 * parser.
+	 *
+	 * @param constraint the constraint to check
+	 * @since 3.0
+	 */
+
+	public void addConstraint(OptionConstraint constraint)
+	{
+		_constraints.add(constraint);
+	}
+
+	/**
+	 * This method is used to remove a constraint from the parser.
+	 *
+	 * @param constraint the constraint to remove
+	 * @since 3.0
+	 */
+
+	public void removeConstraint(OptionConstraint constraint)
+	{
+		_constraints.remove(constraint);
+	}
+
+	/**
+	 * This method is used to check the constraints.
+	 */
+
+	private void checkConstraints()
+	{
+		if(_checkedConstraints)
+			return;
+
+		for(Iterator i = _constraints.iterator(); i.hasNext(); )
+		{
+			OptionConstraint oc = (OptionConstraint)i.next();
+			if(!oc.isOK())
+			{
+				System.err.println(Strings.format("fParserConstraintFailure",
+					new Object[] { oc.getMessage() }));
+				usage();
+				System.exit(oc.getExitStatus());
+			}
+		}
+
+		_checkedConstraints = true;
 	}
 
 	/**
@@ -654,23 +603,22 @@ public final class CommandParser implements CommandListener
 		if(lobj != null || sobj != null)
 		{
 			String desc = null;
-			System.err.print("warning:  overriding option");
-			System.err.print(" '");
+			String sopt = null;
 			if(lobj != null)
 			{
-				System.err.print(lname);
+				sopt = lname;
 				desc = lobj.listener.getDescription();
 			}
 			else if(sobj != null)
 			{
-				System.err.print(c);
+				sopt = c.toString();
 				desc = sobj.listener.getDescription();
 			}
-			System.err.print("' from '");
-			System.err.print(desc);
-			System.err.print("' by '");
-			System.err.print(l.getDescription());
-			System.err.println("'.");
+			System.err.println(Strings.format("fParserWarnOverride",
+					new Object[] {
+						sopt, desc,
+						l.getDescription()
+					}));
 		}
 
 		// set up the maps
@@ -679,6 +627,11 @@ public final class CommandParser implements CommandListener
 		if(c.charValue() != 0)
 		{
 			_shortOpts.put(c, holder);
+		}
+
+		if(!_commands.contains(opt))
+		{
+			_commands.add(opt);
 		}
 	}
 
@@ -694,7 +647,7 @@ public final class CommandParser implements CommandListener
 		String hlp = val.option.getHelp();
 		if(hlp == null || hlp.length() == 0)
 		{
-			hlp = "<arg>";
+			hlp = Strings.get("sParserDefaultArg");
 		}
 
 		String name = val.option.getLongName();
@@ -712,18 +665,23 @@ public final class CommandParser implements CommandListener
 			name = buf.toString();
 		}
 
-		String msg = "error:  option " + name + " requires parameter '" + hlp + "'.";
 		if(_exitmissing)
 		{
-			System.err.print(msg);
-			System.err.println("  Exiting.");
+			System.err.println(Strings.format("fParserErrMissingParam",
+					new Object[] {
+						name, hlp,
+						Strings.get("sExiting")
+					}));
 			usage();
 			System.exit(_exitstatus);
 		}
 		else
 		{
-			System.err.print(msg);
-			System.err.println("  Ignored.");
+			System.err.println(Strings.format("fParserErrMissingParam",
+					new Object[] {
+						name, hlp,
+						Strings.get("sIgnored")
+					}));
 		}
 	}
 
@@ -790,7 +748,7 @@ public final class CommandParser implements CommandListener
 				}
 				else
 				{
-					buf.append("<arg>");
+					buf.append(Strings.get("sParserDefaultArg"));
 				}
 			}
 
@@ -808,7 +766,8 @@ public final class CommandParser implements CommandListener
 
 			if(ad != null && ad.length() > 0)
 			{
-				buf.append(" (default: ");
+				buf.append(" (");
+				buf.append(Strings.get("lParserDefault"));
 				
 				if(val instanceof String)
 					buf.append("\"");
@@ -926,6 +885,7 @@ public final class CommandParser implements CommandListener
 	{
 		_longOpts.remove(opt.getLongName());
 		_shortOpts.remove(opt.getShortName());
+		_commands.remove(opt);
 	}
 
 	/**
@@ -936,19 +896,14 @@ public final class CommandParser implements CommandListener
 
 	private void resetOptions()
 	{
-		Iterator i = _longOpts.values().iterator();
+		Iterator i = _commands.iterator();
 		while(i.hasNext())
 		{
-			OptionHolder holder = (OptionHolder)i.next();
-			holder.option.reset();
+			CommandOption opt = (CommandOption)i.next();
+			opt.reset();
 		}
 
-		i = _shortOpts.values().iterator();
-		while(i.hasNext())
-		{
-			OptionHolder holder = (OptionHolder)i.next();
-			holder.option.reset();
-		}
+		_checkedConstraints = false;
 	}
 
 	private int processArg(int argc, String[] args)
@@ -1012,7 +967,9 @@ public final class CommandParser implements CommandListener
 		// if we get here should have a value
 		if(val == null)
 		{
-			System.err.println("error:  unknown option specified (" + s + ")");
+			System.err.println(
+				Strings.format("fParserErrUnknownOption",
+					new Object[] { s } ));
 			usage();
 			return args.length;
 		}
@@ -1077,7 +1034,7 @@ public final class CommandParser implements CommandListener
 			oh = (OptionHolder)_shortOpts.get(ch);
 			if(oh == null)
 			{
-				System.err.println("error:  unknown option '" + ch + "' specified.");
+				System.err.println(Strings.format("fParserErrUnknownSwitch", new Object[] { ch }));
 				return args.length;
 			}
 
@@ -1092,7 +1049,7 @@ public final class CommandParser implements CommandListener
 				}
 				else
 				{
-					System.err.println("error:  unknown option '" + ch + "' specified.");
+					System.err.println(Strings.format("fParserErrUnknownSwitch", new Object[] { ch }));
 					return args.length;
 				}
 			}
@@ -1118,7 +1075,7 @@ public final class CommandParser implements CommandListener
 				}
 				else if(oh.option.getExpectsArgument())
 				{
-					System.err.println("error:  invalid option combination '" + sw + "'");
+					System.err.println(Strings.format("fParserErrInvalidCombo", new Object[] { sw }));
 					return args.length;
 				}
 			}
@@ -1144,7 +1101,7 @@ public final class CommandParser implements CommandListener
 	private HashMap		_shortOpts = new HashMap();
 
 	/** our registered listeners */
-	private Vector		_listeners = new Vector();
+	private ArrayList	_listeners = new ArrayList();
 
 	/** indicate if we should handle autohelp */
 	private boolean		_autohelp = true;
@@ -1162,7 +1119,7 @@ public final class CommandParser implements CommandListener
 	private String		_eoargs;
 
 	/** the unhandled arguments */
-	private Vector		_leftovers;
+	private ArrayList	_leftovers;
 
 	/** controls if we exit on missing arguments */
 	private boolean		_exitmissing;
@@ -1178,4 +1135,16 @@ public final class CommandParser implements CommandListener
 
 	/** the maximum width of the switch part */
 	private final int	SWITCH_LENGTH = 35;
+
+	/** keep track of the registered commands */
+	private ArrayList	_commands = new ArrayList();
+
+	/** track what we do on execute errors */
+	private boolean		_abortExecOnError = true;
+
+	/** track the constraints */
+	private ArrayList	_constraints = new ArrayList();
+
+	/** track if we've checked our constraints */
+	private boolean		_checkedConstraints = false;
 }
