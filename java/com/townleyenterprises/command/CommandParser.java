@@ -49,7 +49,7 @@ import java.util.Vector;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.12 2004/01/28 23:31:23 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.13 2004/01/30 12:56:45 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -845,6 +845,29 @@ public final class CommandParser implements CommandListener
 	private void printWrappedText(String text, char cchar, 
 				int width, int indent)
 	{
+		// check if we have a newline
+		int nl = text.indexOf('\n');
+		if(nl != -1)
+		{
+			int start = 0;
+			while(nl != -1)
+			{
+				String sstr = text.substring(start, nl);
+				printWrappedText(sstr, cchar,
+						width, indent);
+				start = nl+1;
+				int x = sstr.indexOf('\n');
+				if(x == -1)
+				{
+					printWrappedText(text.substring(start),
+						cchar, width, indent);
+					return;
+				}
+				
+				nl += x;
+			}
+		}
+
 		String line = text;
 		int lwidth = width;
 		while(line.length() > lwidth)
