@@ -46,7 +46,7 @@ package com.townleyenterprises.validator;
  * intended to provide enough information to allow the listener to
  * react to the validation failure and correct it if possible.
  *
- * @version $Id: FieldValidationEvent.java,v 1.1 2004/07/28 10:13:40 atownley Exp $
+ * @version $Id: FieldValidationEvent.java,v 1.2 2004/08/11 16:21:39 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -72,15 +72,29 @@ public class FieldValidationEvent extends ValidationEvent
 		_value = value;
 	}
 
+	/**
+	 * This method returns the field name of the given form.
+	 */
+
 	public String getField()
 	{
 		return _field;
 	}
 
+	/**
+	 * This method returns the raw field falue which triggered the
+	 * validation failure.
+	 */
+
 	public Object getValue()
 	{
 		return _value;
 	}
+
+	/**
+	 * This method returns the field value as a string rather than
+	 * an object.
+	 */
 
 	public String getText()
 	{
