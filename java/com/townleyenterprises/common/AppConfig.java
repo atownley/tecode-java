@@ -55,13 +55,13 @@ import java.util.Properties;
  * The runtime behavior of this class may be configured using the
  * following properties:
  * <ul>
- * <li><code>te-common.appconfig.overridesystemproperties</code> - set to
+ * <li><code>te-code.appconfig.overridesystemproperties</code> - set to
  * yes or true to allow overiding of the system property values from
  * registered {@link ConfigSupplier} instances.</li>
  * </ul>
  * </p>
  *
- * @version $Id: AppConfig.java,v 1.8 2004/07/29 18:34:07 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.9 2004/08/11 13:21:10 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -237,7 +237,7 @@ public final class AppConfig
 	private static List		loaders = new ArrayList();	
 
 	/** the property name */
-	private static final String	SYSOVERRIDE = "te-common.appconfig.overridesystemproperties";
+	private static final String	SYSOVERRIDE = "te-code.common.appconfig.overridesystemproperties";
 
 	/** our property parser */
 	private static PropertyParser	pparser = new PropertyParser();
