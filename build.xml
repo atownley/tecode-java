@@ -41,7 +41,7 @@
 //////////////////////////////////////////////////////////////////////
 -->
 
-<project name="te-common" default="jar" basedir=".">
+<project name="te-common" default="all" basedir=".">
 	<property name="app.name"	value="te-common"/>
 	<property name="build.home"	value="build/${app.name}"/>
 	<property name="build.dir"	value="build/classes"/>
@@ -98,6 +98,8 @@
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
+
+	<target name="all" depends="verstamp,jar" />
 
 	<target name="compile">
 		<mkdir dir="${build.dir}"/>
@@ -174,5 +176,9 @@
 		<delete dir="build"/>
 		<delete dir="docs/api"/>
 		<delete dir="${dist.dir}"/>
+	</target>
+
+	<target name="distclean" depends="clean">
+		<delete file="${verstamp}"/>
 	</target>
 </project>
