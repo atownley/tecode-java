@@ -49,7 +49,7 @@ import java.util.Vector;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.14 2004/07/20 10:40:05 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.15 2004/07/20 11:40:14 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -1047,7 +1047,7 @@ public final class CommandParser implements CommandListener
 				// FIXME:  needs to be handled
 				// better...
 				if(arg.startsWith(_lswitch)
-						|| c0 == _sswitch)
+						|| arg.charAt(0) == _sswitch)
 				{
 					handleMissingArg(val);
 					return ++argc;
