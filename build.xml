@@ -43,13 +43,15 @@
 
 <project name="te-common" default="all" basedir=".">
 	<property name="app.name"	value="te-common"/>
+	<property name="ext.dir"	value="extensions"/>
 	<property name="build.home"	value="build/${app.name}"/>
 	<property name="build.dir"	value="build/classes"/>
 	<property name="build.tests"	value="build/tests"/>
 	<property name="reports.tests"	value="build/reports"/>
 	<property name="lib.dir"	value="lib"/>
 	<property name="src.dir"	value="java"/>
-	<property name="tests.dir"	value="tests"/>
+	<property name="tests.dir"	value="tests/java"/>
+	<property name="tests.lib.dir"	value="tests/lib"/>
 	<property name="build.version"	value="${basedir}/version.properties"/>
 	<property name="build.date"	value="${basedir}/version.date"/>
 	<property name="build.count"	value="${basedir}/version.count"/>
@@ -110,6 +112,9 @@
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar"/>
 		</fileset>
+		<fileset dir="${tests.lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
 	</path>
 
 	<target name="all" depends="verstamp,jar" />
@@ -138,6 +143,11 @@
 		
 		<copy file="LICENSE" todir="${dist.dir}" />
 		<copy file="RELEASE-NOTES" todir="${dist.dir}" />
+		<copy file="BUGS" todir="${dist.dir}" />
+		<copy file="TODO" todir="${dist.dir}" />
+		<copy file="ChangeLog" todir="${dist.dir}" />
+		<copy file="${build.count}" todir="${dist.dir}" />
+		<copy file="${build.version}" todir="${dist.dir}" />
 		<copy todir="${dist.dir}/lib">
 			<fileset dir="${lib.dir}"
 				includes="**/*.jar"/>
@@ -147,8 +157,11 @@
 		</copy>
 	</target>
 
-	<target name="bin-dist" depends="jar,docs,distdirs">
+	<target name="bin-dist" depends="jar,extensions,docs,distdirs">
 		<copy file="${app.name}.jar" todir="${dist.dir}/lib" />
+		<copy todir="${dist.dir}/lib">
+			<fileset dir="${basedir}" includes="${app.name}-ext*.jar"/>
+		</copy>
 		
 		<mkdir dir="${dist.dir}/docs" />
 		<copy todir="${dist.dir}/docs">
@@ -164,6 +177,20 @@
 		<copy todir="${dist.dir}/java">
 			<fileset dir="java"/>
 		</copy>
+		
+		<!-- don't forget the tests -->
+		<mkdir dir="${dist.dir}/tests"/>
+		<copy todir="${dist.dir}/tests">
+			<fileset dir="tests"/>
+		</copy>
+		
+		<!-- don't forget the add-ons -->
+		<mkdir dir="${dist.dir}/extensions" />
+		<copy todir="${dist.dir}/extensions">
+			<fileset dir="${ext.dir}"/>
+		</copy>
+
+		<!-- finally do the build.xml -->
 		<copy file="build.xml" todir="${dist.dir}" />
 		<zip destfile="${dist.dir}-src.zip"
 			basedir="."
@@ -182,6 +209,44 @@
 		</javadoc>
 	</target>
 
+	<target name="extensions" depends="ext-jaxor3.2-pre,ext-jaxor3.2-beta" />
+
+	<target name="ext-jaxor3.2-pre" depends="jar">
+		<property name="ext1.name" value="jaxor3.2-pre"/>
+		<property name="ext1.build.dir" value="build/${ext1.name}/classes"/>
+		<property name="ext1.src.dir" value="${ext.dir}/${ext1.name}/src"/>
+		<mkdir dir="${ext1.build.dir}"/>
+		<javac srcdir="${ext1.src.dir}"
+			destdir="${ext1.build.dir}"
+			debug="on" deprecation="on">
+			<classpath>
+				<path refid="build.cp"/>
+				<pathelement location="${app.name}.jar"/>
+				<pathelement location="${ext.dir}/${ext1.name}/lib/jaxor.jar"/>
+			</classpath>
+			<include name="**/*.java"/>
+		</javac>
+		<jar jarfile="${app.name}-ext-${ext1.name}.jar" basedir="${ext1.build.dir}"/>
+	</target>
+	
+	<target name="ext-jaxor3.2-beta" depends="jar">
+		<property name="ext2.name" value="jaxor3.2-beta"/>
+		<property name="ext2.build.dir" value="build/${ext2.name}/classes"/>
+		<property name="ext2.src.dir" value="${ext.dir}/${ext2.name}/src"/>
+		<mkdir dir="${ext2.build.dir}"/>
+		<javac srcdir="${ext2.src.dir}"
+			destdir="${ext2.build.dir}"
+			debug="on" deprecation="on">
+			<classpath>
+				<path refid="build.cp"/>
+				<pathelement location="${app.name}.jar"/>
+				<pathelement location="${ext.dir}/${ext2.name}/lib/jaxor.jar"/>
+			</classpath>
+			<include name="**/*.java"/>
+		</javac>
+		<jar jarfile="${app.name}-ext-${ext2.name}.jar" basedir="${ext2.build.dir}"/>
+	</target>
+	
 	<target name="clean">
 		<delete file="${app.name}.jar"/>
 		<delete file="${dist.dir}.zip"/>
@@ -189,6 +254,9 @@
 		<delete dir="build"/>
 		<delete dir="docs/api"/>
 		<delete dir="${dist.dir}"/>
+		<delete>
+			<fileset dir="${basedir}" includes="${app.name}-ext*.jar"/>
+		</delete>
 	</target>
 
 	<target name="distclean" depends="clean">
