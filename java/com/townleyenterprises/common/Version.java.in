@@ -48,7 +48,7 @@ import java.util.StringTokenizer;
  * It allows easy version checking from client user applications to
  * enforce dependency checking on a particular release (if required).
  *
- * @version $Id: Version.java.in,v 1.7 2004/02/04 19:51:31 atownley Exp $
+ * @version $Id: Version.java.in,v 1.8 2004/02/05 10:22:06 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -162,20 +162,39 @@ public final class Version
 	}
 
 	/**
+	 * This is an overloaded version of require which facilitates
+	 * easier version checking.
+	 *
+	 * @param checkver the version of the required build
+	 * @exception VersionMismatchException
+	 * 	if the requested version is not available
+	 * @exception NumberFormatException
+	 * 	if the required numeric values can't be converted to
+	 * 	numbers
+	 */
+
+	public static void require(String checkver)
+			throws VersionMismatchException
+	{
+		if(compare(MAJOR, MINOR, RELEASE, BUILD, checkver) < 0)
+			throw new VersionMismatchException(checkver);
+	}
+
+	/**
 	 * This utility method is used to compare two sets of version
 	 * values and report how they relate to each other.  If any of
 	 * the version strings contain a release of
 	 * <code>DEVELOPER</code>, that version will always be greater
 	 * than the other.
 	 *
-	 * @arg maj1 the fist major version
-	 * @arg min1 the fist minor version
-	 * @arg rel1 the fist release number
-	 * @arg bld1 the fist build number
-	 * @arg maj2 the fist major version
-	 * @arg min2 the fist minor version
-	 * @arg rel2 the fist release number
-	 * @arg bld2 the fist build number
+	 * @param maj1 the fist major version
+	 * @param min1 the fist minor version
+	 * @param rel1 the fist release number
+	 * @param bld1 the fist build number
+	 * @param maj2 the fist major version
+	 * @param min2 the fist minor version
+	 * @param rel2 the fist release number
+	 * @param bld2 the fist build number
 	 * @return &lt; 0 if the first is less than the second; 0 if
 	 * 	they are equal or &gt; 0 if the first is greater than
 	 * 	the second
@@ -225,6 +244,9 @@ public final class Version
 	 *
 	 * @param ver1 the string array for version 1
 	 * @param ver2 the string array for version 2
+	 * @return &lt; 0 if the first is less than the second; 0 if
+	 * 	they are equal or &gt; 0 if the first is greater than
+	 * 	the second
 	 */
 
 	public static int compare(String[] ver1, String[] ver2)
@@ -235,6 +257,46 @@ public final class Version
 				Integer.parseInt(ver2[0]),
 				Integer.parseInt(ver2[1]),
 				ver2[2], ver2[3]);
+	}
+
+	/**
+	 * This version of compare deals with two version strings which
+	 * are expected to be in the format provided by either {@link
+	 * getVersion} or {@link getFullVersion}.
+	 *
+	 * @param verstr1 the first version string
+	 * @param verstr2 the second version string
+	 * @return &lt; 0 if the first is less than the second; 0 if
+	 * 	they are equal or &gt; 0 if the first is greater than
+	 * 	the second
+	 */
+
+	public static int compare(String verstr1, String verstr2)
+	{
+		return compare(parse(verstr1), parse(verstr2));
+	}
+
+	/**
+	 * This version of the compare method is used to support the
+	 * second require method.
+	 *
+	 * @param maj1 the fist major version
+	 * @param min1 the fist minor version
+	 * @param rel1 the fist release number
+	 * @param bld1 the fist build number
+	 * @param verstr the string to compare against
+	 * @return &lt; 0 if the first is less than the second; 0 if
+	 * 	they are equal or &gt; 0 if the first is greater than
+	 * 	the second
+	 */
+
+	private static int compare(int maj1, int min1,
+			String rel1, String bld1, String verstr)
+	{
+		String[] v = parse(verstr);
+		return compare(maj1, min1, rel1, bld1,
+			Integer.parseInt(v[0]), Integer.parseInt(v[1]),
+			v[2], v[3]);
 	}
 
 	/**
@@ -301,6 +363,11 @@ public final class Version
 					rmin + "." + rrel + " (Build " +
 					rbuild + "); have version:  " +
 					getFullVersion());
+		}
+
+		public VersionMismatchException(String reqver)
+		{
+			super("Required version:  " + reqver + "; have version:  " + getFullVersion());
 		}
 	}
 
