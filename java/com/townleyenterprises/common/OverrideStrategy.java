@@ -41,28 +41,29 @@
 
 package com.townleyenterprises.common;
 
+import java.util.List;
+
 /**
- * This interface defines a mechanism for two objects to be related
- * for reading a specified key.  The current override mechanism is
- * optimized for read operations.
+ * This class defines the strategy which will resolve a single
+ * OverrideNode from a list of nodes which have been "stacked" in the
+ * specified list.  The odering of the nodes is always constant, but
+ * the strategy determines where on the list the nodes are retrieved.
  *
- * @version $Id: OverrideStrategy.java,v 1.1 2004/07/29 18:29:20 atownley Exp $
- * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
+ * @version $Id: OverrideStrategy.java,v 1.2 2004/12/26 19:44:08 atownley Exp $
+ * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  */
 
 public interface OverrideStrategy
 {
 	/**
-	 * This method is used to determine the relationship between
-	 * the two suppliers of a given key.  The method should return
-	 * a reference for the object deemed to best provide the value
-	 * for the given key.
+	 * This method should be implemented to select the specific
+	 * override node to be returned to appropriately resolve the
+	 * node.
 	 *
-	 * @param key the key
-	 * @param s1 the first supplier
-	 * @param s2 the second supplier
-	 * @return the object providing the property for the given key
+	 * @param key the key being checked
+	 * @param list the list of nodes
+	 * @return the OverrideNode to be used
 	 */
 
-	Object resolve(Object key, Object s1, Object s2);
+	OverrideNode resolve(Object key, List list);
 }

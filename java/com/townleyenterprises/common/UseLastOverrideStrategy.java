@@ -41,19 +41,23 @@
 
 package com.townleyenterprises.common;
 
+import java.util.List;
+
 /**
- * This class implements the strategy that the second supplier (e.g.
- * the newest or latest) always overrides the first or previous
- * supplier.
+ * This class implements the strategy that the last node should always
+ * be used for the source of the value.
  *
- * @version $Id: UseLastOverrideStrategy.java,v 1.1 2004/07/29 18:30:49 atownley Exp $
- * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
+ * @version $Id: UseLastOverrideStrategy.java,v 1.2 2004/12/26 19:44:08 atownley Exp $
+ * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  */
 
-public final class UseLastOverrideStrategy implements OverrideStrategy
+public class UseLastOverrideStrategy implements OverrideStrategy
 {
-	public Object resolve(Object key, Object s1, Object s2)
+	public OverrideNode resolve(Object key, List list)
 	{
-		return s2;
+		if(list == null)
+			return null;
+
+		return (OverrideNode)list.get(list.size() - 1);
 	}
 }
