@@ -1,1 +1,1 @@
-* default argument handling doesn't work correctly (currently ignored)
+* default argument always displays as string even when it shouldn't
