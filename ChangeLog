@@ -1,3 +1,80 @@
+2004-12-27 Andrew S. Townley <atownley>
+	* build.xml
+	
+	  Added system property for the test data directory
+
+	* Added unit tests for the IO package based on the ones for
+	  the .NET edition.
+	
+	* Deprecated old AppConfig & ConfigSupplier
+
+	* java/com/townleyenterprises/common/ConfigLoader.java
+
+	  Added note about possible deprecation since this job is now
+	  handled centrally via the OverrideManager.
+	
+	* java/com/townleyenterprises/config/AppConfig.java
+	  java/com/townleyenterprises/config/ConfigSupplier.java
+	  java/com/townleyenterprises/config/MapConfigSupplier.java
+	  java/com/townleyenterprises/config/PropertiesConfigSupplier.java
+	  java/com/townleyenterprises/config/SystemConfigSupplier.java
+
+	  Removed unused methods for the canRead/canWrite checks.
+	  Added method to return contents as Properties object for
+	  easier integration with existing Java APIs.
+
+	* java/com/townleyenterprises/config/PropertiesConfigSupplier.java
+	  Added new constructor to allow previous ConfigLoader
+	  functionality to be implemented via this supplier.
+	  
+	  Instrumented the class with BasicTrace.
+
+2004-12-26 Andrew S. Townley <atownley>
+	* Added config package
+
+	* java/com/townleyenterprises/common/OverrideManager.java
+	  java/com/townleyenterprises/common/OverrideNode.java
+	  java/com/townleyenterprises/common/OverrideStrategy.java
+	  java/com/townleyenterprises/common/ResourceLoader.java
+	  java/com/townleyenterprises/common/ResourceManager.java
+	  java/com/townleyenterprises/common/ResourceProvider.java
+	  java/com/townleyenterprises/common/UseLastOverrideStrategy.java
+
+	  Chagned implementation of the way the override worked
+	  (again!) and had to change the implementations of all the
+	  classes above.  Unit tests were not changed, and everything
+	  still passes.  I think I've finally gotten it right this
+	  time.  Much of the complexity was reduced and I think things
+	  are stable for now.
+
+
+2004-12-25 Andrew S. Townley <atownley>
+	* java/com/townleyenterprises/common/OverrideManager.java
+	  java/com/townleyenterprises/common/ResourceManager.java
+	  java/com/townleyenterprises/common/ResourceProvider.java
+
+	  Changed return type of getKeys to be a set rather than a
+	  collection since each key should be unique.  This was a
+	  mistake from my previous port of the stuff from the .NET
+	  edition.
+
+2004-12-04 Andrew S. Townley <atownley>
+	* build.xml
+
+	  Added manifest to allow easier checking of the te-common
+	  library version.
+
+	* java/com/townleyenterprises/filter/PropertySorter.java
+
+	  Added locale-specific sorting for string properties.
+
+	* java/com/townleyenterprises/common/ResourceManager.java
+
+	  Added utility method to parse locale string and return
+	  a valid Locale object
+
+2004-11-29 Release of 3.0.0-pre2
+
 2004-11-28 Andrew S. Townley <atownley>
 	* build.xml
 	  
@@ -17,6 +94,8 @@
 
 2004-11-27 Andrew S. Townley <atownley>
 	* Merged in Java version of the te-trace package.
+
+2004-11-23 Release of 3.0.0-pre1
 
 2004-01-30 Andrew S. Townley <atownley>
 	* Moved tests to allow separate library directory for test
