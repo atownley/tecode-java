@@ -44,7 +44,7 @@ package com.townleyenterprises.command;
 /**
  * This class provides support for defining command-line arguments.
  *
- * @version $Id: CommandOption.java,v 1.3 2004/01/26 09:18:42 atownley Exp $
+ * @version $Id: CommandOption.java,v 1.4 2004/01/27 19:16:51 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -85,8 +85,8 @@ public class CommandOption
 	 * @param argDesc the long description of what the argument
 	 * 	does
 	 * @param show true if should be shown in autohelp
-	 * @param def the default value (informational only) of
-	 * 	the argument if it is not specified.
+	 * @param def the default value of the argument if it is not
+	 * 	specified.
 	 */
 
 	public CommandOption(String longName, char shortName,
@@ -101,6 +101,30 @@ public class CommandOption
 		_show = show;
 		_hasarg = hasArg;
 		_default = def;
+	}
+
+	/**
+	 * This version of the constructor allows specifying if the
+	 * argument has a default value.
+	 *
+	 * @param longName the long name to be checked
+	 * @param shortName the short, single character name
+	 * @param hasArg true if this option expects an argument;
+	 * 	false if it is a switch
+	 * @param argHelp the help string for the argument
+	 * @param argDesc the long description of what the argument
+	 * 	does
+	 * @param def the default value of the argument if it is not
+	 *	specified.
+	 * @since 2.1
+	 */
+
+	public CommandOption(String longName, char shortName,
+				boolean hasArg, String argHelp,
+				String argDesc, String def)
+	{
+		this(longName, shortName, hasArg, argHelp,
+			argDesc, true, def);
 	}
 
 	public String getLongName()
@@ -150,13 +174,18 @@ public class CommandOption
 
 	/**
 	 * This method is used to retrieve the argument (if any) which
-	 * was given to the option.
+	 * was given to the option.  If no argument was specified and
+	 * the option has a default value, the default value will be
+	 * returned instead.
 	 *
 	 * @return the argument or null if no argument was specified
 	 */
 
 	public String getArg()
 	{
+		if(_arg == null && _default != null)
+			return _default;
+
 		return _arg;
 	}
 
@@ -196,12 +225,28 @@ public class CommandOption
 	 * CommandParser instance using different sets of arguments.
 	 * Derived classes should override this method to reset any
 	 * state stored using the @{link optionMatched} method.
+	 *
+	 * @since 2.1
 	 */
 
 	public void reset()
 	{
 		_matched = false;
 		_arg = null;
+	}
+
+	/**
+	 * This method is used to provide the argument parsed as the
+	 * appropriate type.  By default, all arguments are treated as
+	 * string values.
+	 *
+	 * @return the argument as a String object
+	 * @since 2.1
+	 */
+
+	public Object getArgValue()
+	{
+		return getArg();
 	}
 
 	private final boolean	_hasarg;
