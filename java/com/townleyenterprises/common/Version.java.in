@@ -48,7 +48,7 @@ import java.util.StringTokenizer;
  * It allows easy version checking from client user applications to
  * enforce dependency checking on a particular release (if required).
  *
- * @version $Id: Version.java.in,v 1.6 2004/02/04 19:33:33 atownley Exp $
+ * @version $Id: Version.java.in,v 1.7 2004/02/04 19:51:31 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -100,7 +100,8 @@ public final class Version
 
 	public static String getVersion()
 	{
-		StringBuffer buf = new StringBuffer(MAJOR);
+		StringBuffer buf = new StringBuffer();
+		buf.append(MAJOR);
 		buf.append(".");
 		buf.append(MINOR);
 		buf.append(".");
