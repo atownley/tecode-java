@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // File:	AbstractCommandListener.java
-// Created:	Mon Nov 17 12:16:47 GMT 2003
+// Created:	Mon Nov 17 12:16:47 GMT 2004
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -46,7 +46,7 @@ package com.townleyenterprises.command;
  * command-line argument handler classes by providing an empty
  * optionMatched method.
  *
- * @version $Id: AbstractCommandListener.java,v 1.1 2003/11/20 10:47:05 atownley Exp $
+ * @version $Id: AbstractCommandListener.java,v 1.2 2004/01/25 18:30:36 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
