@@ -48,7 +48,7 @@ import java.util.Enumeration;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.2 2003/06/08 14:06:20 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.3 2003/06/08 14:21:49 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -222,6 +222,15 @@ public final class CommandParser implements CommandListener
 		for(int i = 0; i < args.length; ++i)
 		{
 			String	s = args[i];
+
+			// executive decision:  if the argument is
+			// empty, it's silently ignored
+
+			if(s.length() == 0)
+				continue;
+
+			// take care of the normal processing
+
 			char	c0 = s.charAt(0);
 			char	c1 = 0;
 			int	idx = s.indexOf('=');
@@ -289,6 +298,10 @@ public final class CommandParser implements CommandListener
 				if(idx != -1)
 				{
 					arg = s.substring(idx + 1);
+					if(arg.length() == 0)
+					{
+						handleMissingArg(val);
+					}
 				}
 				else
 				{
