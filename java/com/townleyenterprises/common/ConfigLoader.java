@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2002-2003, Andrew S. Townley
+// Copyright (c) 2002-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ import java.io.IOException;
  * files so that I don't have to have the exact same code in more than
  * one place.
  *
- * @version $Id: ConfigLoader.java,v 1.2 2004/01/21 21:52:46 atownley Exp $
+ * @version $Id: ConfigLoader.java,v 1.3 2004/01/25 18:44:21 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -170,6 +170,25 @@ public class ConfigLoader
 		buf.append("' ]");
 
 		return buf.toString();
+	}
+
+	/**
+	 * Checks for equality based on the values of the constructor
+	 * attributes.
+	 */
+
+	public boolean equals(Object o)
+	{
+		if(o == null)
+			return false;
+
+		if(!getClass().getName().equals(o.getClass().getName()))
+			return false;
+
+		ConfigLoader loader = (ConfigLoader)o;
+		return loader.klass.equals(klass) 
+				&& loader.primary.equals(primary)
+				&& loader.secondary.equals(secondary);
 	}
 
 	/** this is our global list of properties */
