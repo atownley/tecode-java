@@ -69,8 +69,12 @@ import com.townleyenterprises.common.ConfigSupplier;
  * Prior to using this class, it should be configured using the
  * initialize() method.
  * </p>
+ * @deprecated The functionality of this class has been replaced with
+ * the {@link SQLManager} class which provides a more flexible
+ * approach to the problem, but still manages to have vendor-specific
+ * SQL coexist nicely with ANSI SQL.
  *
- * @version $Id: SQLProvider.java,v 1.3 2004/07/28 10:33:59 atownley Exp $
+ * @version $Id: SQLProvider.java,v 1.4 2004/12/28 21:48:30 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
