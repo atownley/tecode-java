@@ -47,6 +47,7 @@ import java.util.Properties;
 
 import com.townleyenterprises.common.AppConfig;
 import com.townleyenterprises.common.PropertyResolver;
+import com.townleyenterprises.config.ConfigSupplier;
 
 /**
  * This class is used to provide a flexible mechanism to resolving the
@@ -248,22 +249,50 @@ import com.townleyenterprises.common.PropertyResolver;
  * oracle.jdbc.driver=oracle.jdbc.OracleDriver
  * </pre>
  *
- * @version $Id: PersistenceConfig.java,v 1.1 2004/01/28 20:03:17 atownley Exp $
+ * @version $Id: PersistenceConfig.java,v 1.2 2004/12/28 21:47:55 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
 
 public final class PersistenceConfig
 {
+	/**
+	 * This version of the constructor should not normally be used
+	 * unless the properties are not maintained by a
+	 * ConfigSupplier.
+	 *
+	 * @param properties the java.util.Properties instance
+	 */
+
 	public PersistenceConfig(Properties properties)
 	{
 		_resolver = new PropertyResolver(properties);
 	}
 
 	/**
+	 * This version of the constructor takes a ConfigSupplier
+	 * interface to use to retrieve the properties.  This should
+	 * be the preferred constructor for all new code.
+	 *
+	 * @param config the ConfigSupplier instance
+	 * @since 3.0
+	 */
+
+	public PersistenceConfig(ConfigSupplier config)
+	{
+		_resolver = new PropertyResolver(config);
+	}
+
+	/**
 	 * This version of the constructor works with the {@link
 	 * com.townleyenterprises.common.AppConfig} class to provide
 	 * the property information.
+	 *
+	 * @deprecated As of the 3.0 release, the preferred
+	 * constructor should be the version taking a {@link
+	 * com.townleyenterprises.config.ConfigSupplier} instance
+	 * because this allows multiple application configurations to
+	 * coexist within the same JVM.
 	 */
 
 	public PersistenceConfig()
