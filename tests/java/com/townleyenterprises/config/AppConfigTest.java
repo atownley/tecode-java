@@ -51,7 +51,7 @@ import junit.framework.TestCase;
  * Unit tests for the new AppConfig class which are based on
  * the NUnit tests.
  *
- * @version $Id: AppConfigTest.java,v 1.1 2004/12/26 20:37:09 atownley Exp $
+ * @version $Id: AppConfigTest.java,v 1.2 2004/12/27 23:23:10 atownley Exp $
  * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  */
 
@@ -85,6 +85,7 @@ public final class AppConfigTest extends TestCase
 		map3.put("eggs", "green");
 		map3.put("ham", "true");
 		map3.put("key3", "true");
+		map3.put("os.name", "NEXTSTEP");
 
 		ConfigSupplier cs3 =
 			new MapConfigSupplier("actest", map3);
@@ -172,6 +173,14 @@ public final class AppConfigTest extends TestCase
 		assertEquals("override", config.get("key2"));
 		assertEquals("val1", map1.get("key1"));
 		assertEquals("override", map2.get("key2"));
+	}
+
+	public void testSystemMaster()
+	{
+		if("NEXTSTEP".equals(config.get("os.name")))
+		{
+			fail("system override failed");
+		}
 	}
 
 	public static void main(String[] args)
