@@ -54,7 +54,7 @@ import com.townleyenterprises.swing.event.TaskListener;
  * requires only that a single method be implemneted.
  *
  * @since 2.1
- * @version $Id: AbstractMonitoredTask.java,v 1.2 2003/11/24 02:23:05 atownley Exp $
+ * @version $Id: AbstractMonitoredTask.java,v 1.3 2003/11/24 03:29:03 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -150,7 +150,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 	 * This method is used to start the task.
 	 */
 
-	public void start()
+	public final void start()
 	{
 		final SwingWorker worker = new SwingWorker() {
 			public Object construct()
@@ -159,6 +159,7 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 				setStatus("");
 				setComplete(false);
 				_shouldStop = false;
+				initialize();
 				return performTask();
 			}
 
@@ -217,6 +218,15 @@ public abstract class AbstractMonitoredTask implements MonitoredTask
 			return;
 
 		_listeners.remove(listener);
+	}
+
+	/**
+	 * This method can be overridden to add extra initialization prior
+	 * to the iterations performed by the thread.
+	 */
+
+	protected void initialize()
+	{
 	}
 
 	/**

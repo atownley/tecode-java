@@ -69,7 +69,7 @@ import javax.swing.UIManager;
  * an attempt to solve those issues.
  *
  * @since 2.1
- * @version $Id: TStatusBar.java,v 1.1 2003/11/20 16:40:44 atownley Exp $
+ * @version $Id: TStatusBar.java,v 1.2 2003/11/24 03:29:03 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -110,6 +110,7 @@ public class TStatusBar extends JPanel
 		
 		// create the new status component
 		_monitor = new JPanel(new BorderLayout());
+		_monitor.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
 		_monitorLabel = new JLabel();
 		_progress = new JProgressBar();
 		_monitor.add(_monitorLabel, BorderLayout.WEST);
@@ -168,26 +169,58 @@ public class TStatusBar extends JPanel
 	 * 	updates
 	 */
 
-	public void monitorTask(final MonitoredTask task, int interval)
+	public void monitorTask(final MonitoredTask task, double interval)
 	{
+		int len = task.getTaskLength();
 		_progress.setMinimum(0);
-		_progress.setMaximum(task.getTaskLength());
+		if(len != -1)
+			_progress.setMaximum(len);
+		else
+			_progress.setIndeterminate(true);
+		
+		_monitorLabel.setText(task.getStatus());
+		_monitor.setVisible(true);
 		setComponent(_monitor);
+		revalidate();
 
-		_timer = new Timer(interval * 1000, new ActionListener() {
+		_timer = new Timer((int)(interval * 1000), new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				if(_progress.isIndeterminate())
+				{
+					int len = task.getTaskLength();
+					if(len != -1)
+					{
+						_progress.setMaximum(task.getTaskLength());
+						_progress.setIndeterminate(false);
+					}
+				}
+				
 				_progress.setValue(task.getCurrentProgress());
 				_monitorLabel.setText(task.getStatus());
 
 				if(task.isComplete())
 				{
+					_progress.setValue(task.getTaskLength());
 					_timer.stop();
 					restore();
 				}
 			}
 		});
-		_timer.start();
+
+		if(!task.isComplete())
+		{
+			_timer.start();
+		}
+		else
+		{
+			restore();
+		}
+	}
+
+	public void monitorTask(MonitoredTask task, int interval)
+	{
+		monitorTask(task, (double)interval);
 	}
 
 	/**
@@ -223,9 +256,13 @@ public class TStatusBar extends JPanel
 		Component component = getComponent(0);
 		component.setVisible(false);
 		remove(component);
+
+		// make sure the progress bar is stopped
+		_progress.setIndeterminate(false);
+		_progress.setValue(0);
 		add(_content, BorderLayout.CENTER);
 		_content.setVisible(true);
-		invalidate();
+		revalidate();
 	}
 
 	/**
