@@ -61,7 +61,7 @@ import java.util.Properties;
  * </ul>
  * </p>
  *
- * @version $Id: AppConfig.java,v 1.7 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.8 2004/07/29 18:34:07 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -128,7 +128,7 @@ public final class AppConfig
 	{
 		if(props == null)
 		{
-			new RuntimeException("AppConfig not initialized!  Please register a ConfigSupplier.");
+			new RuntimeException(Strings.get("sNoInitAppConfig"));
 		}
 		
 		return resolveProperty(name);
@@ -147,7 +147,7 @@ public final class AppConfig
 	{
 		if(props == null)
 		{
-			new RuntimeException("AppConfig not initialized!  Please register a ConfigSupplier.");
+			new RuntimeException(Strings.get("sNoInitAppConfig"));
 		}
 	
 		// necessary since we're not using the config loader directly

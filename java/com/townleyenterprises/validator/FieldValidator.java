@@ -41,6 +41,7 @@
 
 package com.townleyenterprises.validator;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -48,36 +49,34 @@ import java.util.Locale;
  * validation operation.  It is essentially a function object which
  * can optionally mutate the value being validated.
  *
- * @version $Id: FieldValidator.java,v 1.1 2004/07/28 10:13:40 atownley Exp $
+ * @version $Id: FieldValidator.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
 
-public interface FieldValidator
+public interface FieldValidator extends Serializable
 {
 	/**
-	 * This method validates the given string based on the
+	 * This method validates the given value based on the
 	 * implementation-defined validation rules.
 	 *
-	 * @return the validated string or null if the string is not
-	 * changed.
+	 * @return the validated value
 	 * @exception Exception
 	 * 	if the validation fails
 	 */
 
-	String validate(String value) throws Exception;
+	Object validate(Object value) throws Exception;
 
 	/**
-	 * This method validates the given string based on the
+	 * This method validates the given value based on the
 	 * implementation-defined validation rules and the specified
 	 * locale.
 	 *
-	 * @return the validated string or null if the string is not
-	 * changed.
+	 * @return the validated value
 	 * @exception Exception
 	 * 	if the validation fails
 	 */
 
-	String validate(String value, Locale locale)
+	Object validate(Object value, Locale locale)
 				throws Exception;
 }

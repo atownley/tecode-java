@@ -46,7 +46,7 @@ import java.text.MessageFormat;
 /**
  * This exception is thrown when a field validator fails.
  *
- * @version $Id: FieldValidationException.java,v 1.1 2004/07/28 10:13:40 atownley Exp $
+ * @version $Id: FieldValidationException.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -79,7 +79,7 @@ public class FieldValidationException extends Exception
 
 	public FieldValidationException(String field, Object value)
 	{
-		this(field, value, MessageFormat.format("Validation of field {0} failed for value {1}", new Object[] { field, value }), null);
+		this(field, value, Strings.format("sFieldValidationExceptionDefaultMsg", new Object[] { field, value }), null);
 	}
 
 	public String getField()

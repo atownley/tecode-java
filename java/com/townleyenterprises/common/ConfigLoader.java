@@ -50,7 +50,7 @@ import java.io.IOException;
  * files so that I don't have to have the exact same code in more than
  * one place.
  *
- * @version $Id: ConfigLoader.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: ConfigLoader.java,v 1.5 2004/07/29 18:34:07 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -102,7 +102,8 @@ public class ConfigLoader
 		}
 		catch(IOException e)
 		{
-			System.out.println("Warning:  unable to access file (" + secondaryloc + ")");
+			System.err.println(Strings.format("fUnableToAccessFile",
+				new Object[] { secondaryloc }));
 		}
 
 		// temporary debugging

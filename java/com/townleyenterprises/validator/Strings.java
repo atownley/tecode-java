@@ -34,65 +34,43 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// File:	FieldSetValidator.java
-// Created:	Mon Jul 26 21:06:49 IST 2004
+// File:	Strings.java
+// Created:	Thu Jul 29 16:48:47 IST 2004
 //
 //////////////////////////////////////////////////////////////////////
 
 package com.townleyenterprises.validator;
 
-import java.io.Serializable;
-import java.util.Locale;
-import java.util.Map;
+import com.townleyenterprises.common.Version;
+import com.townleyenterprises.common.ResourceManager;
+import com.townleyenterprises.common.ResourceLoader;
 
 /**
- * This interface defines a mechanism for the validation of an
- * arbitrary set of fields on a form.  This is mostly used for
- * an atomic validation operation on more than one field in the form.
- * The main uses of this would be things like making sure that there
- * was a state selected if the country was USA, Australia or Canada or
- * making sure that the sum of the net and the tax was the total of an
- * order form.
+ * This class is used to track all of the localized strings used for
+ * messages in this package.
  *
- * @version $Id: FieldSetValidator.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
+ * @version $Id: Strings.java,v 1.1 2004/07/29 18:36:38 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
 
-public interface FieldSetValidator extends Serializable
+final class Strings
 {
-	/**
-	 * This method validates the given map of field names and
-	 * values according to the implementation-defined validation
-	 * rules.
-	 *
-	 * @param values the Map of values validated by this validator
-	 * @exception FieldSetValidationException
-	 * 	if the validation fails
-	 */
+	static String get(String key)
+	{
+		return _resources.getString(key);
+	}
 
-	void validate(Map values) throws FieldSetValidationException;
+	static String format(String key, Object[] args)
+	{
+		return _resources.format(key, args);
+	}
 
-	/**
-	 * This method validates the given map of field names and
-	 * values according to the implementation-defined validation
-	 * rules and the specified locale.
-	 *
-	 * @param values the Map of values validated by this validator
-	 * @param locale the locale to be used other than the default
-	 * @exception FieldSetValidationException
-	 * 	if the validation fails
-	 */
-
-	void validate(Map values, Locale locale)
-				throws FieldSetValidationException;
+	private static final ResourceManager _resources = new ResourceManager();
 	
-	/**
-	 * This method is used to retrieve the names of the fields to
-	 * be validated by this validator.
-	 *
-	 * @return the field names as a string array
-	 */
-
-	String[] getFieldNames();
+	static
+	{
+		_resources.manage(new ResourceLoader(Version.class));
+		_resources.manage(new ResourceLoader(Strings.class));
+	}
 }

@@ -49,7 +49,7 @@ import java.lang.reflect.Method;
  * values similar to the way it is handled in the Jakarta Struts
  * package.
  *
- * @version $Id: PropertyProxy.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: PropertyProxy.java,v 1.5 2004/07/29 18:34:07 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -95,10 +95,10 @@ public class PropertyProxy
 		String name = "get" + property;
 		Method method = (Method)_methods.get(name.toLowerCase());
 		if(method == null)
-			throw new RuntimeException("error:  property accessor '" + name + "' not found in '" + _klass + "'");
+			throw new RuntimeException(Strings.format("fNoProperty", new Object[] { name, _klass.toString() }));
 
 		if(!(_klass.equals(o.getClass())))
-			throw new RuntimeException("error:  attempt to access property '" + property + "' of " + _klass.toString() + " on object of " + o.getClass() + ":  " + o.toString());
+			throw new RuntimeException(Strings.format("fBadClass", new Object[] { property, _klass.toString(), o.getClass(), o.toString() }));
 		
 		try
 		{

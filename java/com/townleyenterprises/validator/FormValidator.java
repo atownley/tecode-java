@@ -41,6 +41,7 @@
 
 package com.townleyenterprises.validator;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -67,12 +68,12 @@ import java.util.Locale;
  * </ol>
  * </p>
  *
- * @version $Id: FormValidator.java,v 1.1 2004/07/28 10:13:40 atownley Exp $
+ * @version $Id: FormValidator.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
 
-public interface FormValidator
+public interface FormValidator extends Serializable
 {
 	/**
 	 * This method is used to determine the mode of the form
@@ -92,9 +93,22 @@ public interface FormValidator
 	 * Two modes are supported:  the first will validate all of
 	 * the fields on the form (the default), and the second will
 	 * only validate until the first validation failure occurrs.
+	 *
+	 * @param val the value of the flag
 	 */
 
-	void setValidateAll();
+	void setValidateAll(boolean val);
+
+	/**
+	 * This method will perform the validation of the supplied
+	 * form according to the standard order or an
+	 * implementation-defined order as documented by the specific
+	 * implementation.
+	 *
+	 * @param form the form to validate
+	 * @exception Exception
+	 * 	if any of the validations fail
+	 */
 
 	void validate(Form form) throws Exception;
 

@@ -48,7 +48,7 @@ import java.util.StringTokenizer;
  * It allows easy version checking from client user applications to
  * enforce dependency checking on a particular release (if required).
  *
- * @version $Id: Version.java.in,v 1.9 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: Version.java.in,v 1.10 2004/07/29 18:34:07 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -83,12 +83,8 @@ public final class Version
 
 	public static String getFullVersion()
 	{
-		StringBuffer buf = new StringBuffer(getVersion());
-		buf.append(" (");
-		buf.append(getBuild());
-		buf.append(")");
-
-		return buf.toString();
+		return Strings.format("fFullVersion",
+				new Object[] { getVersion(), getBuild() });
 	}
 
 	/**
@@ -119,12 +115,7 @@ public final class Version
 
 	public static String getBuild()
 	{
-		StringBuffer buf = new StringBuffer("Build ");
-		buf.append(BUILD);
-		buf.append("; ");
-		buf.append(DATE);
-
-		return buf.toString();
+		return Strings.format("fBuild", new Object[] { BUILD, DATE });
 	}
 
 	/**
@@ -206,12 +197,12 @@ public final class Version
 	{
 		if("DEVELOPER".equals(bld1))
 		{
-			System.err.println("warning:  DEVELOPER build override");
+			System.err.println(Strings.get("sWarnDevOverride"));
 			return 1;
 		}
 		else if("DEVELOPER".equals(bld2))
 		{
-			System.err.println("warning:  DEVELOPER build override");
+			System.err.println(Strings.get("sWarnDevOverride"));
 			return -1;
 		}
 
@@ -262,7 +253,7 @@ public final class Version
 	/**
 	 * This version of compare deals with two version strings which
 	 * are expected to be in the format provided by either {@link
-	 * getVersion} or {@link getFullVersion}.
+	 * #getVersion} or {@link #getFullVersion}.
 	 *
 	 * @param verstr1 the first version string
 	 * @param verstr2 the second version string
@@ -314,6 +305,8 @@ public final class Version
 
 	public static String[] parse(String verstr)
 	{
+		// FIXME:  should use the parse capabilities...
+		
 		String[] rval = new String[4];
 
 		// first parse the version
@@ -359,15 +352,19 @@ public final class Version
 		public VersionMismatchException(int rmaj, int rmin,
 					int rrel, int rbuild)
 		{
-			super("Required version:  " + rmaj + "." +
-					rmin + "." + rrel + " (Build " +
-					rbuild + "); have version:  " +
-					getFullVersion());
+			super(Strings.format("fVersionMismatch",
+				new Object[] {
+					new Integer(rmaj),
+					new Integer(rmin),
+					new Integer(rmin),
+					new Integer(rbuild),
+					getFullVersion()} );
 		}
 
 		public VersionMismatchException(String reqver)
 		{
-			super("Required version:  " + reqver + "; have version:  " + getFullVersion());
+			super(Strings.format("fVersionMismatch2",
+				new Object[] { reqver, getFullVersion() });
 		}
 	}
 

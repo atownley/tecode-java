@@ -47,7 +47,7 @@ package com.townleyenterprises.validator;
  * on a Swing JPanel.  The abstraction works in both cases and also
  * supports field values as indexed properties.
  *
- * @version $Id: Form.java,v 1.1 2004/07/28 10:13:40 atownley Exp $
+ * @version $Id: Form.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -87,7 +87,18 @@ public interface Form
 
 	Object getValue(String name, int idx)
 				throws IndexOutOfBoundsException;
-	
+
+	/**
+	 * This overloaded method is used to optimize the retrieval of
+	 * the first value in forms which don't have indexed field
+	 * values.
+	 *
+	 * @param name the field name
+	 * @return the field value
+	 */
+
+	Object getValue(String name);
+
 	/**
 	 * This method sets the field value at the specified index.
 	 *
@@ -101,4 +112,15 @@ public interface Form
 
 	void setValue(String name, int idx, Object value)
 				throws IndexOutOfBoundsException;
+
+	/**
+	 * This overloaded method is used to optimize the setting of
+	 * the first value in forms which don't have indexed field
+	 * values.
+	 *
+	 * @param name the field name
+	 * @param value the field value
+	 */
+
+	void setValue(String name, Object value);
 }

@@ -46,7 +46,7 @@ import java.util.Map;
 /**
  * This exception is thrown when a field set validator fails.
  *
- * @version $Id: FieldSetValidationException.java,v 1.1 2004/07/28 10:13:40 atownley Exp $
+ * @version $Id: FieldSetValidationException.java,v 1.2 2004/07/29 18:36:38 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -76,7 +76,8 @@ public class FieldSetValidationException extends Exception
 
 	public FieldSetValidationException(Map fields)
 	{
-		this(fields, "Field set validation failed", null);
+		this(fields,
+			Strings.get("sFieldSetValidationFailed"), null);
 	}
 
 	public Map getFields()
