@@ -48,6 +48,7 @@
 	<property name="lib.dir"	value="lib"/>
 	<property name="src.dir"	value="java"/>
 	<property name="build.version"	value="${basedir}/version.properties"/>
+	<property name="build.date"	value="${basedir}/version.date"/>
 	<property name="build.count"	value="${basedir}/version.count"/>
 	<property file="${build.version}" />
 	<property name="version"	value="${build.version.major}.${build.version.minor}.${build.version.release}"/>
@@ -55,7 +56,7 @@
 	<property name="verstamp"	value="${src.dir}/com/townleyenterprises/common/Version.java"/>
 
 	<target name="builddate">
-		<propertyfile file="${build.version}"
+		<propertyfile file="${build.date}"
 			comment=" Official build file. DO NOT EDIT.">
 			<entry key="build.version.date"
 				type="date" value="now"
@@ -66,6 +67,7 @@
 
 	<target name="verstamp" depends="builddate" >
 		<filter filtersfile="${build.version}"/>
+		<filter filtersfile="${build.date}"/>
 		<copy file="${verstamp}.in" tofile="${verstamp}"
 			filtering="true" />
 	</target>
@@ -80,6 +82,7 @@
 
 		<!-- update the version information -->
 		<filter filtersfile="${build.version}"/>
+		<filter filtersfile="${build.date}"/>
 		<filter filtersfile="${build.count}"/>
 		<copy file="${verstamp}.in" tofile="${verstamp}"
 			filtering="true" />
@@ -180,5 +183,6 @@
 
 	<target name="distclean" depends="clean">
 		<delete file="${verstamp}"/>
+		<delete file="${build.date}"/>
 	</target>
 </project>
