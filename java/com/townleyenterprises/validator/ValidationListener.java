@@ -34,7 +34,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// File:	FormValidaionListener.java
+// File:	ValidaionListener.java
 // Created:	Mon Jul 26 21:37:03 IST 2004
 //
 //////////////////////////////////////////////////////////////////////
@@ -47,12 +47,12 @@ import java.util.EventListener;
  * This interface is designed to allow the efficient capture of
  * validation faliures during form validation.
  *
- * @version $Id: FormValidationListener.java,v 1.1 2004/07/28 10:13:40 atownley Exp $
+ * @version $Id: ValidationListener.java,v 1.1 2004/08/05 11:58:03 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
 
-public interface FormValidationListener extends EventListener
+public interface ValidationListener extends EventListener
 {
 	void fieldValidationFailed(FieldValidationEvent event);
 
