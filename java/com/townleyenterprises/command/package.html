@@ -40,7 +40,7 @@
 // Author:	Andrew S. Townley (adz1092@netscape.net)
 // Created:	Sun May 11 20:05:12 IST 2003
 //
-// $Id: package.html,v 1.1 2003/06/07 18:42:37 atownley Exp $
+// $Id: package.html,v 1.2 2003/06/08 13:36:24 atownley Exp $
 //
 //////////////////////////////////////////////////////////////////////
 -->
@@ -557,6 +557,18 @@ and will be present in a future release.
 <strong>Assumes 80 character terminal</strong> -- There
 doesn't seem to be a good way to get the terminal width in a
 portable fashion from the Java Virtual Machine.
+</li>
+<li>
+<strong>No support for combined options</strong> -- There is
+currently no support for options which start with the short
+switch character and are longer than one character.  This
+means that you cannot parse command line options of the
+forms:
+<pre>
+	-display
+	-500
+	-cvzf
+</pre>
 </li>
 </ul>
 </p>
