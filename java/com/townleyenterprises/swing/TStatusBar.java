@@ -69,7 +69,7 @@ import javax.swing.UIManager;
  * an attempt to solve those issues.
  *
  * @since 2.1
- * @version $Id: TStatusBar.java,v 1.3 2003/11/27 00:03:03 atownley Exp $
+ * @version $Id: TStatusBar.java,v 1.4 2003/12/04 13:07:22 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -101,11 +101,11 @@ public class TStatusBar extends JPanel
 		_content = new JPanel();
 		_content.setLayout(new BoxLayout(_content,
 					BoxLayout.X_AXIS));
-		_content.add(_statusText);
 		_statusText.setEditable(false);
 		_statusText.setRequestFocusEnabled(false);
 		_statusText.setFocusable(false);
 		_statusText.setBackground(UIManager.getColor("Button.background"));
+		_content.add(_statusText);
 
 		add(_content, BorderLayout.CENTER);
 		
@@ -116,6 +116,7 @@ public class TStatusBar extends JPanel
 		_progress = new JProgressBar();
 		_monitor.add(_monitorLabel, BorderLayout.WEST);
 		_monitor.add(_progress, BorderLayout.CENTER);
+		_monitor.setVisible(false);
 
 		_monitorLabel.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
 	}
