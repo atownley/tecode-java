@@ -47,7 +47,7 @@ import junit.framework.TestCase;
  * Basic unit tests for the Version class.  Note, require() method
  * must be tested manually.
  *
- * @version $Id: VersionTest.java,v 1.2 2004/02/04 19:34:55 atownley Exp $
+ * @version $Id: VersionTest.java,v 1.3 2004/02/05 10:21:59 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -116,6 +116,49 @@ public final class VersionTest extends TestCase
 		act = Version.parse("2.1.0-pre4 (Build 70; 2004-02-04 17:40:26 GMT)");
 		for(int i = 0; i < act.length; ++i)
 			assertEquals(exp[i], act[i]);
+	}
+
+	public void testVersionCompareStrings()
+	{
+		assertTrue(Version.compare("2.1.0 (Build 70)",
+				"2.1.0-pre5 (Build 69)") > 0);
+		assertTrue(Version.compare("2.1.1 (Build 69)",
+				"2.1.0-pre5 (Build 69)") > 0);
+		assertTrue(Version.compare("3.0.100 (Build 24)",
+				"2.1.0-pre5 (Build 69)") > 0);
+		assertTrue(Version.compare("3.0.100 (Build 24)",
+				"2.1.0-pre5 (Build 69)") > 0);
+
+		assertTrue(Version.compare("2.1.0 (Build 68; 2004-02-05 10:10:58 GMT)",
+				"2.1.0-pre5 (Build 69)") < 0);
+		assertTrue(Version.compare("2.0.100 (Build 70)",
+				"2.1.0-pre5 (Build 69)") < 0);
+		assertTrue(Version.compare("0.0.100 (Build 70)",
+				"2.1.0-pre5 (Build 69)") < 0);
+		assertTrue(Version.compare("9.0.0 (Build 2070)",
+				"0.0.0 (Build DEVELOPER)") < 0);
+	}
+	
+	public void testRequire()
+	{
+		Version.require(2,1,0,74);
+		Version.require("2.1.0 (Build 74)");
+
+		try
+		{
+			Version.require(9,0,0,0);
+		}
+		catch(Version.VersionMismatchException e)
+		{
+		}
+
+		try
+		{
+			Version.require("9.0.0 (Build 0)");
+		}
+		catch(Version.VersionMismatchException e)
+		{
+		}
 	}
 
 	public static void main(String[] args)
