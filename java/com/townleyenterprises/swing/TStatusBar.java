@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -69,7 +69,7 @@ import javax.swing.UIManager;
  * an attempt to solve those issues.
  *
  * @since 2.1
- * @version $Id: TStatusBar.java,v 1.4 2003/12/04 13:07:22 atownley Exp $
+ * @version $Id: TStatusBar.java,v 1.5 2004/01/25 19:26:32 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 

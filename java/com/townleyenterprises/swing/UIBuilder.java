@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,7 @@ import javax.swing.JMenuItem;
  * </p>
  *
  * @since 2.1
- * @version $Id: UIBuilder.java,v 1.2 2003/12/12 12:21:52 atownley Exp $
+ * @version $Id: UIBuilder.java,v 1.3 2004/01/25 19:26:45 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 

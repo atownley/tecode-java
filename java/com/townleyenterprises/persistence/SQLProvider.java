@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2002-2003, Andrew S. Townley
+// Copyright (c) 2002-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@ import com.townleyenterprises.common.ConfigSupplier;
  * initialize() method.
  * </p>
  *
- * @version $Id: SQLProvider.java,v 1.1 2003/06/07 18:42:34 atownley Exp $
+ * @version $Id: SQLProvider.java,v 1.2 2004/01/25 19:22:39 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 

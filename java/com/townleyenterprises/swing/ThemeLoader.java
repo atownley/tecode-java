@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -60,7 +60,7 @@ import javax.swing.UIDefaults;
  * properties.  These are also not localized, so the locale concept
  * doesn't apply in this case.
  *
- * @version $Id: ThemeLoader.java,v 1.2 2003/12/04 13:04:25 atownley Exp $
+ * @version $Id: ThemeLoader.java,v 1.3 2004/01/25 19:26:42 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@ import java.util.Iterator;
  * This class provides an implementation of the Filter interface that
  * implements the OR conjunction.
  *
- * @version $Id: LogicalOrFilter.java,v 1.2 2003/06/08 19:58:31 atownley Exp $
+ * @version $Id: LogicalOrFilter.java,v 1.3 2004/01/25 19:19:48 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -47,13 +47,29 @@ package com.townleyenterprises.filter;
  * which it is applied.  It supports both case sensitive and case
  * insensitive searching.
  *
- * @version $Id: SubstringFilter.java,v 1.2 2003/06/08 19:57:16 atownley Exp $
+ * @version $Id: SubstringFilter.java,v 1.3 2004/01/25 19:19:48 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
 
 public class SubstringFilter extends StringFilter
 {
+	/**
+	 * The constructor takes the property and the string value
+	 * which should be compared.  Using this constructor will
+	 * result in case sensitive comparisons.
+	 *
+	 * @param klass the class of the object to be filtered
+	 * @param property the property name
+	 * @param value the string value
+	 */
+
+	public SubstringFilter(Class klass, String property,
+				String value)
+	{
+		super(klass, property, value, false);
+	}
+
 	/**
 	 * The constructor takes the property and the string value
 	 * which should be compared.
