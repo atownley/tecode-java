@@ -2,9 +2,24 @@
 TODO Items for te-common
 ========================
 
-* General testing and bug fixes/clean-ups for 2.0 Release
+* Merge in the changes to the command line parser from the .NET
+  edition.
+
+* Merge in the config stuff from the .NET edition.
+
+* General testing and bug fixes/clean-ups for 3.0 Release
 
 * Add more support files to the distribution
+
+* Fix the semantics of the events and the listeners to conform
+  to the JavaBeans specification regarding EventObject and
+  EventListener.  Also, optionally freezing of listeners during
+  notification.
+
+* Check thread safety of all of the classes and document
+  accordingly
+
+* More examples
 
 com.townleyenterprises.command Package
 
