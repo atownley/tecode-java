@@ -302,7 +302,7 @@
 
 	<target name="junit" depends="compile-tests">
 		<mkdir dir="${reports.tests}"/>
-		<junit printsummary="yes" haltonfailure="no">
+		<junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
 			<classpath>
 				<path refid="build.cp"/>
 				<path refid="tests.cp"/>
