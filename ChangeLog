@@ -5,68 +5,83 @@
 	  generation of source files from .in files as well as
 	  clean them up correctly.
 
+	* ChangeLog
+
+	  Fixed source path references.
+	
+	* 2.1.0-pre2 Released internally.
+
 2003-12-17 Andrew S. Townley <atownley>
-	* java/src/com/townleyenterprises/common/AppConfig.java
-	  java/src/com/townleyenterprises/common/ConfigLoader.java
+	* java/com/townleyenterprises/common/AppConfig.java
+	  java/com/townleyenterprises/common/ConfigLoader.java
 
 	  Support for tracking the registered config loaders
 	  to determine which properties were being loaded from
 	  where.  ConfigLoader now tracks information about how
 	  it was configured.
 
+2003-12-04 Andrew S. Townley <atownley>
+
+	* 2.1.0-pre1 Released internally.
+
 2003-11-26 Andrew S. Townley <atownley>
-	* java/src/com/townleyenterprises/swing/TAboutBox.java
+	* java/com/townleyenterprises/swing/TAboutBox.java
 	  
 	  Added basic about box.
 
 2003-11-24 Andrew S. Townley <atownley>
-	*  java/src/com/townleyenterprises/event/TaskEvent.java
-	   java/src/com/townleyenterprises/event/TaskListener.java
+	*  java/com/townleyenterprises/event/TaskEvent.java
+	   java/com/townleyenterprises/event/TaskListener.java
 
 	  Added support for task listeners for monitored tasks.
 
 2003-11-20 Andrew S. Townley <atownley>
-	* java/src/com/townleyenterprises/swing/AbstractMonitoredTask.java
-	  java/src/com/townleyenterprises/swing/MonitoredTask.java
-	  java/src/com/townleyenterprises/swing/TStatusBar.java
+	* java/com/townleyenterprises/swing/AbstractMonitoredTask.java
+	  java/com/townleyenterprises/swing/MonitoredTask.java
+	  java/com/townleyenterprises/swing/TStatusBar.java
 
 	  Added mechanism for monitored background GUI tasks and
 	  implementation of status bar to support progress monitoring.
 
-	* java/src/com/townleyenterprises/swing/AbstractUIBuilder.java
-	  java/src/com/townleyenterprises/swing/ResourceUIBuilder.java
-	  java/src/com/townleyenterprises/swing/UIBuilder.java
+	* java/com/townleyenterprises/swing/AbstractUIBuilder.java
+	  java/com/townleyenterprises/swing/ResourceUIBuilder.java
+	  java/com/townleyenterprises/swing/UIBuilder.java
 
 	  Added mechanism for dynamic menu generation based on
 	  mechanisms in the JFC demo Notepad.
 
-	* java/src/com/townleyenterprises/swing/ResourceLoader.java
-	  java/src/com/townleyenterprises/swing/ResourceProvider.java
+	* java/com/townleyenterprises/swing/ResourceLoader.java
+	  java/com/townleyenterprises/swing/ResourceProvider.java
 
 	  Added mechanism for generic resource loading.
 
-	* java/src/com/townleyenterprises/swing/SpringHints.java
+	* java/com/townleyenterprises/swing/SpringHints.java
 
 	  Added helper class for the SpringLayout.
 
-	* java/src/com/townleyenterprises/swing/SwingWorker.java
+	* java/com/townleyenterprises/swing/SwingWorker.java
 
 	  Added SwingWorker from Java JFC Tutorial.
 
-	* java/src/com/townleyenterprises/swing/ThemeLoader.java
-	  java/src/com/townleyenterprises/swing/resources/default.theme
+	* java/com/townleyenterprises/swing/ThemeLoader.java
+	  java/com/townleyenterprises/swing/resources/default.theme
 	  
 	  Added dynamic, property-file driven Swing theme.
 
+	* java/com/townleyenterprises/command/AbstractCommandListener.java
+
+	  Added abstract base class so optionMatched() is not
+	  necessary to implement when using OO-Parsing
+
 2003-06-08 Andrew S. Townley <atownley>
 
-	* java/src/com/townleyenterprises/filter/package.html
+	* java/com/townleyenterprises/filter/package.html
 
 	  Updated the JavaDoc for the package to actually
 	  reflect reality and put in some more appropriate
 	  examples.
 
-	* java/src/com/townleyenterprises/command/CommandParser.java
+	* java/com/townleyenterprises/command/CommandParser.java
 
 	  Fixed several small bugs with supporting only
 	  options with short versions, printing usage for
@@ -81,16 +96,16 @@
 	  error if an option requiring a value was missing
 	  an argument.
 
-	* java/src/com/townleyenterprises/command/RepeatableCommandOption.java
-	  java/src/com/townleyenterprises/command/DelimitedCommandOption.java
+	* java/com/townleyenterprises/command/RepeatableCommandOption.java
+	  java/com/townleyenterprises/command/DelimitedCommandOption.java
 
 	  Actually implemented real versions of these based
 	  on further thinking after writing the examples for
 	  the site.  The delimited one was necessary for
 	  easily migrating some existing work.
 	
-	* java/src/com/townleyenterprises/filter/StringFilter.java
-	  java/src/com/townleyenterprises/filter/SubstringFilter.java
+	* java/com/townleyenterprises/filter/StringFilter.java
+	  java/com/townleyenterprises/filter/SubstringFilter.java
 
 	  Added StringFilter to deal with case sensitivity.
 	  Changed SubstringFilter to be derived from
@@ -100,13 +115,13 @@
 	  Fixed potential bugs in the way properties were
 	  being checked if any of the values were null.
 
-	* java/src/com/townleyenterprises/filter/Logical*Filter.java
-	  java/src/com/townleyenterprises/filter/QueryFilter.java
+	* java/com/townleyenterprises/filter/Logical*Filter.java
+	  java/com/townleyenterprises/filter/QueryFilter.java
 
 	  Added toString() implementations so that they
 	  could be printed for debugging.
 
-	* java/src/com/townleyenterprises/common/PropertyProxy.java
+	* java/com/townleyenterprises/common/PropertyProxy.java
 
 	  Renamed getProxyClass method to getSubjectClass
 	  since you're getting the class of the thing being
