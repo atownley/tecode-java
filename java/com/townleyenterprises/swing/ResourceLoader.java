@@ -48,8 +48,18 @@ import java.util.ResourceBundle;
 /**
  * This class provides a way to access Java resource strings from a
  * location relative to a specific class.
+ * <p>
+ * This class supports a system property which will control how
+ * missing resources are reported.  The property is:
  *
- * @version $Id: ResourceLoader.java,v 1.2 2003/11/20 16:41:07 atownley Exp $
+ * <ul>
+ * <li>te-common.swing.resourceloader.showmissingresources - set to
+ * <code>true</code> or <code>yes</code> to display messages about
+ * missing resources</li>
+ * </ul>
+ * </p>
+ *
+ * @version $Id: ResourceLoader.java,v 1.3 2003/12/11 03:12:18 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -114,8 +124,13 @@ public class ResourceLoader implements ResourceProvider
 		}
 		catch(MissingResourceException e)
 		{
-			System.err.println(getClass().getName() + ":  unable to find resource for key = '" + e.getKey() + "' in bundle named:  '" + _name + "'");
-//			e.printStackTrace();
+			String p = System.getProperty("te-common.swing.resourceloader.showmissingresources");
+			if(p != null && (p.toLowerCase().charAt(0) == 'y'
+					|| p.toLowerCase().charAt(0) == 't'))
+			{
+				System.err.println(getClass().getName() + ":  unable to find resource for key = '" + e.getKey() + "' in bundle named:  '" + _name + "'");
+//				e.printStackTrace();
+			}
 		}
 
 		return s;
@@ -131,6 +146,23 @@ public class ResourceLoader implements ResourceProvider
 	public ResourceBundle getResourceBundle()
 	{
 		return _resources;
+	}
+
+	/**
+	 * Provide some clue as to what we're doing and who we are.
+	 */
+
+	public String toString()
+	{
+		StringBuffer buf = new StringBuffer("[ResourceLoader (");
+		buf.append(hashCode());
+		buf.append("): klass='");
+		buf.append(_klass);
+		buf.append("'; name='");
+		buf.append(_name);
+		buf.append("' ]");
+
+		return buf.toString();
 	}
 
 	/** a reference to the class */
