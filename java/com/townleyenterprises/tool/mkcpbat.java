@@ -73,7 +73,7 @@ import com.townleyenterprises.common.Path;
  * </pre>
  * </p>
  *
- * @version $Id: mkcpbat.java,v 1.4 2004/07/29 18:28:28 atownley Exp $
+ * @version $Id: mkcpbat.java,v 1.5 2004/07/30 16:43:41 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -93,6 +93,8 @@ public final class mkcpbat
 
 	private mkcpbat(String[] args)
 	{
+		// add the resources
+		Strings.addResources(this, "mkcpbat");
 		_parser = new CommandParser("mkcpbat",
 				Strings.get("sFileArgs"));
 		_parser.setExitOnMissingArg(true, -1);
