@@ -1,0 +1,362 @@
+
+Version Numbering Scheme
+========================
+
+Author:		Andrew S. Townley
+Created:	Wed Aug  4 17:00:47 IST 2004
+Copyright 2004, Andrew S. Townley.  All Rights Reserved.
+
+No part of this document can be reproduced in any form without the
+above copyright disclaimer.
+
+INTRODUCTION
+
+This file attempts to describe in a bit more detail the version
+numbering scheme used by TE-Code and how to correctly use it both in
+Open Source and commercial projects.  The scheme is based on a number
+of sources, including, but not limited to, the Linux kernel and
+various other Free Software projects.
+
+1. THE VERSION INFORMATION
+==========================
+
+Each version number consists of the following components (regardless
+if they are immediately visible or not):
+
+  1) The Project
+  1) The Major Version
+  2) The Minor Version
+  3) The Release Number
+  4) An optional release suffix
+  5) The sequential build number
+  6) The build date
+
+This gives us (using the current version of te-common)
+something looking like the following:
+
+TE Common API: 3.0.0-dev (Build 77; 2004-07-30 17:30:23 IST)
+
+This one is pretty standard and is saying that:
+
+ - The project is 'TE Common API'
+ - The major version is 3
+ - The minor version is 0
+ - The release version is 0
+ - The release suffix is '-dev'
+ - It is the 77th build (from the beginning of time)
+ - The 66th build was performed on July 30, 2004 at 5:30pm Irish
+   Standard Time
+
+THE PROJECT
+
+The project is the entity which is being versioned.  Normally, this is
+some catchy name like Linux, GNOME or Microsoft Word, however it could
+be a project code name like Xanadu, Xerces, Tristar, Chisato or
+Phobos.  
+
+Things get somewhat tricky if you want to have a project component
+appear with a different version number, or with the default version
+string, but this can be done using the Java MessageFormat class and
+the constant values defined by the appropriately placed
+Version.java.in file.
+
+Essentially, it's just a name, so it can be whatever you want.
+
+THE MAJOR VERSION
+
+Let's face it, most people are used to seeing version numbers so that
+they generally know that a product who's major version number is 1
+hasn't been around as long as something with a major version number of
+7.  The main thing that causes problems with versions is knowing when
+to increment them.  This particular aspect is described a little
+later.
+
+The major version generally reflects the overall maturity of the
+product/project and also often represents how many times the root core
+of the product has been significantly changed.
+
+THE MINOR VERSION
+
+The minor version is used to track significant iterations of a given
+major version.  It will normally be incremented more frequently than a
+major version.
+
+THE RELEASE VERSION
+
+The release version is mostly used to indicate how may times bugs have
+been fixed for a given major and minor version of the project.  Higher
+release versions normally mean that for whatever reason, it was
+decided that only reported bugs would be fixed.  In larger
+organizations, these are generally not performed by the main R&D team,
+but in our case, they are.
+
+THE RELEASE SUFFIX
+
+This is something which can lead to a great deal of confusion, so I'm
+going to cover what the common ones are and what they represent.
+
+-dev	This suffix indicates that the version is under active
+	development and is likely to not be stable.  People familiar
+	with the Linux kernel versioning scheme:  this is similar to
+	the way Linus uses the odd numbered versions to track changes.
+
+-pre#	This suffix indicates the iteration of a pre-release cycle.
+	An example would be 1.0.0-pre1 which indicates that this is
+	the first "beta" candidate which is released for a wider
+	audience.
+
+-rc#	This suffix indicates that the product is very near to a final
+	release.  These builds have generally been through the R&D
+	testing cycle and have been given over for UAT to the target
+	customer.  Each new build given to an end customer for UAT
+	should have a different release candidate number.
+
+-p#	This suffix indicates that the product has been patched to the
+	given patch level.  In general, patch releases should be
+	avoided if at all possible, but there are times when this is
+	necessary.  For historical reasons, patches for a given
+	release start at 0 and not 1.  All other numbered release
+	suffixes start with 1.
+
+[none]	When no release suffix is present, the version is an
+	"official" or final release to operations.  Any bug fixes to
+	an official release will require either a new release version
+	or an emergency patch release.
+
+THE BUILD NUMBER
+
+This number indicates the sequence of builds since the project has
+started.  Normally, during active development and testing, a nightly
+build will be performed, however less active projects can have weekly
+ones, monthly ones or simply perform builds as needed.
+
+There are two situations with the build number.  The first is when no
+external rules are in place.  Builds from a developer's machine should
+always have a build number of 'DEVELOPER' unless for some reason the
+build number must be numeric.  In this case, the developer builds will
+have a value of 9999 instead.  The latter is true for the .NET edition
+since all parts of the version number must be numeric.
+
+THE BUILD DATE
+
+This data is recorded as part of the version as informational only.
+In practice, it can be useful in cases where someone mistakenly
+performs release builds without modifying the build number, but mostly
+it's there as trivia.
+
+2. VERSIONING AND THE PRODUCT'S LIFE CYCLE
+==========================================
+
+My own take on versioning of a product is compiled from my previous
+experience based on what I've personally seen work.  This may or may
+not work for you, but this is how things get done in te-code.
+
+STARTING OUT
+
+Lots of people do an initial release which is lower than 1.0.0.
+Personally, I don't care for this anymore--although I've done it in
+the past.  Whatever features are going to be useful to someone (even
+if it's just me) get the 1.0.0 version.  I also always start my
+official builds from 0 (pre-increment of build numbers is currently in
+use so you can always tell what the last one was).
+
+If functionality is added which isn't stable yet, the project can
+easily go through a number of pre-releases while the rest of it
+catches up to the stuff that was done first.  I've seen projects take
+a loooong time to get to the 1.0 mark.
+
+INCREMENTING THE MAJOR VERSION
+
+To me, the major version of a product indicates the overall maturity
+of the system.  Scott Hayden, a former co-worker of mine at Informix
+once said that if you've implemented something more than twice, you're
+doing it wrong.  While I agree, there is a natural evolution of things
+in life (not just software) where what has gone before needs to be
+either modified significantly to support something new or
+re-implemented so that it can be done better or more efficiently.
+However, I'm not a fan of eternal refactoring.  I think that you get
+it to a point where it's stable and works and then leave it alone
+until it breaks.  This is certainly where I'd agree with Scott.
+
+So, if you have a system which either adds a whole slew of new
+functionality which alters the core, or causes the core to expand
+significantly, this is when the major version should be incremented.
+Getting specific, if you're going to double the size of the codebase,
+that's probably a good time for a major version.  If you're only
+adding a few new classes or a package to an existing piece of
+software, that probably isn't.
+
+INCREMENTING THE MINOR VERSION
+
+There's a number of schools of thought about this as well.  In the
+example above, adding some new classes or packages which extend
+existing functionality, but don't necessarily change the scope of a
+product get a new minor version.  In large projects, you'll have more
+minor versions than you will in smaller projects.  Essentially, it all
+comes down to the rough percentage of new code vs. the existing code
+and what kinds of features get added.
+
+Again, an example:  if you have a product which was built to talk to
+MySQL and decide that you want it to talk to PostgreSQL as well, but
+that you were in a hurry and used some MySQL-specific features which
+need to be changed to support PostgreSQL, then that's a minor version
+increment.  If, however, doing so requires you to change most of the
+product, then that's a major version increment.
+
+INCREMENTING THE RELEASE VERSION
+
+Release versions always start at 0 for a given major and minor
+version.  I feel that the release number of a given system should be
+limited to fixing bugs which have been reported in a live system that
+can't wait until the next minor version.  This can be for a number of
+reasons including that there's currently no new problems the product
+needs to address at the moment, but a number of users have reported
+bugs in the system.
+
+Each time a group of bugs gets fixed, this causes the release version
+to be incremented.  If your iteration cycle is short enough for a
+given project, specific releases may not be necessary.  In most
+projects, they are a reality for a variety of reasons.  Also, as
+previously stated, the remit of producing incremental releases is
+often given to either Technical Support or Localization since the
+theory is that the core codebase is not being touched.
+
+INCREMENTING THE BUILD NUMBER
+
+My first experiences with build numbers came from Microsoft Windows NT
+3.1.  I generally think they're a good idea because if you have a
+consistent build numbering scheme, it is easy to tell which versions
+implement specific features (as they will be added during development
+rather than between releases).  Build numbers are part of the core
+version compatibility checks implemented in the Version.java.in class
+for the Java Edition of te-common.
+
+Of course, while useful, they can also be a bit tricky to handle for
+the following cases:
+
+ - patch releases
+ - incremental releases
+
+Patch releases are particularly troublesome to manage from a build
+and source code control (SCC) point of view because they "break the
+rules" of a product's release cycle.  My current thinking on patch
+releases is that the only change to the version number should be the
+addition of a prefix and an update of the date.  The rest of the
+version information should stay the same--including the build number.
+
+For incremental releases, I generally let the build counter increase
+as necessary under the (perhaps flawed) assumption that the number of
+regular builds during the development cycle for the next minor release
+will cause the build number to be greater than it was when the
+incremental release is set free.  This doesn't always work, but will
+generally work in practice where there is concurrent development on
+the head of SCC and a branch off the x.0.0 release label where each of
+the incremental and patch releases are tracked.
+
+VERSION COMPATIBILITY
+
+[ put some stuff in here]
+
+PUTTING IT ALL TOGETHER
+
+The following sections describe the life cycle of a hypothetical
+product code named 'Woof'.
+
+Initial Development
+
+Development of the 'Woof' project starts of for the 1.0.0 release.
+The initial version control file checked into SCC has the following
+values:
+
+ - major version: 	1
+ - minor version: 	0
+ - release version:	0-dev
+ - build count:		DEVELOPER
+
+Note that the te-common Version stuff doesn't have any idea that
+there's a prefix on the release version--maybe this'll be changed
+someday, but it's not currently causing any problems.
+
+Official nightly builds of Woof are performed in a controlled build
+environment which does the following:
+
+ 1) Checks out the head of Woof from SCC
+ 2) Increments the build count
+ 3) Checks in the updated file
+ 5) Applies a label to the source tree for the new build number
+ 6) Performs the build
+
+The nightly builds are picked up by the test team who use the
+1.0.0-dev version number to track all of their bugs and make sure to 
+note the build number where they saw it introduced.  Depending on the
+team and the tools used, a special version number can be used, or bugs
+can just be tracked against released an unreleased versions.
+
+Pre-Release to Customer(s)
+
+The project continues until Woof is code complete for the 1.0
+features.  The Woof project team would like to get some early product
+feedback, so they decide to do a number of pre-releases to their
+potential customers.  To track these things, the version information
+is changed as follows on the head of SCC:
+
+ - major version:	1
+ - minor version:	0
+ - release version:	0-pre1
+ - build count:		DEVELOPER
+
+Depending on how long of a beta cycle and how active the organization
+wants to be, there could be a number of pre-releases as the product
+reacts to user feedback and bug reports.  The project team decides
+there will be a 10-week beta cycle consisting of two pre-releases
+before the product will be released to the general public.
+
+Once the release has "left the building", the release version is
+changed from '0-pre1' to '0-pre2' in preparation for the next beta
+release.
+
+During this time, the main R&D team performs any additional automation
+and execution of tests not yet completed for the project team starts
+thinking about what should go into the next minor release.  This
+decision is also based on feedback from the customers during the beta
+period as some things may not be easily addressed in time for the
+final release.
+
+At the end of the first month, the development team fixes all the bugs
+and makes some minor UI changes to the product based on usability
+issues reported by their customers.  This of course causes changes in
+the test plans which keep the test team busy.  This work is completed
+in two weeks and the 1.0.0-pre2 release is given to all registered
+beta customers.  In SCC, the version is changed to 1.0.0-rc1 and the
+final release schedule is determined.  
+
+The Home Stretch
+
+Depending on the product and the customers, the release candidate
+builds may or may not be visible outside the organization.  In the
+case of Woof, the decision is made to not make the release candidate
+builds available to the general public.
+
+A '1.0.0-release' branch is created in SCC based on the build label
+from the 1.0.0-pre2 release.  Check-ins on the branch are carefully
+monitored by the project team and only selected bug fixes will be
+allowed into the final release.  The 1.0.0-rc1 build is created and
+given to the test team to perform their final testing.  As new or
+regression bugs are found and prioritized, new rc builds are created
+until things look stable.  The final set of tests is run on the
+current release candidate build (1.0.0-rc7) and the build is given the
+green light by the test team.
+
+The version information is updated in SCC to be 1.0.0 and the final,
+controlled build is performed, labeled, burnt to the CD and checked
+for viruses before being released to the vast reaches of the
+multiverse.  The project team has a release party and the customers
+eagerly download/unwrap and install Woof 1.0.0 onto their unsuspecting
+computers.
+
+Dark Clouds
+
+[ add sections here on how to handle patch releases as well as
+incremental releases ]
+---------------------------------------------------------------------
+$Id: versions.txt,v 1.1 2004/08/04 18:09:14 atownley Exp $
