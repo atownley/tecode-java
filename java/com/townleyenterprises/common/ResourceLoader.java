@@ -71,7 +71,7 @@ import javax.swing.ImageIcon;
  * </ul>
  * </p>
  *
- * @version $Id: ResourceLoader.java,v 1.2 2004/08/11 13:19:33 atownley Exp $
+ * @version $Id: ResourceLoader.java,v 1.3 2004/08/11 16:19:01 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -370,10 +370,6 @@ public class ResourceLoader implements ResourceProvider
 		try
 		{
 			s = rez.getString(key);
-			if(s == null || "".equals(s))
-			{
-				s = key;
-			}
 		}
 		catch(MissingResourceException e)
 		{
@@ -384,6 +380,7 @@ public class ResourceLoader implements ResourceProvider
 				System.err.println(Strings.format("fMissingResource", new Object[] { getClass().getName(), e.getKey(), _name }));
 //				e.printStackTrace();
 			}
+			s = key;
 		}
 
 		return s;
