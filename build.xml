@@ -53,7 +53,7 @@
 	<property file="${build.version}" />
 	<property name="version"	value="${build.version.major}.${build.version.minor}.${build.version.release}"/>
 	<property name="dist.dir"	value="${app.name}-${version}"/>
-	<property name="verstamp"	value="${src.dir}/com/townleyenterprises/common/Version.java"/>
+	<property name="kill.file"	value="configured.files"/>
 
 	<target name="builddate">
 		<propertyfile file="${build.date}"
@@ -68,8 +68,12 @@
 	<target name="verstamp" depends="builddate" >
 		<filter filtersfile="${build.version}"/>
 		<filter filtersfile="${build.date}"/>
-		<copy file="${verstamp}.in" tofile="${verstamp}"
-			filtering="true" />
+		
+		<copy todir="${basedir}" filtering="true">
+			<mapper type="glob" from="*.in" to="*"/>
+			<fileset dir="${basedir}"
+				includes="**/*.in"/>
+		</copy>
 	</target>
 
 	<target name="cmbuild" depends="clean,builddate">
@@ -84,8 +88,12 @@
 		<filter filtersfile="${build.version}"/>
 		<filter filtersfile="${build.date}"/>
 		<filter filtersfile="${build.count}"/>
-		<copy file="${verstamp}.in" tofile="${verstamp}"
-			filtering="true" />
+		
+		<copy todir="${basedir}" filtering="true">
+			<mapper type="glob" from="*.in" to="*"/>
+			<fileset dir="${basedir}"
+				includes="**/*.in"/>
+		</copy>
 
 		<!-- perform the build -->
 		<property file="${build.count}" />
@@ -182,7 +190,9 @@
 	</target>
 
 	<target name="distclean" depends="clean">
-		<delete file="${verstamp}"/>
+		<delete>
+			<fileset dir="${basedir}" includesfile="${kill.file}"/>
+		</delete>
 		<delete file="${build.date}"/>
 	</target>
 </project>
