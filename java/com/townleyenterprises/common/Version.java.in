@@ -1,0 +1,135 @@
+//////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2003, Andrew S. Townley
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 
+//     * Redistributions of source code must retain the above
+//     copyright notice, this list of conditions and the following
+//     disclaimer.
+// 
+//     * Redistributions in binary form must reproduce the above
+//     copyright notice, this list of conditions and the following
+//     disclaimer in the documentation and/or other materials provided
+//     with the distribution.
+// 
+//     * Neither the names Andrew Townley and Townley Enterprises,
+//     Inc. nor the names of its contributors may be used to endorse
+//     or promote products derived from this software without specific
+//     prior written permission.  
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+// OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// File:	Version.java
+// Created:	Wed Nov 26 00:12:50 GMT 2003
+//
+//////////////////////////////////////////////////////////////////////
+
+package com.townleyenterprises.common;
+
+/**
+ * This class provides version information for the te-common project.
+ * It allows easy version checking from client user applications to
+ * enforce dependency checking on a particular release (if required).
+ *
+ * @version $Id: Version.java.in,v 1.1 2003/12/04 12:57:00 atownley Exp $
+ * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ */
+
+public final class Version
+{
+	/** this is the project to which the version refers */
+	public static final String	PROJECT = "@build.version.project@";
+
+	/** this is the major version number of the build */
+	public static final String	MAJOR	= "@build.version.major@";
+
+	/** this is the minor version number of the build. */
+	public static final String	MINOR	= "@build.version.minor@";
+
+	/** this is the release number of the build in question */
+	public static final String	RELEASE	= "@build.version.release@";
+
+	/** this is the sequential number of the official builds */
+	public static final String	BUILD	= "@build.version.count@";
+
+	/** this is the date on which the build was performed */
+	public static final String	DATE	= "@build.version.date@";
+
+	/**
+	 * This method is used to retrieve the formatted version number
+	 * suitable for displaying in about boxes, version outputs, log
+	 * files, etc.
+	 *
+	 * @return the formatted version string
+	 */
+
+	public static String getFullVersion()
+	{
+		StringBuffer buf = new StringBuffer(getVersion());
+		buf.append(" (");
+		buf.append(getBuild());
+		buf.append(")");
+
+		return buf.toString();
+	}
+
+	/**
+	 * This method is used to just get the formatted version number
+	 * without the build information.
+	 *
+	 * @return the version string
+	 */
+
+	public static String getVersion()
+	{
+		StringBuffer buf = new StringBuffer(MAJOR);
+		buf.append(".");
+		buf.append(MINOR);
+		buf.append(".");
+		buf.append(RELEASE);
+		
+		return buf.toString();
+	}
+
+	/**
+	 * This method is used to just retrieve the build portion of the
+	 * version number.
+	 *
+	 * @return the build information
+	 */
+
+	public static String getBuild()
+	{
+		StringBuffer buf = new StringBuffer("Build ");
+		buf.append(BUILD);
+		buf.append("; ");
+		buf.append(DATE);
+
+		return buf.toString();
+	}
+
+	public static void main(String[] args)
+	{
+		System.out.print(PROJECT);
+		System.out.print(": ");
+		System.out.println(getFullVersion());
+	}
+
+	/** prevent instantiation */
+	private Version() {}
+}
