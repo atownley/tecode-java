@@ -44,7 +44,7 @@ package com.townleyenterprises.command;
 /**
  * This class provides support for defining command-line arguments.
  *
- * @version $Id: CommandOption.java,v 1.2 2004/01/25 18:34:32 atownley Exp $
+ * @version $Id: CommandOption.java,v 1.3 2004/01/26 09:18:42 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -189,6 +189,19 @@ public class CommandOption
 	{
 		_matched = true;
 		_arg = arg;
+	}
+
+	/**
+	 * This method is used to support multiple parses by a
+	 * CommandParser instance using different sets of arguments.
+	 * Derived classes should override this method to reset any
+	 * state stored using the @{link optionMatched} method.
+	 */
+
+	public void reset()
+	{
+		_matched = false;
+		_arg = null;
 	}
 
 	private final boolean	_hasarg;

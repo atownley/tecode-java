@@ -41,15 +41,16 @@
 
 package com.townleyenterprises.command;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class provides the basic support for repeatable command line
  * arguments.  This class can be used to allow a given argument to be
  * supplied more than once on the command line.
  *
- * @version $Id: RepeatableCommandOption.java,v 1.2 2004/01/25 18:37:46 atownley Exp $
+ * @version $Id: RepeatableCommandOption.java,v 1.3 2004/01/26 09:18:54 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -137,7 +138,22 @@ public class RepeatableCommandOption extends CommandOption
 
 	public List getArgs()
 	{
-		return _list.subList(0, _list.size());
+		List lcopy = new ArrayList(_list.size());
+		Collections.copy(lcopy, _list);
+		return lcopy;
+	}
+
+	/**
+	 * This method empties the list of all matched arguments in
+	 * addition to any operations performed by the parent class.
+	 *
+	 * @since 2.1
+	 */
+
+	public void reset()
+	{
+		super.reset();
+		_list.clear();
 	}
 
 	/**
