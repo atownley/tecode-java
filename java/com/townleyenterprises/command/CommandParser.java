@@ -49,7 +49,7 @@ import java.util.Vector;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.10 2004/01/27 20:14:22 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.11 2004/01/28 12:00:58 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -443,12 +443,24 @@ public final class CommandParser implements CommandListener
 		}
 		System.out.println("");
 
+		if(_preamble != null)
+		{
+			System.out.println("");
+			printWrappedText(_preamble, ' ', 80, 0);
+		}
+
 		for(Enumeration e = _listeners.elements(); e.hasMoreElements(); )
 		{
 			CommandListener l = (CommandListener)e.nextElement();
 			System.out.println("\n" + l.getDescription() + ":");
 
 			printOptionsHelp(l.getOptions());
+		}
+
+		if(_postamble != null)
+		{
+			System.out.println("");
+			printWrappedText(_postamble, ' ', 80, 0);
 		}
 	}
 
@@ -536,6 +548,22 @@ public final class CommandParser implements CommandListener
 	{
 		_exitmissing = val;
 		_exitstatus = status;
+	}
+
+	/**
+	 * This method is used to set optional text which can be
+	 * printed before and after the command option descriptions.
+	 *
+	 * @param preamble the text to be printed before the option
+	 * 	descriptions
+	 * @param postamble the text to be printed after the option
+	 * 	descriptions
+	 */
+
+	public void setExtraHelpText(String preamble, String postamble)
+	{
+		_preamble = preamble;
+		_postamble = postamble;
 	}
 
 	/**
@@ -858,6 +886,12 @@ public final class CommandParser implements CommandListener
 
 	/** the exit code to use if exit on missing arguments */
 	private int		_exitstatus;
+
+	/** the preamble to print before the options */
+	private String		_preamble = null;
+
+	/** the postamble to print */
+	private String		_postamble = null;
 
 	/** the maximum width of the switch part */
 	private final int	SWITCH_LENGTH = 35;
