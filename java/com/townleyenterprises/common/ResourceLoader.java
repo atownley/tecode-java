@@ -65,13 +65,13 @@ import javax.swing.ImageIcon;
  * missing resources are reported.  The property is:
  *
  * <ul>
- * <li>te-common.common.resourceloader.showmissingresources - set to
+ * <li>te-code.common.resourceloader.showmissingresources - set to
  * <code>true</code> or <code>yes</code> to display messages about
  * missing resources</li>
  * </ul>
  * </p>
  *
- * @version $Id: ResourceLoader.java,v 1.1 2004/07/29 18:32:04 atownley Exp $
+ * @version $Id: ResourceLoader.java,v 1.2 2004/08/11 13:19:33 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -102,6 +102,19 @@ public class ResourceLoader implements ResourceProvider
 	}
 
 	/**
+	 * This constructor takes a class to use as the basis for
+	 * finding resources for the specific locale.
+	 *
+	 * @param cls the class providing the base resource location
+	 * @param locale the locale of the resources to load
+	 */
+
+	public ResourceLoader(Class cls, Locale locale)
+	{
+		this(cls, "strings", locale);
+	}
+
+	/**
 	 * This version of the constructor is used to load resource
 	 * settings from an arbitrarily named resource property file.
 	 *
@@ -125,6 +138,23 @@ public class ResourceLoader implements ResourceProvider
 
 	public ResourceLoader(Class cls, String name, Locale locale)
 	{
+		String p = null;
+
+		// sanity parameter checks
+		if(cls == null)
+			p = "cls";
+		else if(name == null)
+			p = "name";
+		else if(locale == null)
+			p = "locale";
+
+		if(p != null)
+		{
+			throw new NullPointerException(
+				Strings.format("fNullParameter",
+						new Object[] { p }));
+		}
+
 		_klass = cls;
 		Package pkg = _klass.getPackage();
 		if(pkg != null)
@@ -136,6 +166,7 @@ public class ResourceLoader implements ResourceProvider
 			_name = "resources.".concat(name);
 		}
 
+		_locale = locale;
 		_bundles.put(locale, 
 			ResourceBundle.getBundle(_name, locale));
 	}
@@ -143,7 +174,9 @@ public class ResourceLoader implements ResourceProvider
 	/**
 	 * This method is used to find a given resource string.
 	 *
-	 * @param key the resource string key
+	 * @param key the resource string key.  If the key can't be
+	 * found or the resulting string is empty, the key is
+	 * returned.
 	 * @return the string for the key
 	 */
 
@@ -154,6 +187,19 @@ public class ResourceLoader implements ResourceProvider
 
 	public String getString(String key, Locale locale)
 	{
+		String p = null;
+
+		// sanity parameter checks
+		if(locale == null)
+			p = "locale";
+
+		if(p != null)
+		{
+			throw new NullPointerException(
+				Strings.format("fNullParameter",
+						new Object[] { p }));
+		}
+
 		// see if we have a bundle for the locale
 		ResourceBundle bundle = getResourceBundle(locale);
 		if(bundle == null)
@@ -176,7 +222,7 @@ public class ResourceLoader implements ResourceProvider
 
 	public ImageIcon getIcon(String key)
 	{
-		return getIcon(key, Locale.getDefault());
+		return getIcon(key, _locale);
 	}
 
 	/**
@@ -190,6 +236,21 @@ public class ResourceLoader implements ResourceProvider
 
 	public ImageIcon getIcon(String key, Locale locale)
 	{
+		String p = null;
+
+		// sanity parameter checks
+		if(key == null)
+			p = "key";
+		else if(locale == null)
+			p = "locale";
+
+		if(p != null)
+		{
+			throw new NullPointerException(
+				Strings.format("fNullParameter",
+						new Object[] { p }));
+		}
+
 		// need to see if there's a locale-specific version of
 		// the icon.
 
@@ -228,14 +289,14 @@ public class ResourceLoader implements ResourceProvider
 
 	/**
 	 * This method returns the reference to the bundle for the
-	 * default locale.
+	 * default locale for this instance.
 	 *
 	 * @return the bundle
 	 */
 
 	public ResourceBundle getResourceBundle()
 	{
-		return getResourceBundle(Locale.getDefault());
+		return getResourceBundle(_locale);
 	}
 
 	/**
@@ -248,6 +309,19 @@ public class ResourceLoader implements ResourceProvider
 
 	public ResourceBundle getResourceBundle(Locale locale)
 	{
+		String p = null;
+
+		// sanity parameter checks
+		if(locale == null)
+			p = "locale";
+
+		if(p != null)
+		{
+			throw new NullPointerException(
+				Strings.format("fNullParameter",
+						new Object[] { p }));
+		}
+
 		return (ResourceBundle)_bundles.get(locale);
 	}
 
@@ -263,6 +337,8 @@ public class ResourceLoader implements ResourceProvider
 		buf.append(_klass);
 		buf.append("'; name='");
 		buf.append(_name);
+		buf.append("'; locale='");
+		buf.append(_locale);
 		buf.append("' ]");
 
 		return buf.toString();
@@ -276,16 +352,34 @@ public class ResourceLoader implements ResourceProvider
 	private String getBundleString(ResourceBundle rez, String key)
 	{
 		String s = null;
+		String p = null;
+
+		// sanity parameter checks
+		if(rez == null)
+			p = "rez";
+		else if(key == null)
+			p = "key";
+
+		if(p != null)
+		{
+			throw new NullPointerException(
+				Strings.format("fNullParameter",
+						new Object[] { p }));
+		}
 
 		try
 		{
 			s = rez.getString(key);
+			if(s == null || "".equals(s))
+			{
+				s = key;
+			}
 		}
 		catch(MissingResourceException e)
 		{
-			String p = System.getProperty("te-common.common.resourceloader.showmissingresources");
-			if(p != null && (p.toLowerCase().charAt(0) == 'y'
-					|| p.toLowerCase().charAt(0) == 't'))
+			String x = System.getProperty("te-code.common.resourceloader.showmissingresources");
+			if(p != null && (x.toLowerCase().charAt(0) == 'y'
+					|| x.toLowerCase().charAt(0) == 't'))
 			{
 				System.err.println(Strings.format("fMissingResource", new Object[] { getClass().getName(), e.getKey(), _name }));
 //				e.printStackTrace();
@@ -300,6 +394,9 @@ public class ResourceLoader implements ResourceProvider
 
 	/** save a reference to our resource bundle name */
 	private String			_name;
+
+	/** save a reference to our specified default locale */
+	private Locale			_locale;
 
 	/** the resource bundles for the other locales */
 	private HashMap			_bundles = new HashMap();
