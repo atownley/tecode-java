@@ -16,10 +16,16 @@ com.townleyenterprises.command Package
 
 * Support combined and single-dash arguments
 
-* Explicitly support preamble and postamble arbitrary text
-  blocks a la getopt
+* Provide alternate streams for error and output to ease
+  testing of error and output messages
 
-* Support default argument values correctly
+* Provide a way to support plugable handlers for error and
+  output operations to ease testing and provide more flexibility.
+
+* Provide i18n support
+
+* Provide suppot for grouping sets of options for a single
+  CommandListener.
 
 com.townleyenterprises.common Package
 
