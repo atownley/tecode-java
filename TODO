@@ -14,6 +14,13 @@ com.townleyenterprises.command Package
   should be a way to figure out how to better handle
   arguments which can be used alone or with other arguments.
 
+* Support combined and single-dash arguments
+
+* Explicitly support preamble and postamble arbitrary text
+  blocks a la getopt
+
+* Support default argument values correctly
+
 com.townleyenterprises.common Package
 
 * Clean up the documentation (what little there is)
