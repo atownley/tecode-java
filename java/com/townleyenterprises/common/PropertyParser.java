@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2002-2004, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // File:	PropertyParser.java
-// Created:	Thu Jan 22 18:20:34 GMT 2004
+// Created:	Thu Jan 22 18:20:34 GMT 2003
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -49,7 +49,7 @@ import java.io.IOException;
  * This is a static utility class to perform parsing of property
  * values to primitive types.
  *
- * @version $Id: PropertyParser.java,v 1.1 2004/01/25 18:29:25 atownley Exp $
+ * @version $Id: PropertyParser.java,v 1.2 2004/01/25 19:31:38 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
