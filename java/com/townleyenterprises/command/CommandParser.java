@@ -48,7 +48,7 @@ import java.util.Enumeration;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.3 2003/06/08 14:21:49 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.4 2003/06/08 16:31:35 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -451,12 +451,12 @@ public final class CommandParser implements CommandListener
 		{
 			// ok, this is cheating a little for when it
 			// wraps based on the ] being in col 72...
-			buf.append("  ");
+			buf.append(" ");
 			buf.append(_arghelp);
 		}
 
 		// now, we split the lines
-		printWrappedText(buf.toString(), ']', 72, 7);
+		printWrappedText(buf.toString(), ']', 72, 8);
 	}
 
 	/**
@@ -531,6 +531,7 @@ public final class CommandParser implements CommandListener
 		{
 			System.err.print(msg);
 			System.err.println("  Exiting.");
+			help();
 			System.exit(_exitstatus);
 		}
 		else
@@ -640,7 +641,20 @@ public final class CommandParser implements CommandListener
 			char c = line.charAt(cut);
 			if(c != cchar)
 			{
+				int ocut = cut;
 				cut = line.lastIndexOf(cchar, cut);
+				if(cut > lwidth || cut == -1)
+				{
+					cut = line.lastIndexOf(' ', ocut);
+					if(cut == -1)
+					{
+						// then we can't wrap
+						// correctly, so just
+						// bail and chop at
+						// the edge
+						cut = lwidth - 1;
+					}
+				}
 				t = line.substring(0, cut + 1);
 			}
 			else if(c == cchar && Character.isWhitespace(c))
@@ -655,7 +669,7 @@ public final class CommandParser implements CommandListener
 			}
 
 			System.out.println(t);
-			line = line.substring(cut + 1);
+			line = line.substring(cut + 1).trim();
 			for(int xx = 0; xx < indent; ++xx)
 			{
 				System.out.print(" ");
