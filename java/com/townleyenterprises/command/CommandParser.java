@@ -49,7 +49,7 @@ import java.util.Vector;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.9 2004/01/27 19:14:45 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.10 2004/01/27 20:14:22 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -111,7 +111,7 @@ public final class CommandParser implements CommandListener
 
 	public CommandParser(String appName, String argHelp)
 	{
-		this(appName, argHelp, '-', "--");
+		this(appName, argHelp, '-', "--", "--");
 	}
 
 	/**
@@ -131,10 +131,39 @@ public final class CommandParser implements CommandListener
 	public CommandParser(String appName, String argHelp,
 				char sSwitch, String lSwitch)
 	{
+		this(appName, argHelp, sSwitch, lSwitch, "--");
+	}
+
+	/**
+	 * This version of the constructor allows the client to
+	 * specify the switch characters to be used for the short and
+	 * long options.  It also allows the specification of the
+	 * string to mark the end of the argument list.  By default,
+	 * this string is <code>--</code> which conforms to the POSIX
+	 * standard.
+	 *
+	 * @param appName the name of the application
+	 * @param argHelp the help for the additional arguments which
+	 * 	may be supplied to the application
+	 * @param sSwitch the single character option switch
+	 * @param lSwitch the long option switch
+	 * @param endOfArgsMarker the string marking the end of the
+	 * 	argument list (may be null).  Anything after this
+	 * 	string is treated as a leftover argument.
+	 * @exception RuntimeException
+	 * 	if a single character is used for the long switch
+	 * @since 2.1
+	 */
+
+	public CommandParser(String appName, String argHelp,
+				char sSwitch, String lSwitch,
+				String endOfArgsMarker)
+	{
 		_appname = appName;
 		_arghelp = argHelp;
 		_sswitch = sSwitch;
 		_lswitch = lSwitch;
+		_eoargs = endOfArgsMarker;
 
 		if(_lswitch.length() == 1)
 		{
@@ -217,7 +246,7 @@ public final class CommandParser implements CommandListener
 			usage();
 			return;
 		}
-
+		
 		if(_autohelp)
 		{
 			addCommandListener(this);
@@ -232,6 +261,7 @@ public final class CommandParser implements CommandListener
 
 		OptionHolder val = null;
 
+		boolean copyargs = false;
 		_leftovers = new Vector();
 		
 		for(int i = 0; i < args.length; ++i)
@@ -241,8 +271,20 @@ public final class CommandParser implements CommandListener
 			// executive decision:  if the argument is
 			// empty, it's silently ignored
 
-			if(s.length() == 0)
+			if(s == null || s.length() == 0)
 				continue;
+
+			if(s.equals(_eoargs))
+			{
+				copyargs = true;
+				continue;
+			}
+
+			if(copyargs)
+			{
+				_leftovers.add(s);
+				continue;
+			}
 
 			// take care of the normal processing
 
@@ -353,6 +395,9 @@ public final class CommandParser implements CommandListener
 
 	public String[] getUnhandledArguments()
 	{
+		if(_leftovers == null)
+			return new String[0];
+
 		String[] args = new String[_leftovers.size()];
 		return (String[])_leftovers.toArray(args);
 	}
@@ -801,6 +846,9 @@ public final class CommandParser implements CommandListener
 
 	/** the long switch */
 	private String		_lswitch;
+
+	/** string to signal end of the argument list */
+	private String		_eoargs;
 
 	/** the unhandled arguments */
 	private Vector		_leftovers;
