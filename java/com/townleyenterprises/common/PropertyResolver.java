@@ -41,14 +41,18 @@
 
 package com.townleyenterprises.common;
 
+import java.io.IOException;
 import java.util.Properties;
+import java.util.Set;
+
+import com.townleyenterprises.config.ConfigSupplier;
 
 /**
- * This is a decorator class for a java.util.Properties object to
- * provide an extra method for locating properties with a specified
- * prefix.
+ * This is a decorator class for a java.util.Properties object or a
+ * ConfigSupplier object to provide an extra method for locating
+ * properties with a specified prefix.
  *
- * @version $Id: PropertyResolver.java,v 1.2 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: PropertyResolver.java,v 1.3 2004/12/28 21:46:27 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -63,12 +67,25 @@ public class PropertyResolver
 
 	public PropertyResolver(Properties properties)
 	{
-		_props = properties;
+		_props = new PropertiesAdapter(properties);
+	}
+
+	/**
+	 * The constructor initializes the instance with the reference
+	 * to the ConfigSupplier to use for the property definitions.
+	 *
+	 * @param properties the ConfigSupplier to decorate
+	 * @since 3.0
+	 */
+
+	public PropertyResolver(ConfigSupplier config)
+	{
+		_props = config;
 	}
 
 	/**
 	 * This method is just a pass-through to the
-	 * java.util.Properties.getProperties method.
+	 * ConfigSupplier's get method.
 	 *
 	 * @param key the property key
 	 * @return the property value or null if not present
@@ -76,7 +93,7 @@ public class PropertyResolver
 
 	public String get(String key)
 	{
-		return _props.getProperty(key);
+		return _props.get(key);
 	}
 
 	/**
@@ -90,9 +107,67 @@ public class PropertyResolver
 
 	public String get(String prefix, String key)
 	{
-		return _props.getProperty(prefix.concat(".").concat(key));
+		return _props.get(prefix.concat(".").concat(key));
 	}
 
 	/** the properties object */
-	private final Properties	_props;
+	private final ConfigSupplier	_props;
+
+	/**
+	 * This class is used to provide an adapter for the
+	 * java.util.Properties object to implement the ConfigSupplier
+	 * interface.  This class shouldn't really be used elsewhere
+	 * since it can't meaningfully support the getAppName method,
+	 * so we define it as a private class here.
+	 */
+
+	private static class PropertiesAdapter implements ConfigSupplier
+	{
+		public PropertiesAdapter(Properties props)
+		{
+			__props = props;
+		}
+
+		public String getAppName()
+		{
+			return null;
+		}
+
+		public Set getKeys()
+		{
+			return null;
+		}
+
+		public String get(String key)
+		{
+			return __props.getProperty(key);
+		}
+
+		public void put(String key, String value)
+			throws UnsupportedOperationException
+		{
+			__props.setProperty(key, value);
+		}
+
+		public Properties getProperties()
+		{
+			return __props;
+		}
+
+		public boolean isCaseSensitive()
+		{
+			return true;
+		}
+
+		public void load() throws IOException
+		{
+		}
+
+		public void save() throws IOException,
+				UnsupportedOperationException
+		{
+		}
+
+		private final Properties __props;
+	}
 }
