@@ -41,6 +41,8 @@
 
 package com.townleyenterprises.tool;
 
+import java.util.MissingResourceException;
+
 import com.townleyenterprises.common.Version;
 import com.townleyenterprises.common.ResourceManager;
 import com.townleyenterprises.common.ResourceLoader;
@@ -49,7 +51,7 @@ import com.townleyenterprises.common.ResourceLoader;
  * This class is used to track all of the localized strings used for
  * messages in this package.
  *
- * @version $Id: Strings.java,v 1.2 2004/07/30 16:39:05 atownley Exp $
+ * @version $Id: Strings.java,v 1.3 2004/07/30 16:42:29 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -58,7 +60,14 @@ final class Strings
 {
 	static void addResources(Object obj, String name)
 	{
-		_resources.manage(new ResourceLoader(obj.getClass(), name));
+		try
+		{
+			_resources.manage(new ResourceLoader(obj.getClass(), name));
+		}
+		catch(MissingResourceException e)
+		{
+			// ignored
+		}
 	}
 
 	static String get(String key)
