@@ -41,12 +41,14 @@
 
 package com.townleyenterprises.common;
 
+import java.util.StringTokenizer;
+
 /**
  * This class provides version information for the te-common project.
  * It allows easy version checking from client user applications to
  * enforce dependency checking on a particular release (if required).
  *
- * @version $Id: Version.java.in,v 1.4 2004/02/04 17:38:04 atownley Exp $
+ * @version $Id: Version.java.in,v 1.5 2004/02/04 18:37:14 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -215,6 +217,63 @@ public final class Version
 			return diff;
 
 		return ibld1 - ibld2;
+	}
+
+	/**
+	 * This version of compare deals with arrays of 4 string
+	 * values (as parsed by the parse method) instead of the 8
+	 * string values.
+	 *
+	 * @param ver1 the string array for version 1
+	 * @param ver2 the string array for version 2
+	 */
+
+	public static int compare(String[] ver1, String[] ver2)
+	{
+		return compare(ver1[0], ver1[1], ver1[2], ver1[3],
+				ver2[0], ver2[1], ver2[2], ver2[3]);
+	}
+
+	/**
+	 * This method is used to parse the supplied string into an
+	 * array of String objects representing the version in the
+	 * format:
+	 * <code><em>major</em>.<em>minor</em>.<em>release</em> (Build
+	 * <em>build</em>[; <em>date</em>])</code>.  If it doesn't
+	 * match this format,
+	 * an empty array is returned.
+	 *
+	 * @param verstr the version string
+	 * @return the array containing the individual values
+	 */
+
+	public static String[] parse(String verstr)
+	{
+		String[] rval = new String[4];
+
+		// first parse the version
+		int idx = verstr.indexOf(" ");
+		String sstr = verstr.substring(0,idx);
+		StringTokenizer st = new StringTokenizer(sstr, ".");
+		rval[0] = st.nextToken();
+		rval[1] = st.nextToken();
+		rval[2] = st.nextToken();
+
+		// now, grab the build number
+		sstr = verstr.substring(idx+1);
+		idx = sstr.indexOf(";");
+		if(idx == -1)
+		{
+			// no date
+			rval[3] = sstr.substring(sstr.indexOf(" ") + 1,
+				sstr.length() - 1);
+		}
+		else
+		{
+			rval[3] = sstr.substring(sstr.indexOf(" ") + 1, idx);
+		}
+
+		return rval;
 	}
 
 	public static void main(String[] args)
