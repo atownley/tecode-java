@@ -41,16 +41,18 @@
 
 package com.townleyenterprises.common;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class provides an implementation for tracking overridable
  * nodes based on a pluggable override strategy. 
  *
- * @version $Id: OverrideManager.java,v 1.1 2004/07/29 18:29:20 atownley Exp $
- * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
+ * @version $Id: OverrideManager.java,v 1.2 2004/12/26 19:43:00 atownley Exp $
+ * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  */
 
 public abstract class OverrideManager
@@ -59,10 +61,10 @@ public abstract class OverrideManager
 	 * This method returns all of the keys managed by this
 	 * instance.
 	 *
-	 * @return the keys as a collection
+	 * @return the keys as a set
 	 */
 
-	public Collection getKeys()
+	public Set getKeys()
 	{
 		return _map.keySet();
 	}
@@ -77,7 +79,7 @@ public abstract class OverrideManager
 
 	public Object get(Object key)
 	{
-		OverrideNode node = getNode(key);
+		OverrideNode node = getNodeForReading(key);
 		if(node == null)
 			return null;
 
@@ -96,50 +98,64 @@ public abstract class OverrideManager
 
 	public void manage(Object object)
 	{
-		Collection c = getKeys(object);
+		Set c = getKeys(object);
 
 		for(Iterator i = c.iterator(); i.hasNext(); )
 		{
 			Object key = i.next();
-//System.out.println("adding key:  " + key);
-			OverrideNode node = getNode(key);
-			if(node == null)
+			List olist = (List)_map.get(key);
+			if(olist == null)
 			{
-				node = new OverrideNode();
-				_map.put(key, node);
+				olist = new ArrayList();
+				_map.put(key, olist);
 			}
-			node.set(resolve(key, node.get(), object));
+			olist.add(new OverrideNode(object));
+		}
+	}
+
+	/**
+	 * This method sets the value for the specified key.
+	 *
+	 * @param key the key to retrieve
+	 * @param value the value for the key 
+	 */
+
+	public void put(Object key, Object value)
+	{
+		OverrideNode node = getNodeForWriting(key);
+		setValue(key, node.get(), value);
+
+		// now, we need to check to see that the set value
+		// will be read next time.
+		if(!node.equals(getNodeForReading(key)))
+		{
+			List list = (List)_map.get(key);
+			list.add(node);
 		}
 	}
 
 	/**
 	 * This method is used to configure the override strategy used
-	 * when adding new objects.
+	 * when reading values.
 	 *
 	 * @param strategy the strategy
 	 */
 
-	public void setOverrideStrategy(OverrideStrategy strategy)
+	public void setReadResolver(OverrideStrategy strategy)
 	{
-		_strategy = strategy;
+		_readResolver = strategy;
 	}
 
 	/**
-	 * Provide an implementation of the strategy interface based
-	 * on the configured strategy.
+	 * This method is used to configure the override strategy used
+	 * when writing values.
 	 *
-	 * @param key the key
-	 * @param s1 the first supplier
-	 * @param s2 the second supplier
-	 * @return the object providing the property for the given key
+	 * @param strategy the strategy
 	 */
 
-	protected final Object resolve(Object key, Object s1, Object s2)
+	public void setWriteResolver(OverrideStrategy strategy)
 	{
-		if(_strategy == null)
-			return null;
-
-		return _strategy.resolve(key, s1, s2);
+		_writeResolver = strategy;
 	}
 
 	/**
@@ -152,7 +168,7 @@ public abstract class OverrideManager
 	 * @return a collection of key values
 	 */
 
-	protected abstract Collection getKeys(Object object);
+	protected abstract Set getKeys(Object object);
 
 	/**
 	 * This method is used to retrieve the value for the specific
@@ -166,20 +182,58 @@ public abstract class OverrideManager
 	protected abstract Object getValue(Object key, Object object);
 
 	/**
+	 * This method is used to set the value for the specific
+	 * property key given the managed object.
+	 *
+	 * @param key the key to set
+	 * @param object the object to manipulate
+	 * @param value the value for the key
+	 */
+
+	protected abstract void setValue(Object key, 
+					Object object, Object value);
+
+	/**
 	 * This method is used to retrieve the specific OverrideNode
-	 * associated with the given key.
+	 * associated with the given key for reading the value.
 	 *
 	 * @param key the key
 	 * @return the node
 	 */
 
-	protected OverrideNode getNode(Object key)
+	protected OverrideNode getNodeForReading(Object key)
 	{
-		return (OverrideNode)_map.get(key);
+		return _readResolver.resolve(key, (List)_map.get(key));	
 	}
+
+	/**
+	 * This method is used to retrieve the specific OverrideNode
+	 * associated with the given key for writing the value.
+	 *
+	 * @param key the key
+	 * @return the node
+	 */
+
+	protected OverrideNode getNodeForWriting(Object key)
+	{
+		List list = (List)_map.get(key);
+		OverrideNode node =  _writeResolver.resolve(key, list);
+		if(list == null && node != null)
+		{
+			// key didn't exist before
+			List list2 = new ArrayList();
+			_map.put(key, list2);
+			list2.add(node);
+		}
+
+		return node;
+	}
+
+	/** track the current read strategy */
+	private OverrideStrategy	_readResolver = null;
 	
-	/** track the current strategy */
-	private OverrideStrategy	_strategy = null;
+	/** track the current write strategy */
+	private OverrideStrategy	_writeResolver = null;
 
 	/** the map of values */
 	private HashMap			_map = new HashMap();
