@@ -50,6 +50,7 @@ import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalTheme;
+import javax.swing.UIDefaults;
 
 /**
  * This class is similar to the {@link
@@ -59,7 +60,7 @@ import javax.swing.plaf.metal.MetalTheme;
  * properties.  These are also not localized, so the locale concept
  * doesn't apply in this case.
  *
- * @version $Id: ThemeLoader.java,v 1.1 2003/11/20 10:47:52 atownley Exp $
+ * @version $Id: ThemeLoader.java,v 1.2 2003/12/04 13:04:25 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -104,6 +105,7 @@ public class ThemeLoader
 
 	public ThemeLoader(ThemeLoader parent, Class cls, String name)
 	{
+		// FIXME:  there's redundant code here... :(
 		_klass = cls;
 		_name = name;
 
@@ -120,6 +122,46 @@ public class ThemeLoader
 			{
 				_theme.load(is);
 				is.close();
+			}
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * This constructor is used to load themes directly from the
+	 * specified input stream.
+	 *
+	 * @param stream the InputStream
+	 */
+
+	public ThemeLoader(InputStream stream)
+	{
+		this(null, stream);
+	}
+
+	/**
+	 * This constructor is used to support inheritance from
+	 * arbitrary input streams.
+	 *
+	 * @param parent the parent theme
+	 * @param stream the input stream
+	 */
+
+	public ThemeLoader(ThemeLoader parent, InputStream stream)
+	{
+		_theme.clear();
+		if(parent != null)
+			_theme.putAll(parent._theme);
+
+		try
+		{
+			if(stream != null)
+			{
+				_theme.load(stream);
+				stream.close();
 			}
 		}
 		catch(IOException e)
@@ -279,6 +321,37 @@ public class ThemeLoader
 			_secondary1 = loader.getColorUIResource("secondary1");
 			_secondary2 = loader.getColorUIResource("secondary2");
 			_secondary3 = loader.getColorUIResource("secondary3");
+
+			_controlbg = loader.getColorUIResource("control.background");
+			_controlbgdisabled = loader.getColorUIResource("control.background.disabled");
+			_controlbgselected = loader.getColorUIResource("control.background.selected");
+			_controlfg = loader.getColorUIResource("control.foreground");
+			_controlfgdisabled = loader.getColorUIResource("control.foreground.disabled");
+
+			// NOTE:  not currently supported
+//			_controlfgselected = loader.getColorUIResource("control.foreground.selected");
+			
+			_buttonbg = loader.getColorUIResource("button.background");
+			_buttonbgdisabled = loader.getColorUIResource("button.background.disabled");
+			_buttonbgselected = loader.getColorUIResource("button.background.selected");
+			_buttonfg = loader.getColorUIResource("button.foreground");
+			_buttonfgdisabled = loader.getColorUIResource("button.foreground.disabled");
+			
+			// NOTE:  not currently supported
+//			_buttonfgselected = loader.getColorUIResource("button.foreground.selected");
+
+			_toolbarbg = loader.getColorUIResource("toolbar.background");
+			
+			_text = loader.getColorUIResource("text");
+			_textselected = loader.getColorUIResource("text.selected");
+			_textselectedbg = loader.getColorUIResource("text.selected.background");
+			
+			_windowbg = loader.getColorUIResource("window.background");
+			_windowtitlebg = loader.getColorUIResource("window.title.background");
+			_windowtitlefg = loader.getColorUIResource("window.title.foreground");
+			_windowtitleinactivebg = loader.getColorUIResource("window.title.inactive.background");
+			_windowtitleinactivefg = loader.getColorUIResource("window.title.inactive.foreground");
+
 			_black = loader.getColorUIResource("black");
 			_white = loader.getColorUIResource("white");
 		
@@ -289,6 +362,34 @@ public class ThemeLoader
 			_systemTextFont = loader.getFontUIResource("systemtext");
 			_userTextFont = loader.getFontUIResource("usertext");
 			_windowTitleFont = loader.getFontUIResource("windowtitle");
+		}
+
+		public void addCustomEntriesToTable(UIDefaults table)
+		{
+			super.addCustomEntriesToTable(table);
+
+			// now, we have to take care of all our
+			// special overrides here
+
+			table.put("Button.background", _buttonbg);
+			table.put("Button.disabledText", _buttonfgdisabled);
+			table.put("ComboBox.buttonBackground", _buttonbg);
+			table.put("ComboBox.background", _buttonbg);
+			table.put("ComboBox.disabledText", _buttonfgdisabled);
+			table.put("ComboBox.disabledForeground", _buttonfgdisabled);
+			table.put("ComboBox.disabledBackground", _buttonbg);
+			table.put("Button.select", _buttonbgselected);
+			table.put("ToolBar.background", _toolbarbg);
+
+			if(_textselected != null)
+			{
+				table.put("Menu.selectionForeground", _textselected);
+				table.put("MenuItem.selectionForeground", _textselected);
+				table.put("RadioButtonMenuItem.selectionForeground", _textselected);
+				table.put("ToolTip.foreground", _textselected);
+				table.put("activeCaptionText", _textselected);
+				table.put("ComboBox.selectionForeground", _textselected);
+			}
 		}
 
 		public String getName()
@@ -368,6 +469,110 @@ public class ThemeLoader
 			return super.getSecondary3();
 		}
 
+		public ColorUIResource getControl()
+		{
+			if(_controlbg != null)
+				return _controlbg;
+
+			return super.getControl();
+		}
+
+		public ColorUIResource getControlDisabled()
+		{
+			if(_controlbgdisabled != null)
+				return _controlbgdisabled;
+
+			return super.getControlDisabled();
+		}
+
+		public ColorUIResource getControlHighlight()
+		{
+			if(_controlbgselected != null)
+				return _controlbgselected;
+
+			return super.getControlHighlight();
+		}
+		
+		public ColorUIResource getControlTextColor()
+		{
+			if(_controlfg != null)
+				return _controlfg;
+
+			return super.getControlTextColor();
+		}
+		
+		public ColorUIResource getInactiveControlTextColor()
+		{
+			if(_controlfgdisabled != null)
+				return _controlfgdisabled;
+
+			return super.getInactiveControlTextColor();
+		}
+	
+		public ColorUIResource getUserTextColor()
+		{
+			if(_text != null)
+				return _text;
+
+			return super.getUserTextColor();
+		}
+	
+		public ColorUIResource getHighlightedTextColor()
+		{
+			if(_textselected != null)
+				return _textselected;
+
+			return super.getHighlightedTextColor();
+		}
+	
+		public ColorUIResource getTextHighlightColor()
+		{
+			if(_textselectedbg != null)
+				return _textselectedbg;
+
+			return super.getTextHighlightColor();
+		}
+	
+		public ColorUIResource getWindowBackground()
+		{
+			if(_windowbg != null)
+				return _windowbg;
+
+			return super.getWindowBackground();
+		}
+	
+		public ColorUIResource getWindowTitleBackground()
+		{
+			if(_windowtitlebg != null)
+				return _windowtitlebg;
+
+			return super.getWindowTitleBackground();
+		}
+	
+		public ColorUIResource getWindowTitleForeground()
+		{
+			if(_windowtitlefg != null)
+				return _windowtitlefg;
+
+			return super.getWindowTitleForeground();
+		}
+	
+		public ColorUIResource getWindowTitleInactiveBackground()
+		{
+			if(_windowtitleinactivebg != null)
+				return _windowtitleinactivebg;
+
+			return super.getWindowTitleInactiveBackground();
+		}
+	
+		public ColorUIResource getWindowTitleInactiveForeground()
+		{
+			if(_windowtitleinactivefg != null)
+				return _windowtitleinactivefg;
+
+			return super.getWindowTitleInactiveForeground();
+		}
+	
 		public FontUIResource getSubTextFont()
 		{
 			if(_subTextFont != null)
@@ -416,6 +621,27 @@ public class ThemeLoader
 		private ColorUIResource	_secondary1 = null;
 		private ColorUIResource	_secondary2 = null;
 		private ColorUIResource	_secondary3 = null;
+		private ColorUIResource	_controlbg = null;
+		private ColorUIResource	_controlbgdisabled = null;
+		private ColorUIResource	_controlbgselected = null;
+		private ColorUIResource	_controlfg = null;
+		private ColorUIResource	_controlfgdisabled = null;
+		private ColorUIResource	_controlfgselected = null;
+		private ColorUIResource	_buttonbg = null;
+		private ColorUIResource	_buttonbgdisabled = null;
+		private ColorUIResource	_buttonbgselected = null;
+		private ColorUIResource	_buttonfg = null;
+		private ColorUIResource	_buttonfgdisabled = null;
+		private ColorUIResource	_buttonfgselected = null;
+		private ColorUIResource	_toolbarbg = null;
+		private ColorUIResource	_text = null;
+		private ColorUIResource	_textselected = null;
+		private ColorUIResource	_textselectedbg = null;
+		private ColorUIResource	_windowbg = null;
+		private ColorUIResource	_windowtitlebg = null;
+		private ColorUIResource	_windowtitlefg = null;
+		private ColorUIResource	_windowtitleinactivebg = null;
+		private ColorUIResource	_windowtitleinactivefg = null;
 		private ColorUIResource	_black = null;
 		private ColorUIResource	_white = null;
 		private FontUIResource	_subTextFont = null;
