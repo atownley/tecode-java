@@ -1,4 +1,64 @@
-2003-06-08 Andrew S. Townley <atownley@sourceforge.net>
+2004-01-21 Andrew S. Townley <atownley>
+	* build.xml
+	  
+	  Checked in changes made yesterday to support dynamic
+	  generation of source files from .in files as well as
+	  clean them up correctly.
+
+2003-12-17 Andrew S. Townley <atownley>
+	* java/src/com/townleyenterprises/common/AppConfig.java
+	  java/src/com/townleyenterprises/common/ConfigLoader.java
+
+	  Support for tracking the registered config loaders
+	  to determine which properties were being loaded from
+	  where.  ConfigLoader now tracks information about how
+	  it was configured.
+
+2003-11-26 Andrew S. Townley <atownley>
+	* java/src/com/townleyenterprises/swing/TAboutBox.java
+	  
+	  Added basic about box.
+
+2003-11-24 Andrew S. Townley <atownley>
+	*  java/src/com/townleyenterprises/event/TaskEvent.java
+	   java/src/com/townleyenterprises/event/TaskListener.java
+
+	  Added support for task listeners for monitored tasks.
+
+2003-11-20 Andrew S. Townley <atownley>
+	* java/src/com/townleyenterprises/swing/AbstractMonitoredTask.java
+	  java/src/com/townleyenterprises/swing/MonitoredTask.java
+	  java/src/com/townleyenterprises/swing/TStatusBar.java
+
+	  Added mechanism for monitored background GUI tasks and
+	  implementation of status bar to support progress monitoring.
+
+	* java/src/com/townleyenterprises/swing/AbstractUIBuilder.java
+	  java/src/com/townleyenterprises/swing/ResourceUIBuilder.java
+	  java/src/com/townleyenterprises/swing/UIBuilder.java
+
+	  Added mechanism for dynamic menu generation based on
+	  mechanisms in the JFC demo Notepad.
+
+	* java/src/com/townleyenterprises/swing/ResourceLoader.java
+	  java/src/com/townleyenterprises/swing/ResourceProvider.java
+
+	  Added mechanism for generic resource loading.
+
+	* java/src/com/townleyenterprises/swing/SpringHints.java
+
+	  Added helper class for the SpringLayout.
+
+	* java/src/com/townleyenterprises/swing/SwingWorker.java
+
+	  Added SwingWorker from Java JFC Tutorial.
+
+	* java/src/com/townleyenterprises/swing/ThemeLoader.java
+	  java/src/com/townleyenterprises/swing/resources/default.theme
+	  
+	  Added dynamic, property-file driven Swing theme.
+
+2003-06-08 Andrew S. Townley <atownley>
 
 	* java/src/com/townleyenterprises/filter/package.html
 
