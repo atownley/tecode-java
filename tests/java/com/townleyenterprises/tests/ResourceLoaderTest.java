@@ -53,7 +53,7 @@ import com.townleyenterprises.common.*;
  * this mechanism, we can't test the defaults very well without
  * putting test strings into the resources for the common package.
  *
- * @version $Id: ResourceLoaderTest.java,v 1.1 2004/08/11 13:20:44 atownley Exp $
+ * @version $Id: ResourceLoaderTest.java,v 1.2 2004/08/11 16:24:55 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -122,7 +122,7 @@ public final class ResourceLoaderTest extends TestCase
 	public void testMissingKey()
 	{
 		ResourceLoader loader = new ResourceLoader(this);
-		assertNull(loader.getString("barf"));
+		assertEquals("barf", loader.getString("barf"));
 	}
 		
 	public void testErrorNullClass()
