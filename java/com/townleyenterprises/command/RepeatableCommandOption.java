@@ -50,8 +50,8 @@ import java.util.List;
  * arguments.  This class can be used to allow a given argument to be
  * supplied more than once on the command line.
  *
- * @version $Id: RepeatableCommandOption.java,v 1.3 2004/01/26 09:18:54 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: RepeatableCommandOption.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
 

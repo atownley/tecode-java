@@ -50,8 +50,8 @@ import junit.framework.TestCase;
 /**
  * Basic unit tests for the CountingIterator class
  *
- * @version $Id: CountingIteratorTest.java,v 1.1 2004/01/30 11:31:55 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: CountingIteratorTest.java,v 1.2 2004/07/28 10:34:00 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public final class CountingIteratorTest extends TestCase

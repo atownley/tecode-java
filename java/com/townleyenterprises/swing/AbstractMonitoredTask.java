@@ -54,8 +54,8 @@ import com.townleyenterprises.swing.event.TaskListener;
  * requires only that a single method be implemneted.
  *
  * @since 2.1
- * @version $Id: AbstractMonitoredTask.java,v 1.5 2004/01/25 19:26:27 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: AbstractMonitoredTask.java,v 1.6 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public abstract class AbstractMonitoredTask implements MonitoredTask

@@ -47,8 +47,8 @@ import java.util.Iterator;
  * This class provides an implementation of the Filter interface that
  * implements the NOT operation.
  *
- * @version $Id: LogicalNotFilter.java,v 1.3 2004/01/25 19:19:37 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: LogicalNotFilter.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class LogicalNotFilter implements Filter

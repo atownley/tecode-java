@@ -72,8 +72,8 @@ package com.townleyenterprises.swing;
  * </pre>
  *
  * @since 2.1
- * @version $Id: SpringHints.java,v 1.2 2004/01/25 19:26:32 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: SpringHints.java,v 1.3 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class SpringHints

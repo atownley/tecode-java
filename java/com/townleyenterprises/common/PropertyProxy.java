@@ -49,8 +49,8 @@ import java.lang.reflect.Method;
  * values similar to the way it is handled in the Jakarta Struts
  * package.
  *
- * @version $Id: PropertyProxy.java,v 1.3 2004/01/25 19:10:54 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: PropertyProxy.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class PropertyProxy

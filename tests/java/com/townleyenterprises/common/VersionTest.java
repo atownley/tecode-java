@@ -47,8 +47,8 @@ import junit.framework.TestCase;
  * Basic unit tests for the Version class.  Note, require() method
  * must be tested manually.
  *
- * @version $Id: VersionTest.java,v 1.3 2004/02/05 10:21:59 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: VersionTest.java,v 1.4 2004/07/28 10:34:00 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public final class VersionTest extends TestCase

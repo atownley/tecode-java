@@ -47,8 +47,8 @@ import java.io.Serializable;
  * This class encapsulates a collating specification, allowing sorting
  * by arbitrary property values.
  *
- * @version $Id: SortSpecification.java,v 1.2 2004/01/25 19:19:48 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: SortSpecification.java,v 1.3 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
 

@@ -48,8 +48,8 @@ import java.util.Properties;
  * provide an extra method for locating properties with a specified
  * prefix.
  *
- * @version $Id: PropertyResolver.java,v 1.1 2004/01/28 19:42:39 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: PropertyResolver.java,v 1.2 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class PropertyResolver

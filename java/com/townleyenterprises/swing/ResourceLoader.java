@@ -59,8 +59,8 @@ import java.util.ResourceBundle;
  * </ul>
  * </p>
  *
- * @version $Id: ResourceLoader.java,v 1.4 2004/01/25 19:26:32 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: ResourceLoader.java,v 1.5 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class ResourceLoader implements ResourceProvider

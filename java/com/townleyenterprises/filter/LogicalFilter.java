@@ -48,8 +48,8 @@ import java.util.Iterator;
  * This package class provides the base operation common to all logical
  * comparison filters within the system.
  *
- * @version $Id: LogicalFilter.java,v 1.3 2004/01/25 19:19:36 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: LogicalFilter.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public abstract class LogicalFilter implements Filter

@@ -61,8 +61,8 @@ import java.util.Properties;
  * </ul>
  * </p>
  *
- * @version $Id: AppConfig.java,v 1.6 2004/01/25 18:43:26 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: AppConfig.java,v 1.7 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public final class AppConfig

@@ -50,8 +50,8 @@ import java.io.IOException;
  * files so that I don't have to have the exact same code in more than
  * one place.
  *
- * @version $Id: ConfigLoader.java,v 1.3 2004/01/25 18:44:21 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: ConfigLoader.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 // FIXME:  this should really use the new 1.4 preferences stuff

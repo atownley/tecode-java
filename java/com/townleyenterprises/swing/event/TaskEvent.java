@@ -48,8 +48,8 @@ import com.townleyenterprises.swing.MonitoredTask;
  * It is essentially a snapshot of the "interesting" bits of the task.
  *
  * @since 2.1
- * @version $Id: TaskEvent.java,v 1.2 2004/01/25 19:26:45 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: TaskEvent.java,v 1.3 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class TaskEvent

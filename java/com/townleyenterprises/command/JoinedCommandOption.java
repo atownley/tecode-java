@@ -69,8 +69,8 @@ package com.townleyenterprises.command;
  * next argument in the argument list.
  * </p>
  *
- * @version $Id: JoinedCommandOption.java,v 1.1 2004/01/28 23:31:31 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: JoinedCommandOption.java,v 1.2 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.1
  */
 

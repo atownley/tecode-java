@@ -63,8 +63,8 @@ import com.townleyenterprises.persistence.QueryHandler;
  * queries not necessarily limited to the individual table.  Like the
  * QueryHandler, it does not implement Jaxor's Laxy Loading mechanism.
  *
- * @version $Id: DynamicFinder.java,v 1.1 2004/01/30 11:48:43 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: DynamicFinder.java,v 1.2 2004/07/28 10:33:57 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class DynamicFinder extends QueryAdapter

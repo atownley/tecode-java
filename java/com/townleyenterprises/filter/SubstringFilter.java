@@ -47,8 +47,8 @@ package com.townleyenterprises.filter;
  * which it is applied.  It supports both case sensitive and case
  * insensitive searching.
  *
- * @version $Id: SubstringFilter.java,v 1.3 2004/01/25 19:19:48 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: SubstringFilter.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
 

@@ -60,8 +60,8 @@ import javax.swing.UIDefaults;
  * properties.  These are also not localized, so the locale concept
  * doesn't apply in this case.
  *
- * @version $Id: ThemeLoader.java,v 1.3 2004/01/25 19:26:42 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: ThemeLoader.java,v 1.4 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class ThemeLoader

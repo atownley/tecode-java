@@ -45,8 +45,8 @@ package com.townleyenterprises.filter;
  * This interface provides the base operation common to all filters
  * within the system.
  *
- * @version $Id: Filter.java,v 1.2 2004/01/25 19:19:35 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: Filter.java,v 1.3 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public interface Filter

@@ -47,8 +47,8 @@ import java.util.Iterator;
  * This class provides a decorator to a regular Java iterator that can
  * perform filtering.
  *
- * @version $Id: FilteredIterator.java,v 1.2 2004/01/25 19:19:35 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: FilteredIterator.java,v 1.3 2004/07/28 10:33:58 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
 

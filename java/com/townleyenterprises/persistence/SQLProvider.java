@@ -70,8 +70,8 @@ import com.townleyenterprises.common.ConfigSupplier;
  * initialize() method.
  * </p>
  *
- * @version $Id: SQLProvider.java,v 1.2 2004/01/25 19:22:39 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: SQLProvider.java,v 1.3 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public final class SQLProvider 

@@ -48,7 +48,7 @@
 	<property name="build.dir"	value="build/classes"/>
 	<property name="build.tests"	value="build/tests"/>
 	<property name="reports.tests"	value="build/reports"/>
-	<property name="lib.dir"	value="lib"/>
+	<!--property name="lib.dir"	value="lib"/-->
 	<property name="src.dir"	value="java"/>
 	<property name="tests.dir"	value="tests/java"/>
 	<property name="tests.lib.dir"	value="tests/lib"/>
@@ -115,9 +115,10 @@
 	</target>
 			
 	<path id="build.cp">
-		<fileset dir="${lib.dir}">
+		<!-- currently nothing in the lib directory -->
+		<!--fileset dir="${lib.dir}">
 			<include name="**/*.jar"/>
-		</fileset>
+		</fileset-->
 		<fileset dir="${tests.lib.dir}">
 			<include name="**/*.jar"/>
 		</fileset>

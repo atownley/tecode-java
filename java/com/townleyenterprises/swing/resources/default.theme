@@ -1,6 +1,6 @@
 ######################################################################
 ##
-## Copyright (c) 2004, Andrew S. Townley
+## Copyright (c) 2003-2004, Andrew S. Townley
 ## All rights reserved.
 ## 
 ## Redistribution and use in source and binary forms, with or without
@@ -35,10 +35,10 @@
 ## OF THE POSSIBILITY OF SUCH DAMAGE.
 ##
 ## File:	default.theme
-## Created:	Thu Nov 13 23:01:40 GMT 2004
-## Author:	Andrew S. Townley (adz1092@netscape.net)
+## Created:	Thu Nov 13 23:01:40 GMT 2003
+## Author:	Andrew S. Townley (adz1092@yahoo.com)
 ##
-## $Id: default.theme,v 1.2 2004/01/25 19:27:03 atownley Exp $
+## $Id: default.theme,v 1.4 2004/07/28 10:34:00 atownley Exp $
 ##
 ######################################################################
 

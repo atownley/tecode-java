@@ -61,8 +61,8 @@ import javax.swing.UIManager;
  * This is a pretty basic about box.
  *
  * @since 2.1
- * @version $Id: TAboutBox.java,v 1.2 2004/01/25 19:26:32 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: TAboutBox.java,v 1.3 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class TAboutBox extends JDialog

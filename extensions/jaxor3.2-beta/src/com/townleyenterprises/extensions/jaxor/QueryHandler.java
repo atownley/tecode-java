@@ -68,8 +68,8 @@ import com.townleyenterprises.persistence.QueryListener;
  * the connection factory is not supplied.
  * </p>
  *
- * @version $Id: QueryHandler.java,v 1.1 2004/01/30 11:48:43 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: QueryHandler.java,v 1.2 2004/07/28 10:33:57 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class QueryHandler

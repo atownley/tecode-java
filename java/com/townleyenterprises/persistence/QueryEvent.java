@@ -46,8 +46,8 @@ import java.sql.ResultSet;
 /**
  * This class provides a container for query notification data.
  *
- * @version $Id: QueryEvent.java,v 1.2 2004/01/25 19:22:37 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: QueryEvent.java,v 1.3 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public class QueryEvent

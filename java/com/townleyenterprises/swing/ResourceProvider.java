@@ -46,8 +46,8 @@ package com.townleyenterprises.swing;
  * various locations.  This interface is intended to be expanded with
  * a variety of other resource types.
  *
- * @version $Id: ResourceProvider.java,v 1.2 2004/01/25 19:26:32 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: ResourceProvider.java,v 1.3 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public interface ResourceProvider

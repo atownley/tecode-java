@@ -53,8 +53,8 @@ import com.townleyenterprises.filter.*;
  * This class is responsible for generating SQL given a filter and
  * optional sort specification.
  *
- * @version $Id: SQLFilterAdapter.java,v 1.3 2004/01/25 19:22:39 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: SQLFilterAdapter.java,v 1.4 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
 public final class SQLFilterAdapter

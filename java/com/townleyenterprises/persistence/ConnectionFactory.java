@@ -47,8 +47,8 @@ import java.sql.SQLException;
 /**
  * This mix-in interface provides database connections.
  *
- * @version $Id: ConnectionFactory.java,v 1.1 2004/01/30 11:48:08 atownley Exp $
- * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
+ * @version $Id: ConnectionFactory.java,v 1.2 2004/07/28 10:33:59 atownley Exp $
+ * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.1
  */
 
