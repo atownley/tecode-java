@@ -34,25 +34,26 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// Title:	SubstringFilter.java
-// Created: 	Sat May 17 13:48:20 IST 2003
+// Title:	StringFilter.java
+// Created: 	Sun Jun  8 20:19:32 IST 2003
 //
 //////////////////////////////////////////////////////////////////////
 
 package com.townleyenterprises.filter;
 
 /**
- * This class extends StringFilter to allow substring checks to
- * determine if the value is contained in the value of the object to
- * which it is applied.  It supports both case sensitive and case
- * insensitive searching.
+ * This is a specialized instance of the QueryFilter class which
+ * directly supports filtering Strings.  It will perform case
+ * sensitive or case insensitive string comparisons with the target
+ * objects, depending on how the object is configured when it is
+ * created.
  *
- * @version $Id: SubstringFilter.java,v 1.2 2003/06/08 19:57:16 atownley Exp $
+ * @version $Id: StringFilter.java,v 1.1 2003/06/08 19:57:16 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
 
-public class SubstringFilter extends StringFilter
+public class StringFilter extends QueryFilter
 {
 	/**
 	 * The constructor takes the property and the string value
@@ -61,13 +62,15 @@ public class SubstringFilter extends StringFilter
 	 * @param klass the class of the object to be filtered
 	 * @param property the property name
 	 * @param value the string value
-	 * @param ignorecase controls search case sensitivity
+	 * @param ignorecase controls case sensitivity of the
+	 * 	comparison operation
 	 */
 
-	public SubstringFilter(Class klass, String property,
+	public StringFilter(Class klass, String property,
 				String value, boolean ignorecase)
 	{
-		super(klass, property, value, ignorecase);
+		super(klass, property, QueryOperator.EQ, value);
+		_ignorecase = ignorecase;
 	}
 
 	public boolean doFilter(Object o)
@@ -75,6 +78,7 @@ public class SubstringFilter extends StringFilter
 		String s = (String)getPropertyValue(getProperty(), o);
 		String val = (String)getValue();
 
+		// checks for null
 		if(s == null && val == null)
 		{
 			return true;
@@ -85,20 +89,18 @@ public class SubstringFilter extends StringFilter
 			return false;
 		}
 
-		if(getIgnoreCase())
+		if(_ignorecase)
 		{
-			s = s.toLowerCase();
-			val = val.toLowerCase();
+			return s.equalsIgnoreCase(val);
 		}
 
-		if(s.indexOf(val) != -1)
-			return true;
-
-		return false;
+		return s.equals(val);
 	}
 
-	protected String getOperatorString()
+	public boolean getIgnoreCase()
 	{
-		return "LIKE";
+		return _ignorecase;
 	}
+
+	private final boolean _ignorecase;
 }
