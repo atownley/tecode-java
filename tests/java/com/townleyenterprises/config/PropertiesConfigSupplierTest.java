@@ -41,6 +41,7 @@
 
 package com.townleyenterprises.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +49,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 /**
- * @version $Id: PropertiesConfigSupplierTest.java,v 1.1 2004/12/27 23:20:26 atownley Exp $
+ * @version $Id: PropertiesConfigSupplierTest.java,v 1.2 2004/12/28 10:37:29 atownley Exp $
  * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  */
 
@@ -61,7 +62,8 @@ public final class PropertiesConfigSupplierTest extends TestCase
 
 	protected void setUp() throws Exception
 	{
-		config = new PropertiesConfigSupplier("testapp");
+		config = new PropertiesConfigSupplier("testapp",
+				PropertiesConfigSupplierTest.class);
 	}
 
 	public void testSimpleProperty()
@@ -75,6 +77,19 @@ public final class PropertiesConfigSupplierTest extends TestCase
 		ac.registerConfigSupplier(config);
 
 		assertEquals("val1", ac.get("key1"));
+	}
+
+	public void testFilePathRead() throws Exception
+	{
+		File tf = new File(System.getProperty("tests.data.dir"),
+				"test.properties");
+		PropertiesConfigSupplier pcs = new PropertiesConfigSupplier("testapp", tf.getAbsolutePath());
+
+		assertEquals("value", pcs.get("simple.property"));
+		assertEquals("value", pcs.get("simple.property.lvs").trim());
+		assertEquals("value", pcs.get("simple.property.tvs").trim());
+		assertEquals("value", pcs.get("simple.property.lks").trim());
+		assertEquals("value", pcs.get("simple.property.tks").trim());
 	}
 
 	PropertiesConfigSupplier	config;
