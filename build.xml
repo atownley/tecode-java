@@ -47,6 +47,8 @@
 	<property name="build.dir"	value="build/classes"/>
 	<property name="lib.dir"	value="lib"/>
 	<property name="src.dir"	value="java"/>
+	<property name="version"	value="2.0-Beta2"/>
+	<property name="dist.dir"	value="${app.name}-${version}"/>
 	
 	<path id="build.cp">
 		<fileset dir="${lib.dir}">
@@ -71,6 +73,44 @@
 		</jar>
 	</target>
 
+	<target name="distdirs" >
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/lib" />
+		<mkdir dir="${dist.dir}/examples" />
+		
+		<copy todir="${dist.dir}/lib">
+			<fileset dir="${lib.dir}"
+				includes="**/*.jar"/>
+		</copy>
+		<copy todir="${dist.dir}/examples">
+			<fileset dir="examples"/>
+		</copy>
+	</target>
+
+	<target name="bin-dist" depends="jar,docs,distdirs">
+		<copy file="${app.name}.jar" todir="${dist.dir}/lib" />
+		
+		<mkdir dir="${dist.dir}/docs" />
+		<copy todir="${dist.dir}/docs">
+			<fileset dir="docs"/>
+		</copy>
+		<zip destfile="${dist.dir}.zip"
+			basedir="."
+			includes="${dist.dir}/**" />
+	</target>
+
+	<target name="dist" depends="clean, distdirs">
+		<mkdir dir="${dist.dir}/java" />
+		<copy todir="${dist.dir}/java">
+			<fileset dir="java"/>
+		</copy>
+		<copy file="build.xml" todir="${dist.dir}" />
+		<copy file="LICENSE" todir="${dist.dir}" />
+		<zip destfile="${dist.dir}-src.zip"
+			basedir="."
+			includes="${dist.dir}/**" />
+	</target>
+
 	<target name="docs" depends="compile">
 		<mkdir dir="docs/api"/>
 		<javadoc packagenames="com.townleyenterprises.*"
@@ -78,15 +118,17 @@
 			sourcepath="${src.dir}"
 			destdir="docs/api"
 			classpathref="build.cp">
-			<doctitle><![CDATA[<center><h2>Townley Enterprises Public API, v 2.0 Beta 2<br/>API Reference</h2><br/><br/></center>]]></doctitle>
-			<bottom><![CDATA[<center>Copyright &#169; 2002-2003, Townley Enterprises.  All Rights Reserved.</center>]]></bottom>
+			<doctitle><![CDATA[<center><h3>Townley Enterprises Common Public API, v 2.0 Beta 2<br/>API Reference</h3><br/><br/></center>]]></doctitle>
+			<bottom><![CDATA[<center>Copyright &#169; 2002-2003, Andrew S. Townley and Townley Enterprises.  All Rights Reserved.<br/>This project is hosted on <a href="http://te-code.sourceforge.net/">http://te-code.sourceforge.net</a>.</center>]]></bottom>
 		</javadoc>
 	</target>
 
 	<target name="clean">
 		<delete file="${app.name}.jar"/>
-		<delete file="media.*"/>
+		<delete file="${dist.dir}.zip"/>
+		<delete file="${dist.dir}-src.zip"/>
 		<delete dir="build"/>
 		<delete dir="docs/api"/>
+		<delete dir="${dist.dir}"/>
 	</target>
 </project>
