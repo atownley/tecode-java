@@ -1,3 +1,10 @@
+2004-01-29 Andrew S. Townley <atownley>
+	* Removed core library dependency on Jaxor.  Added new
+	  extension concept to allow the core classes to vary
+	  independently of Jaxor (or any other 3rd-party) while
+	  still allowing backward-compatible deployment for
+	  previous versions.
+
 2004-01-28 Andrew S. Townley <atownley>
 	* java/com/townleyenterprises/command/CommandParser.java
 
