@@ -46,7 +46,7 @@ package com.townleyenterprises.common;
  * <code>dirname</code> and <code>basename</code> based on arbitrary
  * path separators.
  *
- * @version $Id: Path.java,v 1.1 2004/01/25 18:29:24 atownley Exp $
+ * @version $Id: Path.java,v 1.2 2004/07/29 18:33:58 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -163,6 +163,40 @@ public final class Path
 		}
 
 		return s;
+	}
+
+	/**
+	 * This method is used to strip the trailing "file extension"
+	 * from the given string.
+	 *
+	 * @param s the string
+	 * @return the base of s
+	 */
+
+	public static String stripExtension(String s)
+	{
+		int idx = s.lastIndexOf(".");
+		if(idx == -1)
+			return s;
+
+		return s.substring(0, idx);
+	}
+
+	/**
+	 * This method is used to get the "file extension" from the
+	 * string.
+	 *
+	 * @param s the string
+	 * @return the extension or an empty string if none
+	 */
+
+	public static String getExtension(String s)
+	{
+		int idx = s.lastIndexOf(".");
+		if(idx == -1)
+			return "";
+
+		return s.substring(idx + 1);
 	}
 
 	// prevent instantiation
