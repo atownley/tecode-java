@@ -48,7 +48,7 @@ import java.util.Enumeration;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.5 2003/06/08 16:34:15 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.6 2003/06/08 16:39:24 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -202,7 +202,7 @@ public final class CommandParser implements CommandListener
 	{
 		if(args.length == 0 && !_zeroarg)
 		{
-			help();
+			usage();
 			return;
 		}
 
@@ -284,7 +284,7 @@ public final class CommandParser implements CommandListener
 			if(val == null)
 			{
 				System.err.println("error:  unknown option specified (" + s + ")");
-				help();
+				usage();
 				break;
 			}
 
