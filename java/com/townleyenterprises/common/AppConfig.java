@@ -61,7 +61,14 @@ import java.util.Properties;
  * </ul>
  * </p>
  *
- * @version $Id: AppConfig.java,v 1.9 2004/08/11 13:21:10 atownley Exp $
+ * @deprecated This class should no longer be used as it does not
+ * allow multiple applications running in the same JVM to have
+ * isolated configurations.  Instead, the {@link
+ * com.townleyenterprises.config.AppConfig} class should be used
+ * instead.  This class will be removed from a future version of the
+ * library.
+ *
+ * @version $Id: AppConfig.java,v 1.10 2004/12/27 23:12:41 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
