@@ -49,11 +49,11 @@ import java.util.ResourceBundle;
  * This class provides a way to access Java resource strings from a
  * location relative to a specific class.
  *
- * @version $Id: ResourceLoader.java,v 1.1 2003/11/20 10:47:52 atownley Exp $
+ * @version $Id: ResourceLoader.java,v 1.2 2003/11/20 16:41:07 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
-public class ResourceLoader
+public class ResourceLoader implements ResourceProvider
 {
 	/**
 	 * The constructor takes an object to use as the basis for

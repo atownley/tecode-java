@@ -61,7 +61,7 @@ import javax.swing.JMenuItem;
  * application.
  *
  * @since 2.1
- * @version $Id: ResourceUIBuilder.java,v 1.1 2003/11/20 10:47:52 atownley Exp $
+ * @version $Id: ResourceUIBuilder.java,v 1.2 2003/11/20 16:41:07 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -96,7 +96,7 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 	 * @param actions the action map
 	 */
 
-	public ResourceUIBuilder(ResourceLoader loader, Map actions)
+	public ResourceUIBuilder(ResourceProvider loader, Map actions)
 	{
 		this(loader, actions, null);
 	}
@@ -112,7 +112,7 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 	 * @param menuStatusListener the change listener
 	 */
 
-	public ResourceUIBuilder(ResourceLoader loader, Map actions,
+	public ResourceUIBuilder(ResourceProvider loader, Map actions,
 				ChangeListener menuStatusListener)
 	{
 		super(actions);
@@ -250,8 +250,8 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 	}
 	
 	/** keep a reference to the resource loader */
-	private ResourceLoader	_loader;
+	private ResourceProvider	_loader;
 
 	/** keep a reference to the status listener */
-	private ChangeListener	_statusListener;
+	private ChangeListener		_statusListener;
 }
