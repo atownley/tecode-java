@@ -41,6 +41,8 @@
 
 package com.townleyenterprises.command;
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
 /**
@@ -48,7 +50,7 @@ import junit.framework.TestCase;
  * with successfully parsing the options.  Manual verification of the
  * formatting of the usage and help output will still be necessary.
  *
- * @version $Id: CommandParserTest.java,v 1.3 2004/07/30 16:19:33 atownley Exp $
+ * @version $Id: CommandParserTest.java,v 1.4 2005/02/06 21:03:10 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -308,6 +310,85 @@ public final class CommandParserTest extends TestCase
 		assertEquals("foo=bar", joined.getArg());
 	}
 
+	public void testMultipleJoinedOption()
+	{
+		parser.addCommandListener(this);
+		String[] args = new String[] { "-Dfoo=bar", "-Done=1,two=2", "-D", "three=3" };
+		parser.parse(args);
+		
+		assertTrue(joined.getMatched());
+		List largs = joined.getArgs();
+		assertEquals("foo=bar", largs.get(0));
+		assertEquals("one=1,two=2", largs.get(1));
+		assertEquals("three=3", largs.get(2));
+	}
+
+	public void testSingleDelimitedOption()
+	{
+		parser.addCommandListener(new DefaultCommandListener("Options 1", options1));
+		parser.addCommandListener(new DefaultCommandListener("Options 3", options3));
+		String[] args = new String[] { "--zed=one,two,three" };
+		parser.parse(args);
+
+		assertTrue(delim.getMatched());
+		List largs = delim.getArgs();
+		assertEquals("one", largs.get(0));
+		assertEquals("two", largs.get(1));
+		assertEquals("three", largs.get(2));
+	}
+
+	public void testMultipleDelimitedOption()
+	{
+		parser.addCommandListener(new DefaultCommandListener("Options 1", options1));
+		parser.addCommandListener(new DefaultCommandListener("Options 3", options3));
+		String[] args = new String[] { "--zed=one,two,three", "-Z", "four" };
+		parser.parse(args);
+
+		assertTrue(delim.getMatched());
+		List largs = delim.getArgs();
+		assertEquals("one", largs.get(0));
+		assertEquals("two", largs.get(1));
+		assertEquals("three", largs.get(2));
+		assertEquals("four", largs.get(3));
+	}
+
+	public void testPosixOption()
+	{
+		parser.addCommandListener(new DefaultCommandListener("Options 1", options1));
+		parser.addCommandListener(new DefaultCommandListener("Options 3", options3));
+		String[] args = new String[] { "--display", ":0" };
+		parser.parse(args);
+
+		assertTrue(posix.getMatched());
+		assertEquals(":0", posix.getArg());
+	}
+
+	public void testSingleRepeatableOption()
+	{
+		parser.addCommandListener(new DefaultCommandListener("Options 1", options1));
+		parser.addCommandListener(new DefaultCommandListener("Options 3", options3));
+		String[] args = new String[] { "--rep=one" };
+		parser.parse(args);
+
+		assertTrue(repeat.getMatched());
+		List largs = repeat.getArgs();
+		assertEquals("one", largs.get(0));
+	}
+
+	public void testMultipleRepeatableOption()
+	{
+		parser.addCommandListener(new DefaultCommandListener("Options 1", options1));
+		parser.addCommandListener(new DefaultCommandListener("Options 3", options3));
+		String[] args = new String[] { "--rep=one", "--rep", "two", "-R", "three" };
+		parser.parse(args);
+
+		assertTrue(repeat.getMatched());
+		List largs = repeat.getArgs();
+		assertEquals("one", largs.get(0));
+		assertEquals("two", largs.get(1));
+		assertEquals("three", largs.get(2));
+	}
+
 //	public void testHelp()
 //	{
 //		// NOTE:  this is a manual test
@@ -349,10 +430,18 @@ public final class CommandParserTest extends TestCase
 			null, "descriptive text 5");
 	CommandOption opt6 = new CommandOption("default", (char)0,
 			true, "ARG", "this option has a default value", "yay");
-	CommandOption joined = new JoinedCommandOption('D', false, "PROPERTY=VALUE", "set the system property", true);
+	JoinedCommandOption joined = new JoinedCommandOption('D', false, "PROPERTY=VALUE", "set the system property", true);
+
+	DelimitedCommandOption delim = new DelimitedCommandOption("zed", 'Z', "VALUE[,VALUE...]", "set the specified value");
+
+	PosixCommandOption posix = new PosixCommandOption("display", true, "ARG", "specify the system display variable");
+
+	RepeatableCommandOption repeat = new RepeatableCommandOption("rep", 'R', "VALUE", "set the specified value");
 
 	CommandOption[] options1 = 
 		new CommandOption[] { opt1, opt2, opt3, opt6, joined };
 	CommandOption[] options2 = 
 		new CommandOption[] { opt1, opt2, opt3, opt4, opt5 };
+	CommandOption[] options3 =
+		new CommandOption[] { delim, posix, repeat };
 }
