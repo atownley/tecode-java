@@ -53,7 +53,6 @@
 	<property file="${build.version}" />
 	<property name="version"	value="${build.version.major}.${build.version.minor}.${build.version.release}"/>
 	<property name="dist.dir"	value="${app.name}-${version}"/>
-	<property name="kill.file"	value="configured.files"/>
 
 	<target name="builddate">
 		<propertyfile file="${build.date}"
