@@ -51,6 +51,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 /**
  * This class provides a concrete implementation of the UIBuilder
@@ -61,7 +62,7 @@ import javax.swing.JMenuItem;
  * application.
  *
  * @since 2.1
- * @version $Id: ResourceUIBuilder.java,v 1.2 2003/11/20 16:41:07 atownley Exp $
+ * @version $Id: ResourceUIBuilder.java,v 1.3 2003/12/11 00:38:48 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -80,11 +81,15 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 	/** this is the suffix used when looking up mnemonics */
 	public static final String	MNEMONIC_SUFFIX = "Mnemonic";
 
+	/** this is the suffix used when looking up accelerator/shortcuts */
+	public static final String	ACCEL_SUFFIX = "Accel";
+
 	/** this is the suffix used when looking up status text */
 	public static final String	STATUS_SUFFIX = "StatusText";
 
 	/** this is the client property used to hold the status text */
 	public static final String	STATUSTEXT_PROPERTY = STATUS_SUFFIX;
+
 	/**
 	 * The constructor takes the initialized ResourceLoader
 	 * used to read the UI definition.  Since the description of the
@@ -218,6 +223,14 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 		s = _loader.getString(skey);
 		if(!skey.equals(s))
 			item.setMnemonic(s.charAt(0));
+
+		// set the shortcut
+		skey = key + ACCEL_SUFFIX;
+		s = _loader.getString(skey);
+		if(!skey.equals(s))
+		{
+			item.setAccelerator(KeyStroke.getKeyStroke(s));
+		}
 
 		// set the menu action if we can
 		Action action = getAction(key);
