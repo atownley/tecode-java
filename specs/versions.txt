@@ -44,7 +44,7 @@ This one is pretty standard and is saying that:
  - The release version is 0
  - The release suffix is '-dev'
  - It is the 77th build (from the beginning of time)
- - The 66th build was performed on July 30, 2004 at 5:30pm Irish
+ - The 77th build was performed on July 30, 2004 at 5:30pm Irish
    Standard Time
 
 THE PROJECT
@@ -359,4 +359,4 @@ Dark Clouds
 [ add sections here on how to handle patch releases as well as
 incremental releases ]
 ---------------------------------------------------------------------
-$Id: versions.txt,v 1.1 2004/08/04 18:09:14 atownley Exp $
+$Id: versions.txt,v 1.2 2004/08/05 10:39:11 atownley Exp $
