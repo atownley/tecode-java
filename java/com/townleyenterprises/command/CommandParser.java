@@ -49,7 +49,7 @@ import java.util.Vector;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.8 2004/01/26 09:21:19 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.9 2004/01/27 19:14:45 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -447,7 +447,11 @@ public final class CommandParser implements CommandListener
 
 				if(opts[i].getExpectsArgument())
 				{
-					buf.append("=");
+					if(sn.charValue() != 0)
+						buf.append(" ");
+					else
+						buf.append("=");
+
 					if(hlp != null)
 					{
 						buf.append(hlp);
@@ -601,6 +605,7 @@ public final class CommandParser implements CommandListener
 			String ad = opts[i].getArgumentDefault();
 			String hlp = opts[i].getHelp();
 			String desc = opts[i].getDescription();
+			Object val = opts[i].getArgValue();
 
 			if(!show)
 			{
@@ -654,6 +659,26 @@ public final class CommandParser implements CommandListener
 			}
 
 			buf.append(desc);
+
+			if(ad != null && ad.length() > 0)
+			{
+				buf.append(" (default: ");
+				
+				if(val instanceof String)
+					buf.append("\"");
+				else if(val instanceof Character)
+					buf.append("'");
+				
+				buf.append(ad);
+				
+				if(val instanceof String)
+					buf.append("\"");
+				else if(val instanceof Character)
+					buf.append("'");
+				
+				buf.append(")");
+			}
+
 			printWrappedText(buf.toString(), ' ',
 					80, SWITCH_LENGTH);
 		}
