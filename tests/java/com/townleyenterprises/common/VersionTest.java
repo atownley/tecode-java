@@ -47,7 +47,7 @@ import junit.framework.TestCase;
  * Basic unit tests for the Version class.  Note, require() method
  * must be tested manually.
  *
- * @version $Id: VersionTest.java,v 1.4 2004/07/28 10:34:00 atownley Exp $
+ * @version $Id: VersionTest.java,v 1.5 2005/02/06 21:37:57 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -148,7 +148,7 @@ public final class VersionTest extends TestCase
 		{
 			Version.require(9,0,0,0);
 		}
-		catch(Version.VersionMismatchException e)
+		catch(VersionMismatchException e)
 		{
 		}
 
@@ -156,7 +156,7 @@ public final class VersionTest extends TestCase
 		{
 			Version.require("9.0.0 (Build 0)");
 		}
-		catch(Version.VersionMismatchException e)
+		catch(VersionMismatchException e)
 		{
 		}
 	}
