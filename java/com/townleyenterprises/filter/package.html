@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+//////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2003, Andrew S. Townley
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 
+//     * Redistributions of source code must retain the above
+//     copyright notice, this list of conditions and the following
+//     disclaimer.
+// 
+//     * Redistributions in binary form must reproduce the above
+//     copyright notice, this list of conditions and the following
+//     disclaimer in the documentation and/or other materials provided
+//     with the distribution.
+// 
+//     * Neither the names Andrew Townley and Townley Enterprises,
+//     Inc. nor the names of its contributors may be used to endorse
+//     or promote products derived from this software without specific
+//     prior written permission.  
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+// OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// Title:	package.html
+// Author:	Andrew S. Townley (adz1092@netscape.net)
+// Created: 	Wed May  7 18:40:00 IST 2003
+//
+// $Id: package.html,v 1.1 2003/06/07 18:42:35 atownley Exp $
+//
+//////////////////////////////////////////////////////////////////////
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>
+com.townleyenterprises.filter Package Documentation
+</title>
+</head>
+<body>
+<p>
+This class provides a generic filter mechanism for the
+system.
+</p>
+
+<h3>
+Concepts
+</h3>
+<p>
+Filtering is a fairly straightforward concept.  Given a
+collection of objects, iterate over the collections and
+determine based on specific filter criteria if the specific
+object should be included or discarded.
+</p>
+
+<h3>
+Collection Filters
+</h3>
+<p>
+This package supports different types of filtering, depending on
+where the filtering should occur.  The first, and simplest,
+type of filter allows the user to simply provide a class
+that implements the Filter interface and provides a specific
+test.  For example, given an List containing String objects,
+the following code can be used to apply the filter to the
+objects in the list by using the FilteredIterator Decorator.
+In this case, we only want to see strings that start with
+the literal "filterme":
+
+<pre>
+	Iterator collIterator = stringList.iterator();
+	FilteredIterator fi = new FilteredIterator(collIterator,
+		new Filter {
+			public boolean doFilter(Object o)
+			{
+				if(!(o instanceof String))
+					return false;
+
+				String s = (String)o;
+				return s.startsWith("filterme");
+			}
+		});
+	
+	// print our strings
+	while(fi.hasNext())
+		System.out.println(fi.next());
+</pre>
+</p>
+
+<p>
+This mechansim is simple to use and very powerful, but
+sometimes more complex filtering is necessary.  In this
+case, the package provides several pre-defined filters to
+implement logical comparisons.  For example, if the
+application had predefined filters to work on a specific
+type of object, to find all the objects within a given
+collection where filter1 and filter2 were true, something
+like the following would be used:
+
+<pre>
+	// filter1, filter2 are defined earlier
+	Iterator collIterator = stringList.iterator();
+	FilteredIterator fi = new FilteredIterator(collIterator,
+		new LogicalAndFilter ( new Object[]{filter1, filter2} );
+	
+	while(fi.hasNext())
+		System.out.println(fi.next());
+</pre>
+</p>
+
+<p>
+The above code uses the array constructor of the
+LogicalAndFilter class to specify that only objects where
+<em>filter1.doFilter(obj) == true && filter2.doFilter(obj) == true</em> should be
+printed.  There are also logical filter classes to perform
+logical OR and logical NOT operations.  All of these can be
+combined to perform fairly complex filters which are
+dynamically defined during the execution of the application.
+</p>
+
+<h3>
+Persistence Filters
+</h3>
+
+<p>
+Persistence filters, as their name implies, are applied to
+the persistence layer rather than to the in-memory
+collections returned from a persistence layer or otherwise
+created during the execution of an application.  By their
+very nature, peristence filters are more complicated than
+their in-memory counterparts.
+</p>
+</body>
+</html>
