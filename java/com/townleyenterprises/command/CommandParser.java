@@ -49,7 +49,7 @@ import java.util.Vector;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.11 2004/01/28 12:00:58 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.12 2004/01/28 23:31:23 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -69,7 +69,7 @@ public final class CommandParser implements CommandListener
 			option = o;
 			listener = l;
 		}
-		
+	
 		final CommandOption	option;
 		final CommandListener	listener;
 	}
@@ -287,101 +287,161 @@ public final class CommandParser implements CommandListener
 			}
 
 			// take care of the normal processing
-
-			char	c0 = s.charAt(0);
-			char	c1 = 0;
-			int	idx = s.indexOf('=');
-
-			if(s.length() > 1)
-				c1 = s.charAt(1);
-
-			// FIXME:  there may be better ways to do
-			// this, but I'm going to do the easy way
-			// first.
-			
-			if((_sswitch == c0) || (s.startsWith(_lswitch)))
-			{
-				// it is supposed to be an option
-				// is it a combined short option?
-				if(s.length() > 2 && _sswitch == c0 &&
-						(_sswitch != c1))
-				{
-					System.err.println("error:  combined options are not yet supported (" + s + ")");
-					continue;
-				}
-				else if(s.length() == 2 &&
-						_sswitch == c0)
-				{
-					// should be in the short map
-					val = (OptionHolder)_shortOpts.get(new Character(s.charAt(1)));
-				}
-				else
-				{
-					// must be a long option
-					String key;
-					if(idx != -1)
-					{
-						key = s.substring(_lswitch.length(), idx);
-					}
-					else
-					{
-						key = s.substring(_lswitch.length());
-					}
-
-					val = (OptionHolder)_longOpts.get(key);
-				}
-			}
-			else
-			{
-				_leftovers.add(s);
-				continue;
-			}
-
-			// if we get here should have a value
-			if(val == null)
-			{
-				System.err.println("error:  unknown option specified (" + s + ")");
-				usage();
-				break;
-			}
-
-			String arg = null;
-
-			// handle the option
-			if(val.option.getExpectsArgument())
-			{
-				// check to make sure that there's no
-				// '=' sign.
-				if(idx != -1)
-				{
-					arg = s.substring(idx + 1);
-					if(arg.length() == 0)
-					{
-						handleMissingArg(val);
-					}
-				}
-				else
-				{
-					if(++i < args.length)
-					{
-						arg = args[i];
-					}
-					else
-					{
-						handleMissingArg(val);
-						continue;
-					}
-				}
-			}
-
-			// give the option a chance to do what it
-			// wants
-			val.option.optionMatched(arg);
-			
-			// notify the listeners
-			val.listener.optionMatched(val.option, arg);
+			i = processArg(i, args);
 		}
 	}
+
+//	/**
+//	 * This is the main parsing function that should be called to
+//	 * trigger the parsing of the command-line arguments
+//	 * registered with the parser.
+//	 *
+//	 * @param args the command-line arguments to parse
+//	 */
+//
+//	public void parse(String[] args)
+//	{
+//		if(args.length == 0 && !_zeroarg)
+//		{
+//			usage();
+//			return;
+//		}
+//		
+//		if(_autohelp)
+//		{
+//			addCommandListener(this);
+//		}
+//		else
+//		{
+//			removeCommandListener(this);
+//		}
+//
+//		// reset all the options (fix for multiple parse bug)
+//		resetOptions();
+//
+//		OptionHolder val = null;
+//
+//		boolean copyargs = false;
+//		_leftovers = new Vector();
+//		
+//		for(int i = 0; i < args.length; ++i)
+//		{
+//			String	s = args[i];
+//
+//			// executive decision:  if the argument is
+//			// empty, it's silently ignored
+//
+//			if(s == null || s.length() == 0)
+//				continue;
+//
+//			if(s.equals(_eoargs))
+//			{
+//				copyargs = true;
+//				continue;
+//			}
+//
+//			if(copyargs)
+//			{
+//				_leftovers.add(s);
+//				continue;
+//			}
+//
+//			// take care of the normal processing
+//
+//			char	c0 = s.charAt(0);
+//			char	c1 = 0;
+//			int	idx = s.indexOf('=');
+//
+//			if(s.length() > 1)
+//				c1 = s.charAt(1);
+//
+//			// FIXME:  there may be better ways to do
+//			// this, but I'm going to do the easy way
+//			// first.
+//			
+//			if((_sswitch == c0) || (s.startsWith(_lswitch)))
+//			{
+//				// it is supposed to be an option
+//				// is it a combined short option?
+//				if(s.length() > 2 && _sswitch == c0 &&
+//						(_sswitch != c1))
+//				{
+//					System.err.println("error:  combined options are not yet supported (" + s + ")");
+//					continue;
+//				}
+//				else if(s.length() == 2 &&
+//						_sswitch == c0)
+//				{
+//					// should be in the short map
+//					val = (OptionHolder)_shortOpts.get(new Character(s.charAt(1)));
+//				}
+//				else
+//				{
+//					// must be a long option
+//					String key;
+//					if(idx != -1)
+//					{
+//						key = s.substring(_lswitch.length(), idx);
+//					}
+//					else
+//					{
+//						key = s.substring(_lswitch.length());
+//					}
+//
+//					val = (OptionHolder)_longOpts.get(key);
+//				}
+//			}
+//			else
+//			{
+//				_leftovers.add(s);
+//				continue;
+//			}
+//
+//			// if we get here should have a value
+//			if(val == null)
+//			{
+//				System.err.println("error:  unknown option specified (" + s + ")");
+//				usage();
+//				break;
+//			}
+//
+//			String arg = null;
+//
+//			// handle the option
+//			if(val.option.getExpectsArgument())
+//			{
+//				// check to make sure that there's no
+//				// '=' sign.
+//				if(idx != -1)
+//				{
+//					arg = s.substring(idx + 1);
+//					if(arg.length() == 0)
+//					{
+//						handleMissingArg(val);
+//					}
+//				}
+//				else
+//				{
+//					if(++i < args.length)
+//					{
+//						arg = args[i];
+//					}
+//					else
+//					{
+//						handleMissingArg(val);
+//						continue;
+//					}
+//				}
+//			}
+//
+//			// give the option a chance to do what it
+//			// wants
+//			val.option.optionMatched(arg);
+//			
+//			// notify the listeners
+//			val.listener.optionMatched(val.option, arg);
+//		}
+//	}
 
 	/**
 	 * This method allows the client of the argument parser to
@@ -494,19 +554,26 @@ public final class CommandParser implements CommandListener
 				{
 					buf.append(_sswitch);
 					buf.append(sn);
-					buf.append("|");
+					if(ln != null)
+						buf.append("|");
 				}
 				if(ln != null)
 				{
-					buf.append(_lswitch);
+					if(opts[i] instanceof PosixCommandOption)
+						buf.append(_sswitch);
+					else
+						buf.append(_lswitch);
 					buf.append(ln);
 				}
 
 				if(opts[i].getExpectsArgument())
 				{
-					if(sn.charValue() != 0)
+					if((sn.charValue() != 0 &&
+						!(opts[i] instanceof JoinedCommandOption))
+						|| opts[i] instanceof PosixCommandOption)
 						buf.append(" ");
-					else
+					else if(sn.charValue() == 0 &&
+						!(opts[i] instanceof JoinedCommandOption))
 						buf.append("=");
 
 					if(hlp != null)
@@ -697,7 +764,10 @@ public final class CommandParser implements CommandListener
 			}
 			if(ln != null)
 			{
-				buf.append(_lswitch);
+				if(opts[i] instanceof PosixCommandOption)
+					buf.append(_sswitch);
+				else
+					buf.append(_lswitch);
 				buf.append(ln);
 			}
 
@@ -705,9 +775,12 @@ public final class CommandParser implements CommandListener
 			{
 				if(ln != null)
 				{
-					buf.append("=");
+					if(opts[i] instanceof PosixCommandOption)
+						buf.append(" ");
+					else
+						buf.append("=");
 				}
-				else
+				else if(!(opts[i] instanceof JoinedCommandOption))
 				{
 					buf.append(" ");
 				}
@@ -846,6 +919,178 @@ public final class CommandParser implements CommandListener
 			OptionHolder holder = (OptionHolder)i.next();
 			holder.option.reset();
 		}
+
+		i = _shortOpts.values().iterator();
+		while(i.hasNext())
+		{
+			OptionHolder holder = (OptionHolder)i.next();
+			holder.option.reset();
+		}
+	}
+
+	private int processArg(int argc, String[] args)
+	{
+		OptionHolder val = null;
+		String	s = args[argc];
+
+		if(s == null || s.length() == 0)
+			return --argc;
+
+		char c0 = s.charAt(0);
+		int slen = s.length();
+		int idx = s.indexOf("=");
+		
+		if((_sswitch == c0) && (slen > 1)
+				&& !(s.startsWith(_lswitch)))
+		{
+			// we have one of the following:
+			//
+			// 1. a switch
+			// 2. a posix option
+			// 3. a set of combined options
+			
+			if(slen == 2)
+			{
+				val = (OptionHolder)_shortOpts.get(new Character(s.charAt(1)));
+			}
+			else if(slen > 2)
+			{
+				val = (OptionHolder)_longOpts.get(s);
+
+				if(val == null)
+				{
+					// must be combined switches
+					return expandSwitches(s.substring(1),
+							argc, args);
+				}
+			}
+		}
+		else if(s.startsWith(_lswitch))
+		{
+			// must be a long option
+			String key;
+			if(idx != -1)
+			{
+				key = s.substring(_lswitch.length(), idx);
+			}
+			else
+			{
+				key = s.substring(_lswitch.length());
+			}
+
+			val = (OptionHolder)_longOpts.get(key);
+		}
+		else
+		{
+			_leftovers.add(s);
+			return argc;
+		}
+
+		// if we get here should have a value
+		if(val == null)
+		{
+			System.err.println("error:  unknown option specified (" + s + ")");
+			usage();
+			return args.length;
+		}
+
+		String arg = null;
+
+		// handle the option
+		if(val.option.getExpectsArgument())
+		{
+			// check to make sure that there's no
+			// '=' sign.
+			if(idx != -1)
+			{
+				arg = s.substring(idx + 1);
+				if(arg.length() == 0)
+				{
+					handleMissingArg(val);
+				}
+			}
+			else
+			{
+				if(++argc < args.length)
+				{
+					arg = args[argc];
+				}
+				else
+				{
+					handleMissingArg(val);
+					return ++argc;
+				}
+			}
+		}
+
+		// give the option a chance to do what it
+		// wants
+		val.option.optionMatched(arg);
+		
+		// notify the listeners
+		val.listener.optionMatched(val.option, arg);
+
+		return argc;
+	}
+
+	private int expandSwitches(String sw, int argc, String[] args)
+	{
+		OptionHolder oh = null;
+		Character ch = null;
+		String arg = null;
+
+		for(int i = 0; i < sw.length(); ++i)
+		{
+			ch = new Character(sw.charAt(i));
+			oh = (OptionHolder)_shortOpts.get(ch);
+			if(oh == null)
+			{
+				System.err.println("error:  unknown option '" + ch + "' specified.");
+				return args.length;
+			}
+
+			if(oh.option instanceof JoinedCommandOption)
+			{
+				if(i == 0)
+				{
+					arg = sw.substring(1);
+					oh.option.optionMatched(arg);
+					oh.listener.optionMatched(oh.option, arg);
+					break;
+				}
+				else
+				{
+					System.err.println("error:  unknown option '" + ch + "' specified.");
+					return args.length;
+				}
+			}
+			else
+			{
+				if(oh.option.getExpectsArgument()
+						&& (i == sw.length() - 1))
+				{
+					if(++argc < args.length)
+					{
+						arg = args[argc];
+					}
+					else
+					{
+						handleMissingArg(oh);
+					}
+				}
+				else if(oh.option.getExpectsArgument())
+				{
+					System.err.println("error:  invalid option combination '" + sw + "'");
+					return args.length;
+				}
+			}
+
+			// match the option
+			oh.option.optionMatched(arg);
+			oh.listener.optionMatched(oh.option, arg);
+		}		
+
+		return argc;
 	}
 
 	/** the name of our application */
