@@ -48,7 +48,7 @@ import java.util.Enumeration;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.1 2003/06/07 18:42:39 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.2 2003/06/08 14:06:20 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -298,13 +298,7 @@ public final class CommandParser implements CommandListener
 					}
 					else
 					{
-						String hlp = val.option.getHelp();
-						if(hlp == null || hlp.length() == 0)
-						{
-							hlp = "<arg>";
-						}
-
-						System.err.println("error:  option " + val.option.getLongName() + " requires a parameter (" + hlp + ").  Ignored.");
+						handleMissingArg(val);
 						continue;
 					}
 				}
@@ -417,8 +411,11 @@ public final class CommandParser implements CommandListener
 					buf.append(sn);
 					buf.append("|");
 				}
-				buf.append(_lswitch);
-				buf.append(ln);
+				if(ln != null)
+				{
+					buf.append(_lswitch);
+					buf.append(ln);
+				}
 
 				if(opts[i].getExpectsArgument())
 				{
@@ -450,6 +447,21 @@ public final class CommandParser implements CommandListener
 	}
 
 	/**
+	 * This method is used to configure the command parser to exit
+	 * with the specified return code when it encounters arguments
+	 * with missing required parameters.
+	 *
+	 * @param val toggles the behavior
+	 * @param status the exit status to pass to System.exit()
+	 */
+
+	public void setExitOnMissingArg(boolean val, int status)
+	{
+		_exitmissing = val;
+		_exitstatus = status;
+	}
+
+	/**
 	 * This method is an easy way to add a new command option to
 	 * the appropriate places.
 	 *
@@ -468,6 +480,50 @@ public final class CommandParser implements CommandListener
 		if(c.charValue() != 0)
 		{
 			_shortOpts.put(opt.getShortName(), holder);
+		}
+	}
+
+	/**
+	 * This method controls what happens when a missing argument
+	 * for an option is encountered.
+	 *
+	 * @param val the OptionHolder
+	 */
+
+	private void handleMissingArg(OptionHolder val)
+	{
+		String hlp = val.option.getHelp();
+		if(hlp == null || hlp.length() == 0)
+		{
+			hlp = "<arg>";
+		}
+
+		String name = val.option.getLongName();
+		if(name == null || name.length() == 0)
+		{
+			StringBuffer buf = new StringBuffer();
+			buf.append(_sswitch);
+			buf.append(val.option.getShortName());
+			name = buf.toString();
+		}
+		else
+		{
+			StringBuffer buf = new StringBuffer(_lswitch);
+			buf.append(name);
+			name = buf.toString();
+		}
+
+		String msg = "error:  option " + name + " requires parameter '" + hlp + "'.";
+		if(_exitmissing)
+		{
+			System.err.print(msg);
+			System.err.println("  Exiting.");
+			System.exit(_exitstatus);
+		}
+		else
+		{
+			System.err.print(msg);
+			System.err.println("  Ignored.");
 		}
 	}
 
@@ -499,14 +555,28 @@ public final class CommandParser implements CommandListener
 			{
 				buf.append(_sswitch);
 				buf.append(sn);
-				buf.append(", ");
+
+				if(ln != null)
+				{
+					buf.append(", ");
+				}
 			}
-			buf.append(_lswitch);
-			buf.append(ln);
+			if(ln != null)
+			{
+				buf.append(_lswitch);
+				buf.append(ln);
+			}
 
 			if(opts[i].getExpectsArgument())
 			{
-				buf.append("=");
+				if(ln != null)
+				{
+					buf.append("=");
+				}
+				else
+				{
+					buf.append(" ");
+				}
 				if(hlp != null)
 				{
 					buf.append(hlp);
@@ -624,6 +694,12 @@ public final class CommandParser implements CommandListener
 
 	/** the unhandled arguments */
 	private Vector		_leftovers;
+
+	/** controls if we exit on missing arguments */
+	private boolean		_exitmissing;
+
+	/** the exit code to use if exit on missing arguments */
+	private int		_exitstatus;
 
 	/** the maximum width of the switch part */
 	private final int	SWITCH_LENGTH = 35;
