@@ -49,7 +49,7 @@ import java.util.Iterator;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.18 2004/11/21 20:40:35 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.19 2004/11/28 20:15:27 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -78,8 +78,6 @@ public final class CommandParser implements CommandListener
 	 * Specify the autohelp default handler options
 	 */
 
-	// FIXME:  needs l10n support!!
-	
 	private static CommandOption[] ahopts = {
 		new CommandOption("help", '?', false, null, 
 			Strings.get("sParserOptionHelp")),
