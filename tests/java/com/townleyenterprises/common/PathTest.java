@@ -46,7 +46,7 @@ import junit.framework.TestCase;
 /**
  * Basic unit tests for the Path class
  *
- * @version $Id: PathTest.java,v 1.3 2004/07/29 18:36:47 atownley Exp $
+ * @version $Id: PathTest.java,v 1.4 2004/11/28 20:08:14 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -114,6 +114,16 @@ public final class PathTest extends TestCase
 	public void testGetExtensionNone()
 	{
 		assertEquals("", Path.getExtension("foo"));
+	}
+	
+	public void testNullPath()
+	{
+		assertNull(Path.pathname(null, "foo"));
+	}
+	
+	public void testNullPathDelimiter()
+	{
+		assertNull(Path.pathname("foo", null));
 	}
 	
 	public static void main(String[] args)
