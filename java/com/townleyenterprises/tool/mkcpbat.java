@@ -73,7 +73,7 @@ import com.townleyenterprises.common.Path;
  * </pre>
  * </p>
  *
- * @version $Id: mkcpbat.java,v 1.3 2004/02/09 19:03:05 atownley Exp $
+ * @version $Id: mkcpbat.java,v 1.4 2004/07/29 18:28:28 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -93,10 +93,13 @@ public final class mkcpbat
 
 	private mkcpbat(String[] args)
 	{
-		_parser = new CommandParser("mkcpbat", "FILE...");
+		_parser = new CommandParser("mkcpbat",
+				Strings.get("sFileArgs"));
 		_parser.setExitOnMissingArg(true, -1);
 		_parser.addCommandListener(new OptionHandler());
-		_parser.setExtraHelpText("This utility is used to automatically generate the necessary commands to set the classpath on DOS/Windows.  No easy way exists to do this without doing a lot of cut-n-paste, so this utility makes Java development a little easier if you must do it with DOS/Windows.", "Examples:\n  mkcpbat --outfile buildcp.bat lib\\*.jar\n  mkcpbat lib\\*.jar > buildcp.bat\n\nBoth of the above examples will create an executable batch file with appropriate 'SET CLASSPATH=' commands for all the jar files in the specified list of files.\n\nCopyright 2004, Andrew S. Townley.\nAll Rights Reserved.\nReport bugs to <te-code-users@sourceforge.net>.");
+		_parser.setExtraHelpText(
+			Strings.get("smkcpbatExtraHelpTextPreamble"),
+			Strings.get("smkcpbatExtraHelpTextPostamble"));
 
 		_parser.parse(args);
 
@@ -109,7 +112,7 @@ public final class mkcpbat
 				{
 					if(_verbose.getMatched())
 					{
-						System.err.println("Deleteting existing file:  '" + ofname.getName() + "'");
+						System.err.println(Strings.format("fDeleteExistingFile", new Object[] { ofname.getName() }));
 					}
 
 					ofname.delete();
@@ -119,7 +122,8 @@ public final class mkcpbat
 			}
 			catch(IOException e)
 			{
-				System.err.println("error:  " + e.getMessage());
+				System.err.println(Strings.format("fGeneralError", new Object[] { e.getMessage() }));
+
 				if(_verbose.getMatched())
 				{
 					e.printStackTrace();
@@ -131,7 +135,7 @@ public final class mkcpbat
 		String[] largs = _parser.getUnhandledArguments();
 		if(largs.length == 0)
 		{
-			System.err.println("error:  no arguments specified.  Exiting.");
+			System.err.println(Strings.get("sErrorNoArgsExit"));
 			_parser.usage();
 			System.exit(-1);
 		}
@@ -165,7 +169,7 @@ public final class mkcpbat
 				{
 					if(verbose)
 					{
-						System.err.println("Processing argument:  '" + xargs[j] + "'");
+						System.err.println(Strings.format("fProcessArg", new Object[] { xargs[j] }));
 					}
 
 					File pc = new File(xargs[j]);
@@ -175,7 +179,7 @@ public final class mkcpbat
 			}
 			catch(IOException e)
 			{
-				System.err.println("error:  " + e.getMessage());
+				System.err.println(Strings.format("fGeneralError", new Object[] { e.getMessage() }));
 				
 				if(verbose)
 				{
@@ -203,7 +207,7 @@ public final class mkcpbat
 		boolean verbose = _verbose.getMatched();
 
 		if(verbose)
-			System.err.println("expanding arg:  '" + arg + "'");
+			System.err.println(Strings.format("fExpandArg", new Object[] { arg }));
 
 		int idxs = arg.indexOf("*");
 		int idxq = arg.indexOf("?");
@@ -211,7 +215,7 @@ public final class mkcpbat
 		if(idxs == -1 && idxs == -1)
 		{
 			if(verbose)
-				System.err.println("no expansion for:  '" + arg + "'");
+				System.err.println(Strings.format("fNoExpand", new Object[] { arg }));
 
 			return new String[] { arg };
 		}
@@ -224,15 +228,15 @@ public final class mkcpbat
 
 		if(verbose)
 		{
-			System.err.println("basename('" + arg + "'):  " + bname);
-			System.err.println("dirname('" + arg + "'):  " + dirname);
+			System.err.println(Strings.format("fBasename", new Object[] { arg, bname }));
+			System.err.println(Strings.format("fDirname", new Object[] { arg, dirname }));
 		}
 
 		idxs = dirname.indexOf("*");
 		idxq = dirname.indexOf("?");
 		if(idxq != -1 || idxs != -1)
 		{
-			System.err.println("error:  expansion of directory names not currently supported.");
+			System.err.println(Strings.get("sErrorNoDirExpand"));
 			System.exit(-1);
 		}
 
@@ -251,11 +255,11 @@ public final class mkcpbat
 	private PrintStream		_writer = System.out;
 
 	/** specify the output file */
-	private static CommandOption	_ofname = new CommandOption("outfile", (char)0, true, "FILE", "place the batch commands in the named file rather than to the console");
+	private static CommandOption	_ofname = new CommandOption("outfile", (char)0, true, Strings.get("sFileOption"), Strings.get("sOfNameHelp"));
 
-	private static CommandOption	_overwrite = new CommandOption("overwrite", (char)0, false, null, "overwrite the value of outfile, if it already exists");
+	private static CommandOption	_overwrite = new CommandOption("overwrite", (char)0, false, null, Strings.get("sOverwriteHelp"));
 
-	private static CommandOption	_verbose = new CommandOption("verbose", (char)0, false, null, "print verbose processing information to stderr");
+	private static CommandOption	_verbose = new CommandOption("verbose", (char)0, false, null, Strings.get("sVerboseHelp"));
 
 	/** the command line options */
 	private static CommandOption[]	_options = { _ofname, _overwrite, _verbose };
@@ -269,7 +273,7 @@ public final class mkcpbat
 	{
 		public String getDescription()
 		{
-			return "mkcpbat options";
+			return Strings.get("sOptDescription");
 		}
 
 		public CommandOption[] getOptions()
