@@ -48,7 +48,7 @@ import junit.framework.TestCase;
  * with successfully parsing the options.  Manual verification of the
  * formatting of the usage and help output will still be necessary.
  *
- * @version $Id: CommandParserTest.java,v 1.2 2004/01/26 09:27:07 atownley Exp $
+ * @version $Id: CommandParserTest.java,v 1.3 2004/01/27 20:17:49 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -81,6 +81,7 @@ public final class CommandParserTest extends TestCase
 
 		assertTrue(opt1.getMatched());
 		assertEquals("value", opt1.getArg());
+		assertEquals("value", opt1.getArgValue());
 	}
 
 	public void testOptionOneWithEquals()
@@ -91,6 +92,7 @@ public final class CommandParserTest extends TestCase
 
 		assertTrue(opt1.getMatched());
 		assertEquals("value", opt1.getArg());
+		assertEquals("value", opt1.getArgValue());
 	}
 
 	public void testOptionOneShort()
@@ -101,6 +103,7 @@ public final class CommandParserTest extends TestCase
 
 		assertTrue(opt1.getMatched());
 		assertEquals("value", opt1.getArg());
+		assertEquals("value", opt1.getArgValue());
 	}
 
 	public void testOptionNoneMatched()
@@ -130,6 +133,7 @@ public final class CommandParserTest extends TestCase
 		
 		assertTrue(opt2.getMatched());
 		assertEquals("value", opt2.getArg());
+		assertEquals("value", opt2.getArgValue());
 	}
 
 	public void testOnlyLongOptionMissingArg()
@@ -202,8 +206,10 @@ public final class CommandParserTest extends TestCase
 
 		assertTrue(opt1.getMatched());
 		assertEquals("value", opt1.getArg());
+		assertEquals("value", opt1.getArgValue());
 		assertTrue(opt2.getMatched());
 		assertEquals("value3", opt2.getArg());
+		assertEquals("value3", opt2.getArgValue());
 		assertTrue(opt3.getMatched());
 	}
 
@@ -232,9 +238,64 @@ public final class CommandParserTest extends TestCase
 
 		assertTrue(opt1.getMatched());
 		assertEquals("value", opt1.getArg());
+		assertEquals("value", opt1.getArgValue());
 		assertTrue(opt2.getMatched());
 		assertEquals("value3", opt2.getArg());
+		assertEquals("value3", opt2.getArgValue());
 		assertTrue(opt3.getMatched());
+	}
+
+	public void testOptionDefault()
+	{
+		parser.addCommandListener(this);
+		String[] args = new String[0];
+		parser.parse(args);
+
+		assertFalse(opt6.getMatched());
+		assertEquals("yay", opt6.getArg());
+		assertEquals("yay", opt6.getArgValue());
+	}
+
+	public void testEndOfArgsPosix()
+	{
+		parser.addCommandListener(this);
+		String[] args = new String[] { "--", "-1", "value", "-t", "--onlylong", "value" };
+		parser.parse(args);
+
+		assertFalse(opt1.getMatched());
+		assertFalse(opt2.getMatched());
+		assertFalse(opt3.getMatched());
+		assertEquals(5, parser.getUnhandledArguments().length);
+	}
+
+	public void testEndOfArgsNone()
+	{
+		CommandParser altp = new CommandParser("altp", null,
+						'-', "--", null);
+		altp.addCommandListener(this);
+		
+		String[] args = new String[] { "--", "-1", "value", "-t", "--onlylong", "value" };
+		altp.parse(args);
+	
+		// this tests causes the argument parsing to stop at the '--'
+		assertFalse(opt1.getMatched());
+		assertFalse(opt2.getMatched());
+		assertFalse(opt3.getMatched());
+	}
+
+	public void testEndOfArgsCustom()
+	{
+		CommandParser altp = new CommandParser("altp", null,
+						'-', "--", "***");
+		altp.addCommandListener(this);
+		
+		String[] args = new String[] { "***", "--", "-1", "value", "-t", "--onlylong", "value" };
+		altp.parse(args);
+	
+		assertFalse(opt1.getMatched());
+		assertFalse(opt2.getMatched());
+		assertFalse(opt3.getMatched());
+		assertEquals(6, altp.getUnhandledArguments().length);
 	}
 
 	public static void main(String[] args)
@@ -268,9 +329,11 @@ public final class CommandParserTest extends TestCase
 			null, "descriptive text 4");
 	CommandOption opt5 = new CommandOption("ixx", 't', false,
 			null, "descriptive text 5");
+	CommandOption opt6 = new CommandOption("default", (char)0,
+			true, "ARG", "this option has a default value", "yay");
 	
 	CommandOption[] options1 = 
-		new CommandOption[] { opt1, opt2, opt3 };
+		new CommandOption[] { opt1, opt2, opt3, opt6 };
 	CommandOption[] options2 = 
 		new CommandOption[] { opt1, opt2, opt3, opt4, opt5 };
 }
