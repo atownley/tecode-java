@@ -1,3 +1,41 @@
+2005-02-06 Andrew S. Townley <atownley>
+	* java/com/townleyenterprises/command/RepeatableCommandOption.java
+	  Fixed bug regarding returning the list of matched arguments
+	  based on bug report from Bill Nugent.
+	
+	* tests/java/com/townleyenterprises/command/CommandParserTest.java
+	  Added tests for DelimitedCommandOption, PosixCommandOption
+	  and RepeatableCommandOption behavior.
+
+	* tests/java/com/townleyenterprises/common/VersionTest.java
+
+	  Fixed bug regarding compilation of the tests since structure
+	  of the VersionMismatchException has changed.
+
+2005-01-03 Andrew S. Townley <atownley>
+	* java/com/townleyenterprises/common/Version.java.in
+	  java/com/townleyenterprises/common/VersionHelper.java
+	  java/com/townleyenterprises/common/VersionMismatchException.java
+
+	  Refactored the version classes.  Should be mostly backward
+	  compatible except for users of VersionMismatchException.
+
+	  NOTE:  this change will require client code changes!!
+
+2004-12-28 Andrew S. Townley <atownley>
+	* Added test data for the PropertiesConfigSupplier test
+
+	* Deprecated SQLProvider class
+
+	* java/com/townleyenterprises/common/PropertyResolver.java
+	  java/com/townleyenterprises/persistence/PersistenceConfig.java
+
+	  Added support for the ConfigSupplier interface.
+
+	* java/com/townleyenterprises/common/ConfigLoader.java
+
+	  Added method to return key set.
+	
 2004-12-27 Andrew S. Townley <atownley>
 	* build.xml
 	
