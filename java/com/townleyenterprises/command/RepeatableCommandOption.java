@@ -50,7 +50,7 @@ import java.util.List;
  * arguments.  This class can be used to allow a given argument to be
  * supplied more than once on the command line.
  *
- * @version $Id: RepeatableCommandOption.java,v 1.4 2004/07/28 10:33:58 atownley Exp $
+ * @version $Id: RepeatableCommandOption.java,v 1.5 2005/02/06 21:39:26 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -138,8 +138,7 @@ public class RepeatableCommandOption extends CommandOption
 
 	public List getArgs()
 	{
-		List lcopy = new ArrayList(_list.size());
-		Collections.copy(lcopy, _list);
+		List lcopy = new ArrayList(_list);
 		return lcopy;
 	}
 
