@@ -48,7 +48,7 @@ import java.util.Properties;
  * This file provides a generalized mechanism for centralizing access
  * to application configuration information.
  *
- * @version $Id: AppConfig.java,v 1.2 2003/06/08 21:57:37 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.3 2003/12/16 20:28:06 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -83,7 +83,8 @@ public final class AppConfig
 //		System.out.println("**** prefs:  " + prefs);
 //		System.out.println("**** defprefs:  " + defprefs);
 
-		props = new ConfigLoader(s.getClass(), defprefs, prefs);
+		ConfigLoader cl = new ConfigLoader(s.getClass(), defprefs, prefs);
+		props.putAll(cl.getProperties());
 	}
 
 	/**
@@ -154,11 +155,11 @@ public final class AppConfig
 
 	public static Properties getProperties()
 	{
-		return props.getProperties();
+		return props;
 	}
 
 	/** this is our global list of properties */
-	private static ConfigLoader	props = null;
+	private static Properties	props = new Properties();
 
 	/** this is our config supplier */
 	private static ConfigSupplier	supplier = null;
