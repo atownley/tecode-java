@@ -73,7 +73,7 @@ import com.townleyenterprises.common.Path;
  * </pre>
  * </p>
  *
- * @version $Id: mkcpbat.java,v 1.2 2004/02/09 18:58:03 atownley Exp $
+ * @version $Id: mkcpbat.java,v 1.3 2004/02/09 19:03:05 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -96,7 +96,7 @@ public final class mkcpbat
 		_parser = new CommandParser("mkcpbat", "FILE...");
 		_parser.setExitOnMissingArg(true, -1);
 		_parser.addCommandListener(new OptionHandler());
-		_parser.setExtraHelpText("This utility is used to automatically generate the necessary commands to set the classpath on DOS/Windows.  No easy way exists to do this without doing a lot of cut-n-paste, so this utility makes Java development a little easier if you must do it with DOS/Windows.", "Examples:\n  mkcpbat --outfile buildcp.bat lib\\*.jar\n  mkcpbat lib\\*.jar > buildcp.bat\nBoth of the above examples will create an executable batch file with appropriate 'SET CLASSPATH=' commands for all the jar files in the specified list of files.\n\nCopyright 2004, Andrew S. Townley.\nAll Rights Reserved.\nReport bugs to <te-code-users@sourceforge.net>.");
+		_parser.setExtraHelpText("This utility is used to automatically generate the necessary commands to set the classpath on DOS/Windows.  No easy way exists to do this without doing a lot of cut-n-paste, so this utility makes Java development a little easier if you must do it with DOS/Windows.", "Examples:\n  mkcpbat --outfile buildcp.bat lib\\*.jar\n  mkcpbat lib\\*.jar > buildcp.bat\n\nBoth of the above examples will create an executable batch file with appropriate 'SET CLASSPATH=' commands for all the jar files in the specified list of files.\n\nCopyright 2004, Andrew S. Townley.\nAll Rights Reserved.\nReport bugs to <te-code-users@sourceforge.net>.");
 
 		_parser.parse(args);
 
