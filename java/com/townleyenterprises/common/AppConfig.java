@@ -48,7 +48,7 @@ import java.util.Properties;
  * This file provides a generalized mechanism for centralizing access
  * to application configuration information.
  *
- * @version $Id: AppConfig.java,v 1.3 2003/12/16 20:28:06 atownley Exp $
+ * @version $Id: AppConfig.java,v 1.4 2003/12/17 13:05:16 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
@@ -129,8 +129,9 @@ public final class AppConfig
 		{
 			new RuntimeException("AppConfig not initialized!  Please register a ConfigSupplier.");
 		}
-		
-		return props.getProperty(prefix, name);
+	
+		// necessary since we're not using the config loader directly
+		return props.getProperty(prefix.concat(".").concat(name));
 	}
 
 	/**
