@@ -34,8 +34,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// File:	PathTest.java
-// Created:	Fri Jan 23 16:26:14 GMT 2004
+// File:	PropertyProxyTest.java
+// Created:	Thu Jan 22 22:56:02 GMT 2004
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -44,60 +44,63 @@ package com.townleyenterprises.common;
 import junit.framework.TestCase;
 
 /**
- * Basic unit tests for the Path class
+ * Basic unit tests for the PropertyProxy class
  *
- * @version $Id: PathTest.java,v 1.2 2004/01/26 09:25:39 atownley Exp $
+ * @version $Id: PropertyProxyTest.java,v 1.1 2004/01/30 11:31:55 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
-public final class PathTest extends TestCase
+public final class PropertyProxyTest extends TestCase
 {
-	public PathTest(String testname)
+	private static class Proxy
+	{
+		public Integer getInteger()
+		{
+			return new Integer(7);
+		}
+
+		public boolean getBooleanValue()
+		{
+			return false;
+		}
+	}
+
+	private static final Proxy instance = new Proxy();
+
+	public PropertyProxyTest(String testname)
 	{
 		super(testname);
 	}
 
-	public void testBasenameFileName()
+	public void testGetObjectProperty()
 	{
-		assertEquals("file.txt",
-			Path.basename("/some/path/to/file.txt", "/"));
+		PropertyProxy proxy = new PropertyProxy(Proxy.class);
+		Object obj = proxy.getPropertyValue("integer", instance);
+		assertEquals(new Integer(7), obj);
 	}
 
-	public void testBasenameFileNameStripSuffix()
+	public void testGetPrimitiveProperty()
 	{
-		assertEquals("file",
-			Path.basename("/some/path/to/file.txt",
-				"/", ".txt"));
+		PropertyProxy proxy = new PropertyProxy(Proxy.class);
+		Object obj = proxy.getPropertyValue("booleanValue", instance);
+		assertEquals(Boolean.FALSE, obj);
 	}
 
-	public void testDirname()
+	public void testGetBogusProperty()
 	{
-		assertEquals("/some/path/to",
-			Path.dirname("/some/path/to/file.txt"));
-	}
-
-	public void testDirnameNoPath()
-	{
-		assertEquals(".", Path.dirname("file.txt"));
-	}
-
-	public void testBasenameNullPath()
-	{
-		assertNull(Path.basename(null, "foo"));
-	}
-
-	public void testBasenameNoPath()
-	{
-		assertEquals("one", Path.basename("one", "/"));
-	}
-
-	public void testClassname()
-	{
-		assertEquals("PathTest", Path.classname(getClass().getName()));
+		PropertyProxy proxy = new PropertyProxy(Proxy.class);
+		try
+		{
+			proxy.getPropertyValue("fred", instance);
+		}
+		catch(RuntimeException e)
+		{
+			// expected
+		}
 	}
 
 	public static void main(String[] args)
 	{
-		junit.textui.TestRunner.run(PathTest.class);
+		junit.textui.TestRunner.run(PropertyProxyTest.class);
 	}
 }

@@ -34,84 +34,70 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// File:	PersistenceConfigTest.java
-// Created:	Thu Jan 22 22:55:31 GMT 2004
+// File:	PathTest.java
+// Created:	Fri Jan 23 16:26:14 GMT 2004
 //
 //////////////////////////////////////////////////////////////////////
 
-package com.townleyenterprises.persistence;
+package com.townleyenterprises.common;
 
-import java.util.Properties;
 import junit.framework.TestCase;
 
 /**
- * Basic unit tests for the PersistenceConfig class
+ * Basic unit tests for the Path class
  *
- * @version $Id: PersistenceConfigTest.java,v 1.1 2004/01/28 23:35:01 atownley Exp $
+ * @version $Id: PathTest.java,v 1.1 2004/01/30 11:31:55 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
-public final class PersistenceConfigTest extends TestCase
+public final class PathTest extends TestCase
 {
-	public PersistenceConfigTest(String testname)
+	public PathTest(String testname)
 	{
 		super(testname);
 	}
 
-	public void setUp()
+	public void testBasenameFileName()
 	{
-		_props.clear();
-		_props.put("database.type", "postgresql");
-		_props.put("database.user", "appname");
-		_props.put("database.password", "secret");
-		_props.put("database.name", "data");
-		_props.put("postgresql.user", "postgres");
-		_props.put("postgresql.host", "testbox.myco.com");
-		_props.put("postgresql.port", "5432");
-		_props.put("postgresql.jdbc.params", "host port database");
-		_props.put("postgresql.jdbc.url", "jdbc:postgresql://{0}:{1}/{2}");
-		_props.put("postgresql.jdbc.driver", "org.postgresql.Driver");
-		_props.put("oracle.host", "production.myco.com");
-		_props.put("oracle.port", "1521");
-		_props.put("oracle.jdbc.params", "host port database");
-		_props.put("oracle.jdbc.url", "jdbc:oracle:thin:@{0}:{1}:{2}");
-		_props.put("oracle.jdbc.driver", "oracle.jdbc.OracleDriver");
+		assertEquals("file.txt",
+			Path.basename("/some/path/to/file.txt", "/"));
 	}
 
-	public void testGetUser()
+	public void testBasenameFileNameStripSuffix()
 	{
-		assertEquals("postgres", _config.getUser());
-		
-		_props.put("database.type", "oracle");
-		assertEquals("appname", _config.getUser());
+		assertEquals("file",
+			Path.basename("/some/path/to/file.txt",
+				"/", ".txt"));
 	}
 
-	public void testGetPassword()
+	public void testDirname()
 	{
-		assertEquals("secret", _config.getPassword());
+		assertEquals("/some/path/to",
+			Path.dirname("/some/path/to/file.txt"));
 	}
 
-	public void testGetHost()
+	public void testDirnameNoPath()
 	{
-		assertEquals("testbox.myco.com", _config.getHost());
+		assertEquals(".", Path.dirname("file.txt"));
 	}
 
-	public void testGetDriver()
+	public void testBasenameNullPath()
 	{
-		assertEquals("org.postgresql.Driver", _config.getDriverName());
+		assertNull(Path.basename(null, "foo"));
 	}
 
-	public void testGetConnectionURL()
+	public void testBasenameNoPath()
 	{
-		assertEquals("jdbc:postgresql://testbox.myco.com:5432/data",
-			_config.getConnectionURL());
+		assertEquals("one", Path.basename("one", "/"));
+	}
+
+	public void testClassname()
+	{
+		assertEquals("PathTest", Path.classname(getClass().getName()));
 	}
 
 	public static void main(String[] args)
 	{
-		junit.textui.TestRunner.run(PersistenceConfigTest.class);
+		junit.textui.TestRunner.run(PathTest.class);
 	}
-
-	Properties		_props = new Properties();
-	PersistenceConfig	_config = new PersistenceConfig(_props);
 }

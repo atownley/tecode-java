@@ -46,7 +46,7 @@ import junit.framework.TestCase;
 /**
  * Basic unit tests for the PropertyParser class
  *
- * @version $Id: PropertyParserTest.java,v 1.2 2004/01/26 09:25:39 atownley Exp $
+ * @version $Id: PropertyParserTest.java,v 1.1 2004/01/30 11:31:55 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 

@@ -34,73 +34,58 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// File:	PropertyProxyTest.java
-// Created:	Thu Jan 22 22:56:02 GMT 2004
+// File:	PropertyResolverTest.java
+// Created:	Fri Jan 23 16:26:14 GMT 2004
 //
 //////////////////////////////////////////////////////////////////////
 
 package com.townleyenterprises.common;
 
+import java.util.Properties;
 import junit.framework.TestCase;
 
 /**
- * Basic unit tests for the PropertyProxy class
+ * Basic unit tests for the PropertyResolver class
  *
- * @version $Id: PropertyProxyTest.java,v 1.2 2004/01/26 09:25:39 atownley Exp $
+ * @version $Id: PropertyResolverTest.java,v 1.1 2004/01/30 11:31:55 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
-public final class PropertyProxyTest extends TestCase
+public final class PropertyResolverTest extends TestCase
 {
-	private static class Proxy
-	{
-		public Integer getInteger()
-		{
-			return new Integer(7);
-		}
-
-		public boolean getBooleanValue()
-		{
-			return false;
-		}
-	}
-
-	private static final Proxy instance = new Proxy();
-
-	public PropertyProxyTest(String testname)
+	public PropertyResolverTest(String testname)
 	{
 		super(testname);
 	}
 
-	public void testGetObjectProperty()
+	public void setUp()
 	{
-		PropertyProxy proxy = new PropertyProxy(Proxy.class);
-		Object obj = proxy.getPropertyValue("integer", instance);
-		assertEquals(new Integer(7), obj);
+		_props.setProperty("one", "the first property");
+		_props.setProperty("prefix.one", "the prefixed first property");
+		_props.setProperty("xxx.one", "the xxx first property");
 	}
 
-	public void testGetPrimitiveProperty()
+	public void testBasicGet()
 	{
-		PropertyProxy proxy = new PropertyProxy(Proxy.class);
-		Object obj = proxy.getPropertyValue("booleanValue", instance);
-		assertEquals(Boolean.FALSE, obj);
+		assertEquals("the first property", _resolver.get("one"));
 	}
 
-	public void testGetBogusProperty()
+	public void testPrefixGet()
 	{
-		PropertyProxy proxy = new PropertyProxy(Proxy.class);
-		try
-		{
-			proxy.getPropertyValue("fred", instance);
-		}
-		catch(RuntimeException e)
-		{
-			// expected
-		}
+		assertEquals("the prefixed first property",
+			_resolver.get("prefix", "one"));
+	}
+
+	public void testBogusProperty()
+	{
+		assertNull(_resolver.get("bogus"));
 	}
 
 	public static void main(String[] args)
 	{
-		junit.textui.TestRunner.run(PropertyProxyTest.class);
+		junit.textui.TestRunner.run(PropertyResolverTest.class);
 	}
+
+	Properties		_props = new Properties();
+	PropertyResolver	_resolver = new PropertyResolver(_props);
 }

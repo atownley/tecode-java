@@ -34,58 +34,84 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// File:	PropertyResolverTest.java
-// Created:	Fri Jan 23 16:26:14 GMT 2004
+// File:	PersistenceConfigTest.java
+// Created:	Thu Jan 22 22:55:31 GMT 2004
 //
 //////////////////////////////////////////////////////////////////////
 
-package com.townleyenterprises.common;
+package com.townleyenterprises.persistence;
 
 import java.util.Properties;
 import junit.framework.TestCase;
 
 /**
- * Basic unit tests for the PropertyResolver class
+ * Basic unit tests for the PersistenceConfig class
  *
- * @version $Id: PropertyResolverTest.java,v 1.1 2004/01/28 19:42:14 atownley Exp $
+ * @version $Id: PersistenceConfigTest.java,v 1.1 2004/01/30 11:32:03 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  */
 
-public final class PropertyResolverTest extends TestCase
+public final class PersistenceConfigTest extends TestCase
 {
-	public PropertyResolverTest(String testname)
+	public PersistenceConfigTest(String testname)
 	{
 		super(testname);
 	}
 
 	public void setUp()
 	{
-		_props.setProperty("one", "the first property");
-		_props.setProperty("prefix.one", "the prefixed first property");
-		_props.setProperty("xxx.one", "the xxx first property");
+		_props.clear();
+		_props.put("database.type", "postgresql");
+		_props.put("database.user", "appname");
+		_props.put("database.password", "secret");
+		_props.put("database.name", "data");
+		_props.put("postgresql.user", "postgres");
+		_props.put("postgresql.host", "testbox.myco.com");
+		_props.put("postgresql.port", "5432");
+		_props.put("postgresql.jdbc.params", "host port database");
+		_props.put("postgresql.jdbc.url", "jdbc:postgresql://{0}:{1}/{2}");
+		_props.put("postgresql.jdbc.driver", "org.postgresql.Driver");
+		_props.put("oracle.host", "production.myco.com");
+		_props.put("oracle.port", "1521");
+		_props.put("oracle.jdbc.params", "host port database");
+		_props.put("oracle.jdbc.url", "jdbc:oracle:thin:@{0}:{1}:{2}");
+		_props.put("oracle.jdbc.driver", "oracle.jdbc.OracleDriver");
 	}
 
-	public void testBasicGet()
+	public void testGetUser()
 	{
-		assertEquals("the first property", _resolver.get("one"));
+		assertEquals("postgres", _config.getUser());
+		
+		_props.put("database.type", "oracle");
+		assertEquals("appname", _config.getUser());
 	}
 
-	public void testPrefixGet()
+	public void testGetPassword()
 	{
-		assertEquals("the prefixed first property",
-			_resolver.get("prefix", "one"));
+		assertEquals("secret", _config.getPassword());
 	}
 
-	public void testBogusProperty()
+	public void testGetHost()
 	{
-		assertNull(_resolver.get("bogus"));
+		assertEquals("testbox.myco.com", _config.getHost());
+	}
+
+	public void testGetDriver()
+	{
+		assertEquals("org.postgresql.Driver", _config.getDriverName());
+	}
+
+	public void testGetConnectionURL()
+	{
+		assertEquals("jdbc:postgresql://testbox.myco.com:5432/data",
+			_config.getConnectionURL());
 	}
 
 	public static void main(String[] args)
 	{
-		junit.textui.TestRunner.run(PropertyResolverTest.class);
+		junit.textui.TestRunner.run(PersistenceConfigTest.class);
 	}
 
 	Properties		_props = new Properties();
-	PropertyResolver	_resolver = new PropertyResolver(_props);
+	PersistenceConfig	_config = new PersistenceConfig(_props);
 }
