@@ -1,3 +1,15 @@
+2004-01-30 Andrew S. Twonley <atownley>
+	* Moved tests to allow separate library directory for test
+	  support vs. actual build support (and thus distribution).
+
+	* build.xml
+	  
+	  Changes to directory structure.
+	  
+	  Added missing files from source distribution bundle.
+	 
+	  Fixed version information output by Ant build.
+	  
 2004-01-29 Andrew S. Townley <atownley>
 	* Removed core library dependency on Jaxor.  Added new
 	  extension concept to allow the core classes to vary
