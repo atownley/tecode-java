@@ -45,10 +45,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+
+import com.townleyenterprises.trace.BasicTrace;
 
 /**
  * This class provides a ConfigSupplier interface for 
@@ -56,7 +59,7 @@ import java.util.TreeSet;
  * be named using <em>appname</em><code>.properties</code>
  * where the various constructors can find it.
  *
- * @version $Id: PropertiesConfigSupplier.java,v 1.1 2004/12/26 20:35:18 atownley Exp $
+ * @version $Id: PropertiesConfigSupplier.java,v 1.2 2004/12/27 23:19:43 atownley Exp $
  * @author <a href="mailto:atownley@users.sourceforge.net">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -64,43 +67,107 @@ import java.util.TreeSet;
 public final class PropertiesConfigSupplier implements ConfigSupplier
 {
 	/**
-	 * This constructor takes the name of the application.
+	 * This constructor is used to load the properties as
+	 * resources relative to the specified class.
 	 *
 	 * @param name the application name
+	 * @param klass the class name to be used
 	 * @exception IOException
-	 * 	if the properties cannot be loaded
+	 * 	if the load fails
 	 */
 
-	public PropertiesConfigSupplier(String name)
+	public PropertiesConfigSupplier(String name, Class klass)
 			throws IOException
 	{
-		this(name, null);
+		this(name, klass, null);
 	}
 
 	/**
-	 * This constructor takes the name of the application
-	 * and the path at which the properties can be
-	 * located.
+	 * This constructor is used to load the properties as
+	 * resources relative to the specified class, but from a
+	 * specific location on the classpath.
 	 *
 	 * @param name the application name
-	 * @param path the path for the properties
+	 * @param klass the class name to be used
+	 * @param path the path relative to the location of the class
 	 * @exception IOException
-	 * 	if the properties cannot be loaded
+	 * 	if the load fails
+	 */
+
+	public PropertiesConfigSupplier(String name, 
+				Class klass, String path)
+			throws IOException
+	{
+		final String[] pnames = { "name", "klass", "path" };
+		_trace.methodStart("PropertiesConfigSupplier", pnames,
+				new Object[] { name, klass, path });
+
+		try
+		{
+			_name = name;
+			_propfile = name.concat(".properties");
+			if(path != null)
+			{
+				_propfile = path.concat(_propfile);
+			}
+			_klass = klass;
+
+			load();
+
+			_trace.methodReturn();
+		}
+		catch(IOException e)
+		{
+			throw (IOException)_trace.methodThrow(e, true);
+		}
+		finally
+		{
+			_trace.methodExit();
+		}
+	}
+
+	/**
+	 * This constructor allows an absolute path name to be used to
+	 * specify the location of the properties file.  This version
+	 * of the constructor should be used only if you always wish
+	 * to look in a specific location for the file.
+	 * <p>
+	 * Unlike the other versions of the constructor, this version
+	 * makes no assumptions about the name of the properties file.
+	 * It should be fully specified using the path argument.
+	 * </p>
+	 *
+	 * @param name the application name
+	 * @param path the path on the filesystem.  If not an absolute
+	 * path, it is relative to the directory where the JVM was
+	 * started.
+	 * @exception IOException
+	 * 	if the load fails
 	 */
 
 	public PropertiesConfigSupplier(String name, String path)
 			throws IOException
 	{
-		String pname = name.concat(".properties");
-		if(path != null)
+		final String[] pnames = { "name", "path" };
+		_trace.methodStart("PropertiesConfigSupplier", pnames,
+				new Object[] { name, path });
+
+		try
 		{
-			pname = path.concat("/").concat(pname);
+			_name = name;
+			_propfile = path;
+			_klass = null;
+
+			load();
 		}
-
-		_name = name;
-		_propfile = new File(pname);
-
-		load();
+		catch(IOException e)
+		{
+			throw (IOException)_trace.methodThrow(e, true);
+		}
+		finally
+		{
+			_trace.methodExit();
+		}
 	}
 
 	/**
@@ -164,6 +231,19 @@ public final class PropertiesConfigSupplier implements ConfigSupplier
 	}
 
 	/**
+	 * This method is used to convert the contents of the instance
+	 * to a Java Properties object.  This conversion is necessary
+	 * for easy interoperation with existing Java APIs.
+	 *
+	 * @return the settings as a Properties object
+	 */
+
+	public Properties getProperties()
+	{
+		return _props;
+	}
+
+	/**
 	 * This method determines if the instance of the
 	 * supplier supports case-sensitive key lookups.
 	 *
@@ -186,8 +266,32 @@ public final class PropertiesConfigSupplier implements ConfigSupplier
 
 	public void load() throws IOException
 	{
-		_props = new Properties();
-		_props.load(new FileInputStream(_propfile));
+		_trace.methodStart("load");
+
+		try
+		{
+			_trace.tprintln(5, "propfile = '" + _propfile + "'");
+			_props = new Properties();
+
+			if(_klass != null)
+			{
+				_props.load(_klass.getResourceAsStream(_propfile));
+			}
+			else
+			{
+				_props.load(new FileInputStream(_propfile));
+			}
+
+			_trace.methodReturn();
+		}
+		catch(IOException e)
+		{
+			throw (IOException)_trace.methodThrow(e, true);
+		}
+		finally
+		{
+			_trace.methodExit();
+		}
 	}
 
 	/**
@@ -203,23 +307,43 @@ public final class PropertiesConfigSupplier implements ConfigSupplier
 	public void save() throws IOException,
 				UnsupportedOperationException
 	{
-		if(_propfile.canWrite())
+		_trace.methodStart("save");
+
+		try
 		{
-			_props.store(new FileOutputStream(_propfile),
-				"# properties for " + _name);
+			if(_klass != null)
+			{
+				throw (UnsupportedOperationException)_trace.methodThrow(new UnsupportedOperationException(), true);
+			}
+			else
+			{
+				_props.store(new FileOutputStream(_propfile),
+					"# Properties written at " + new Date());
+			}
+			_trace.methodReturn();
 		}
-		else
+		catch(IOException e)
 		{
-			throw new UnsupportedOperationException();
+			throw (IOException)_trace.methodThrow(e, true);
+		}
+		finally
+		{
+			_trace.methodExit();
 		}
 	}
 
+	/** the class used to define the locations */
+	private final Class		_klass;
+
 	/** the application name */
-	private final String 	_name;
+	private final String 		_name;
 
 	/** the property file name */
-	private final File	_propfile;
+	private String			_propfile;
 
 	/** the properties instance */
-	private Properties	_props;
+	private Properties		_props;
+
+	/** trace instance */
+	private static BasicTrace	_trace = new BasicTrace("PropertiesConfigSupplier");
 }
