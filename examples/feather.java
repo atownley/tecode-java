@@ -57,6 +57,7 @@ public class feather implements CommandListener
 	public static void main(String[] args)
 	{
 		CommandParser clp = new CommandParser("feather", "FILE...");
+		clp.setExitOnMissingArg(true, -10);
 		clp.addCommandListener(new feather());
 		clp.parse(args);
 
