@@ -58,7 +58,7 @@ import javax.swing.ImageIcon;
  * com.townleyenterprises.common.UseLastOverrideStrategy} which should
  * "do the right thing" in almost all of the cases.
  *
- * @version $Id: ResourceManager.java,v 1.2 2004/08/11 16:19:39 atownley Exp $
+ * @version $Id: ResourceManager.java,v 1.3 2004/12/04 18:59:48 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -203,6 +203,48 @@ public class ResourceManager extends OverrideManager
 		return format(key, Locale.getDefault(), args);
 	}
 
+	/**
+	 * This method is used to allow strings to be used to
+	 * obtain locales.  It probably isn't complete, but it
+	 * will handle the basics when storing locale
+	 * preferences as text strings
+	 *
+	 * @param s the locale string
+	 * @return a valid locale or null if no locale can be
+	 * 	determined
+	 */
+
+	public static Locale getLocale(String s)
+	{
+		Locale locale = null;
+
+		if(s.indexOf("_") != -1)
+		{
+			String lang = s.substring(0, 2);
+			String country = s.substring(3, 5);
+	
+			int idx = s.indexOf(".");
+			if(idx != -1)
+			{
+				locale = new Locale(lang, country,
+						s.substring(idx+1));
+			}
+			else
+			{
+				locale = new Locale(lang, country);
+			}
+		}
+		else if("C".equals(s) || "POSIX".equals(s))
+		{
+			locale = Locale.US;
+		}
+		else
+		{
+			locale = new Locale(s, "");
+		}
+
+		return locale;
+	}
 	/**
 	 * This method is used to retrieve the property keys from the
 	 * specified object.  The current assumption is that all
