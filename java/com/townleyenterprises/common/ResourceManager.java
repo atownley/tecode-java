@@ -43,12 +43,13 @@ package com.townleyenterprises.common;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javax.swing.ImageIcon;
 
 /**
@@ -58,7 +59,7 @@ import javax.swing.ImageIcon;
  * com.townleyenterprises.common.UseLastOverrideStrategy} which should
  * "do the right thing" in almost all of the cases.
  *
- * @version $Id: ResourceManager.java,v 1.3 2004/12/04 18:59:48 atownley Exp $
+ * @version $Id: ResourceManager.java,v 1.4 2004/12/26 19:44:46 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -105,7 +106,7 @@ public class ResourceManager extends OverrideManager
 
 	public ResourceManager()
 	{
-		setOverrideStrategy(new UseLastOverrideStrategy());
+		setReadResolver(new UseLastOverrideStrategy());
 	}
 
 	/**
@@ -124,7 +125,7 @@ public class ResourceManager extends OverrideManager
 
 	public String getString(String key, Locale locale)
 	{
-		OverrideNode on = getNode(key);
+		OverrideNode on = getNodeForReading(key);
 		if(on == null)
 			return null;
 
@@ -154,8 +155,11 @@ public class ResourceManager extends OverrideManager
 	public void manage(Object object)
 	{
 		super.manage(object);
-		_iconRoot.set(resolve("___icons", 
-				_iconRoot.get(), object));
+
+		// FIXME:  this is a hack because we need to track
+		// things in reverse order and we don't have the
+		// option of a reverse iterator... hmmm....
+		_iconList.add(0, object);
 	}
 
 	/**
@@ -255,7 +259,7 @@ public class ResourceManager extends OverrideManager
 	 * @return a collection of key values
 	 */
 
-	protected Collection getKeys(Object object)
+	protected Set getKeys(Object object)
 	{
 		if(object instanceof ResourceProvider)
 		{
@@ -284,6 +288,12 @@ public class ResourceManager extends OverrideManager
 		return null;
 	}
 
+	// this method currently has no meaning in this context
+	
+	protected void setValue(Object key, Object object, Object val)
+	{
+	}
+
 	/**
 	 * This method is used to walk the entire set of providers to
 	 * attempt to find the icon resource.
@@ -293,26 +303,22 @@ public class ResourceManager extends OverrideManager
 
 	private ImageIcon findIcon(String key, Locale locale)
 	{
-		OverrideNode node = _iconRoot;
-		ResourceProvider rp = (ResourceProvider)node.get();
-		if(rp == null)
-			return null;
+		ImageIcon icon = null;
 
-		ImageIcon icon = rp.getIcon(key, locale);
-		while(icon == null)
+		for(Iterator i = _iconList.iterator(); i.hasNext();)
 		{
-			// walk the list
-			node = node.getPrevious();
-			rp = (ResourceProvider)node.get();
+			ResourceProvider rp = (ResourceProvider)i.next();
 			if(rp == null)
 				return null;
 
 			icon = rp.getIcon(key, locale);
+			if(icon != null)
+				break;
 		}
 
 		return icon;
 	}
 
 	/** maintain a node to track the correct resolution order */
-	private OverrideNode	_iconRoot = new OverrideNode();
+	private List	_iconList = new ArrayList();
 }

@@ -43,13 +43,14 @@ package com.townleyenterprises.common;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.swing.ImageIcon;
 
 /**
@@ -71,7 +72,7 @@ import javax.swing.ImageIcon;
  * </ul>
  * </p>
  *
- * @version $Id: ResourceLoader.java,v 1.3 2004/08/11 16:19:01 atownley Exp $
+ * @version $Id: ResourceLoader.java,v 1.4 2004/12/26 19:44:46 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -274,17 +275,17 @@ public class ResourceLoader implements ResourceProvider
 		return new ImageIcon(url);
 	}
 
-	public Collection getKeys()
+	public Set getKeys()
 	{
 		ResourceBundle bndl = getResourceBundle();
-		ArrayList list = new ArrayList();
+		TreeSet set = new TreeSet();
 		Enumeration e = bndl.getKeys();
 		while(e.hasMoreElements())
 		{
-			list.add(e.nextElement());
+			set.add(e.nextElement());
 		}
 
-		return list;
+		return set;
 	}
 
 	/**

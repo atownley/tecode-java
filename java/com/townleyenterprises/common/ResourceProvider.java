@@ -41,8 +41,8 @@
 
 package com.townleyenterprises.common;
 
-import java.util.Collection;
 import java.util.Locale;
+import java.util.Set;
 import javax.swing.ImageIcon;
 
 /**
@@ -50,7 +50,7 @@ import javax.swing.ImageIcon;
  * various locations.  This interface is intended to be expanded with
  * a variety of other resource types.
  *
- * @version $Id: ResourceProvider.java,v 1.1 2004/07/29 18:32:04 atownley Exp $
+ * @version $Id: ResourceProvider.java,v 1.2 2004/12/26 19:44:46 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -61,7 +61,7 @@ public interface ResourceProvider
 	 * provider.
 	 */
 
-	Collection getKeys();
+	Set getKeys();
 
 	/**
 	 * This method is used to find a given resource string based
