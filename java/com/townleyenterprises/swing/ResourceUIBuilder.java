@@ -54,6 +54,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import com.townleyenterprises.common.ResourceProvider;
+import com.townleyenterprises.trace.BasicTrace;
 
 /**
  * This class provides a concrete implementation of the UIBuilder
@@ -70,7 +71,7 @@ import com.townleyenterprises.common.ResourceProvider;
  * </p>
  *
  * @since 2.1
- * @version $Id: ResourceUIBuilder.java,v 1.9 2004/08/11 16:20:16 atownley Exp $
+ * @version $Id: ResourceUIBuilder.java,v 1.10 2004/11/28 20:10:52 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -122,15 +123,13 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 				ChangeListener menuStatusListener)
 	{
 		super(actions);
+		_trace.methodStart("ResourceUIBuilder", new Object[] {
+				loader, actions, menuStatusListener });
+
 		_loader = loader;
 		_statusListener = menuStatusListener;
-
-		String p = System.getProperty("te-code.swing.resourceuibuilder.debug");
-		if(p != null && (p.toLowerCase().charAt(0) == 'y'
-				|| p.toLowerCase().charAt(0) == 't'))
-		{
-			_debug = true;
-		}
+		_trace.methodReturn();
+		_trace.methodExit();
 	}
 
 	/**
@@ -148,22 +147,28 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 
 	public JMenuBar buildMenuBar(String key)
 	{
-		JMenuBar menubar = new JMenuBar();
-		String[] keys = tokenize(_loader.getString(key));
-		
-		debug("keys.length:  " + keys.length);
+		_trace.methodStart("buildMenuBar", new Object[] { key });
 
-		for(int i = 0; i < keys.length; ++i)
+		try
 		{
-			JMenu menu = buildMenu(keys[i]);
-			if(menu != null)
-				menubar.add(menu);
+			JMenuBar menubar = new JMenuBar();
+			String[] keys = tokenize(_loader.getString(key));
+			_trace.tprintln(5, "keys.length:  " + keys.length);
+
+			for(int i = 0; i < keys.length; ++i)
+			{
+				JMenu menu = buildMenu(keys[i]);
+				if(menu != null)
+					menubar.add(menu);
+			}
+
+			_trace.tprintln(5, "menubar.menuCount:  " + menubar.getMenuCount());
+			return (JMenuBar)_trace.methodReturn(menubar);
 		}
-
-		debug("menubar:  " + menubar);
-		debug("menubar.menuCount:  " + menubar.getMenuCount());
-
-		return menubar;
+		finally
+		{
+			_trace.methodExit();
+		}
 	}
 
 	/**
@@ -174,47 +179,54 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 
 	public JMenu buildMenu(String key)
 	{
-		String skey;
-		String s;
+		_trace.methodStart("buildMenu", new Object[] { key });
 
-		debug("buildMenu:  " + key);
-		debug("keyLabel:  " + _loader.getString(key + LABEL_SUFFIX));
-
-		// read the menu (2-level label redirection)
-		skey = key + LABEL_SUFFIX;
-		s = _loader.getString(skey);
-		
-		debug("actual Label:  '" + _loader.getString(s) + "'");
-		// assuming the key is there
-		JMenu menu = new JMenu(_loader.getString(s));
-		skey = key + MNEMONIC_SUFFIX;
-		s = _loader.getString(skey);
-		if(!skey.equals(s))
+		try
 		{
-			menu.setMnemonic(s.charAt(0));
-			debug("mnemonic:  " + menu.getMnemonic());
-		}
+			String skey;
+			String s;
 
-		// now, process the menu items
-		String[] keys = tokenize(_loader.getString(key));
-		
-		debug("keys.length:  " + keys.length);
-		
-		for(int i = 0; i < keys.length; ++i)
-		{
-			if("-".equals(keys[i]))
-				menu.addSeparator();
-			else
+			_trace.tprintln(5, "keyLabel:  " + _loader.getString(key + LABEL_SUFFIX));
+
+			// read the menu (2-level label redirection)
+			skey = key + LABEL_SUFFIX;
+			s = _loader.getString(skey);
+			
+			_trace.tprintln(5, "actual Label:  '" + _loader.getString(s) + "'");
+			// assuming the key is there
+			JMenu menu = new JMenu(_loader.getString(s));
+			skey = key + MNEMONIC_SUFFIX;
+			s = _loader.getString(skey);
+			if(!skey.equals(s))
 			{
-				JMenuItem item = buildMenuItem(keys[i]);
-				menu.add(item);
+				menu.setMnemonic(s.charAt(0));
+				_trace.tprintln(5, "mnemonic:  " + menu.getMnemonic());
 			}
+
+			// now, process the menu items
+			String[] keys = tokenize(_loader.getString(key));
+			
+			_trace.tprintln(5, "keys.length:  " + keys.length);
+			
+			for(int i = 0; i < keys.length; ++i)
+			{
+				if("-".equals(keys[i]))
+					menu.addSeparator();
+				else
+				{
+					JMenuItem item = buildMenuItem(keys[i]);
+					menu.add(item);
+				}
+			}
+
+			_trace.tprintln(5, "menu.itemCount:  " + menu.getItemCount());
+
+			return (JMenu)_trace.methodReturn(menu);
 		}
-
-		debug("menu:  " + menu);
-		debug("menu.itemCount:  " + menu.getItemCount());
-
-		return menu;
+		finally
+		{
+			_trace.methodExit();
+		}
 	}
 
 	/**
@@ -235,72 +247,76 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 
 	protected JMenuItem buildMenuItemHelper(String key)
 	{
-		String skey;
-		String s;
-		String accel = "";
-		String mnem = "";
-
-		debug("buildMenuItemHelper:  " + key);
-
-		// attempt to get the base key
-		skey = key + LABEL_SUFFIX;
-		s = _loader.getString(skey);
-
-		// assuming key is there somewhere
-		JMenuItem item = new JMenuItem(_loader.getString(s));
-
-		// set up the status text handling
-		skey = key + STATUS_SUFFIX;
-		s = _loader.getString(skey);
-		if(!skey.equals(s) && _statusListener != null)
+		_trace.methodStart("buildMenuItemHelper", new Object[] { key });
+		try
 		{
-			item.putClientProperty(STATUSTEXT_PROPERTY, s);
-			item.addChangeListener(_statusListener);
-		}
+			String skey;
+			String s;
+			String accel = "";
+			String mnem = "";
 
-		// set the mnemonic
-		skey = key + MNEMONIC_SUFFIX;
-		s = _loader.getString(skey);
-		if(!skey.equals(s))
-		{
-			item.setMnemonic(s.charAt(0));
-			debug("mnemonic:  " + item.getMnemonic());
-			mnem = s;
-		}
+			// attempt to get the base key
+			skey = key + LABEL_SUFFIX;
+			s = _loader.getString(skey);
 
-		// set the shortcut
-		skey = key + ACCEL_SUFFIX;
-		s = _loader.getString(skey);
-		if(!skey.equals(s))
-		{
-			item.setAccelerator(KeyStroke.getKeyStroke(s));
-			accel = s;
-		}
+			// assuming key is there somewhere
+			JMenuItem item = new JMenuItem(_loader.getString(s));
 
-		// set the menu action if we can
-		Action action = getAction(key);
-		if(action != null)
-		{
-			//item.addActionListener(action);
-			String label = item.getText();
-			item.setAction(action);
-
-			// FIXME:  figure out why this isn't working automatically
-			item.setMnemonic(mnem.charAt(0));
-			item.setAccelerator(KeyStroke.getKeyStroke(accel));
-			if(action.getValue(Action.NAME) == null)
+			// set up the status text handling
+			skey = key + STATUS_SUFFIX;
+			s = _loader.getString(skey);
+			if(!skey.equals(s) && _statusListener != null)
 			{
-				action.putValue(Action.NAME, label);
+				item.putClientProperty(STATUSTEXT_PROPERTY, s);
+				item.addChangeListener(_statusListener);
 			}
+
+			// set the mnemonic
+			skey = key + MNEMONIC_SUFFIX;
+			s = _loader.getString(skey);
+			if(!skey.equals(s))
+			{
+				item.setMnemonic(s.charAt(0));
+				_trace.tprintln(5, "mnemonic:  " + item.getMnemonic());
+				mnem = s;
+			}
+
+			// set the shortcut
+			skey = key + ACCEL_SUFFIX;
+			s = _loader.getString(skey);
+			if(!skey.equals(s))
+			{
+				item.setAccelerator(KeyStroke.getKeyStroke(s));
+				accel = s;
+			}
+
+			// set the menu action if we can
+			Action action = getAction(key);
+			if(action != null)
+			{
+				//item.addActionListener(action);
+				String label = item.getText();
+				item.setAction(action);
+
+				// FIXME:  figure out why this isn't working automatically
+				item.setMnemonic(mnem.charAt(0));
+				item.setAccelerator(KeyStroke.getKeyStroke(accel));
+				if(action.getValue(Action.NAME) == null)
+				{
+					action.putValue(Action.NAME, label);
+				}
+			}
+			else
+			{
+				item.setEnabled(false);
+			}
+
+			return (JMenuItem)_trace.methodReturn(item);
 		}
-		else
+		finally
 		{
-			item.setEnabled(false);
+			_trace.methodExit();
 		}
-
-		debug("item:  " + item);
-
-		return item;
 	}
 
 	/**
@@ -323,19 +339,6 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 		return (String[])list.toArray(new String[list.size()]);
 	}
 
-	/**
-	 * This method is used to print debug messages.  It is sort of a
-	 * poor-man's ErrorTrace/Log4J/Logger implementation.
-	 */
-
-	private void debug(String s)
-	{
-		if(_debug)
-		{
-			System.out.println(s);
-		}
-	}
-
 	/** keep a reference to the resource loader */
 	private ResourceProvider	_loader;
 
@@ -344,4 +347,7 @@ public class ResourceUIBuilder extends AbstractUIBuilder
 
 	/** controls our debug output */
 	private boolean				_debug = false;
+
+	/** the trace instance */
+	private BasicTrace		_trace = new BasicTrace("com.townleyenterprises.swing.ResourceUIBuilder", 10);
 }
