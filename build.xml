@@ -191,7 +191,11 @@
 
 	<target name="distclean" depends="clean">
 		<delete>
-			<fileset dir="${basedir}" includesfile="${kill.file}"/>
+			<fileset dir="${basedir}" includes="**/*">
+				<present targetdir="${basedir}">
+					<mapper type="glob" from="*" to="*.in"/>
+				</present>
+			</fileset>
 		</delete>
 		<delete file="${build.date}"/>
 	</target>
