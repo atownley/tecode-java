@@ -71,7 +71,7 @@ import junit.framework.TestCase;
  * </pre>
  * </p>
  *
- * @version $Id: AppConfigTest.java,v 1.2 2004/07/28 10:34:00 atownley Exp $
+ * @version $Id: AppConfigTest.java,v 1.3 2004/08/11 13:22:31 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -113,14 +113,14 @@ public final class AppConfigTest extends TestCase
 
 	public void testSystemOverrideYes()
 	{
-		System.setProperty("te-common.appconfig.overridesystemproperties", "yes");
+		System.setProperty("te-code.common.appconfig.overridesystemproperties", "yes");
 		System.setProperty("property1", "spam");
 		assertEquals("override1", AppConfig.get("property1"));
 	}
 
 	public void testSystemOverrideTrue()
 	{
-		System.setProperty("te-common.appconfig.overridesystemproperties", "true");
+		System.setProperty("te-code.common.appconfig.overridesystemproperties", "true");
 		System.setProperty("property1", "spam");
 		assertEquals("override1", AppConfig.get("property1"));
 	}
@@ -134,7 +134,7 @@ public final class AppConfigTest extends TestCase
 
 	public void testSystemOverrideTrash()
 	{
-		System.setProperty("te-common.appconfig.overridesystemproperties", "bogus");
+		System.setProperty("te-code.common.appconfig.overridesystemproperties", "bogus");
 		System.setProperty("property1", "spam");
 		assertEquals("spam", AppConfig.get("property1"));
 	}
