@@ -45,7 +45,7 @@ package com.townleyenterprises.command;
  * This class provides an implementation of a dependency constraint
  * between options.
  *
- * @version $Id: RequiresAnyOptionConstraint.java,v 1.1 2004/07/30 16:20:22 atownley Exp $
+ * @version $Id: RequiresAnyOptionConstraint.java,v 1.2 2004/11/21 20:40:59 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -94,7 +94,7 @@ public class RequiresAnyOptionConstraint extends OptionConstraint
 			return super.getMessage();
 
 		String s = getOption().getName();
-		StringBuffer buf = new StringBuffer(Strings.format("fRequiesAnyError", new Object[] { s }));
+		StringBuffer buf = new StringBuffer(Strings.format("fRequiresAnyError", new Object[] { s }));
 
 		for(int i = 0; i < _deps.length; ++i)
 		{
