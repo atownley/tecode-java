@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2003, Andrew S. Townley
+// Copyright (c) 2003-2004, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@ import java.util.StringTokenizer;
  * 	--eggs green
  * </pre>
  *
- * @version $Id: DelimitedCommandOption.java,v 1.1 2003/06/08 13:35:51 atownley Exp $
+ * @version $Id: DelimitedCommandOption.java,v 1.2 2004/01/25 18:36:46 atownley Exp $
  * @author <a href="mailto:adz1092@netscape.net">Andrew S. Townley</a>
  * @since 2.0
  */
