@@ -1,0 +1,53 @@
+
+Release Notes for te-common 2.0-Beta2 (June 7, 2003)
+====================================================
+
+This is the initial release of the SourceForge hosted codebase.
+
+The 2.0-Beta2 release includes both binary and source versions of the
+project.  Also included with each of the distribution files should
+have been a copy of the software LICENSE.
+
+
+Using the Binary Release
+------------------------
+
+In order to use the binary distribution, simply include all of the JAR
+files in the lib directory in your environment's CLASSPATH.  This is
+the only requirement to use the code.  No other configuration should
+be necessary.
+
+
+Building the Source Release
+---------------------------
+
+Building from the source distribution requires the Jakarta Ant build
+utility.  Ant is freely available and may be downloaded from
+http://jakarta.apache.org/ant.  Once Ant is downloaded and installed,
+the project may be built by executing the following command:
+
+Unix:
+
+	$ ant
+
+Windows:
+
+	C:\te-common-2.0-Beta2> ant
+
+Once the project has been built, it may be used by following the
+instructions in the 'Using the Binary Release' section.
+
+
+Reporting Bugs
+--------------
+
+Bugs and other problems may be directed to the te-code-users mailing
+list hosted on SourceForge.
+
+
+Latest Releases
+---------------
+
+The latest version of the code is always available via SourceForge's
+anonymous CVS facilities.  Information on accessing the project source
+code can be found at http://te-code.sourceforge.net.

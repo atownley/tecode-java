@@ -1,0 +1,26 @@
+
+TODO Items for te-common
+========================
+
+* General testing and bug fixes/clean-ups for 2.0 Release
+
+* Add more support files to the distribution
+
+com.townleyenterprises.command Package
+
+* Fix the CommandParser so that it understands more of the
+  relationships between arguments.  There's still too much
+  effort spent to check for conflicting arguments.  Also
+  should be a way to figure out how to better handle
+  arguments which can be used alone or with other arguments.
+
+com.townleyenterprises.common Package
+
+* Clean up the documentation (what little there is)
+
+com.townleyenterprises.persistence Package
+
+* Figure out how to really make the SQLFilterAdapter work
+  the way it is supposed to.  At the moment, it can generate
+  SQL, but doesn't generate *useful* SQL.
+
