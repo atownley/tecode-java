@@ -48,7 +48,7 @@ import java.util.List;
  * This class provides the capability to break a line of delimited
  * text into a list of objects representing each value.
  *
- * @version $Id: DelimitedLineProcessor.java,v 1.1 2004/01/26 18:49:36 atownley Exp $
+ * @version $Id: DelimitedLineProcessor.java,v 1.2 2004/11/06 19:15:36 atownley Exp $
  * @author <a href="mailto:adz1092@nestscape.net">Andrew S. Townley</a>
  * @since 2.1
  */
@@ -78,8 +78,11 @@ public abstract class DelimitedLineProcessor extends AbstractLineProcessor
 
 	public void processLine(String line) throws Exception
 	{
+		super.processLine(line);
 		if(line == null || line.length() == 0)
+		{
 			return;
+		}
 
 		ArrayList list = new ArrayList();
 		int idx = 0;
