@@ -45,7 +45,7 @@ package com.townleyenterprises.common;
  * This class is used to track all of the localized strings used for
  * messages in this package.
  *
- * @version $Id: Strings.java,v 1.2 2004/08/04 10:37:43 atownley Exp $
+ * @version $Id: Strings.java,v 1.3 2004/08/05 11:59:59 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -54,7 +54,7 @@ final class Strings
 {
 	static String get(String key)
 	{
-		String rc = return _resources.getString(key);
+		String rc = _resources.getString(key);
 		if(rc == null)
 			rc = key;
 
