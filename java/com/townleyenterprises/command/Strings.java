@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2004, Andrew S. Townley
+// Copyright (c) 2004-2005, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -41,15 +41,16 @@
 
 package com.townleyenterprises.command;
 
-import com.townleyenterprises.common.Version;
-import com.townleyenterprises.common.ResourceManager;
 import com.townleyenterprises.common.ResourceLoader;
+import com.townleyenterprises.common.ResourceManager;
+import com.townleyenterprises.common.ResourceProvider;
+import com.townleyenterprises.common.Version;
 
 /**
  * This class is used to track all of the localized strings used for
  * messages in this package.
  *
- * @version $Id: Strings.java,v 1.2 2004/08/04 10:37:40 atownley Exp $
+ * @version $Id: Strings.java,v 1.3 2005/09/21 23:04:18 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -75,7 +76,12 @@ final class Strings
 	}
 
 	private static final ResourceManager _resources = new ResourceManager();
-	
+
+	static void addResourceProvider(ResourceProvider res)
+	{
+		_resources.manage(res);
+	}
+
 	static
 	{
 		_resources.manage(new ResourceLoader(Version.class));
