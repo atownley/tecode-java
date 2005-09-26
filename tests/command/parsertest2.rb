@@ -39,7 +39,7 @@
 ## Created:   Sun Sep 25 15:49:45 IST 2005
 ## Author:    Andrew S. Townley <adz1092@yahoo.com>
 ##
-## $Id: parsertest2.rb,v 1.1 2005/09/26 02:27:08 atownley Exp $
+## $Id: parsertest2.rb,v 1.2 2005/09/26 03:49:16 atownley Exp $
 ##
 ######################################################################
 
@@ -73,7 +73,16 @@ EOF
 
 TEST2_USAGE = <<EOF
 Usage:  test1 [-1|--one] [-2|--two] [-A|--arg ARG]
-        [-DKEY=VALUE[,KEY=VALUE...]] [-?|--help] [--usage] FILE...
+        [-DKEY=VALUE[,KEY=VALUE...]] [-C|--continue] [-B|--bomb]
+        [-G|--good] [-?|--help] [--usage] FILE...
+EOF
+
+CONTINUE_OUTPUT = <<EOF
+Hello!
+EOF
+
+CONTINUE_ERROR = <<EOF
+java.lang.Exception: BOOM!
 EOF
 
 class CommandParserTests < TestScript
@@ -120,6 +129,18 @@ class CommandParserTests < TestScript
     assert_equal(0, rc, "unknown switch same as joined")
     assert_equal(TEST2_UNKNOWN_COMBO_SWITCH2, prog.errors.join(""))
     assert_equal(TEST2_USAGE, prog.output.join(""))
+  end
+
+  def testcase_abort_on_error(prog)
+    rc = prog.run(%w( --bomb ))
+    assert_equal(4, rc, "execption during execution")
+  end
+
+  def testcase_no_abort_on_error(prog)
+    rc = prog.run(%w( --continue --bomb --good ))
+    assert_equal(0, rc, "execption ignored during execution")
+    assert_equal(CONTINUE_OUTPUT, prog.output.join(""))
+    assert_equal(CONTINUE_ERROR, prog.errors.join(""))
   end
 end
 
