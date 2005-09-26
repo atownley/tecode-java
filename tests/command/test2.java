@@ -49,10 +49,24 @@ class test2
 	private CommandOption _one = new CommandOption("one", '1', false, null, "option one description");
 	private CommandOption _two = new CommandOption("two", '2', false, null, "option two description");
 	private CommandOption _arg = new CommandOption("arg", 'A', true, "ARG", "option arg description");
-  private CommandOption _joined = new JoinedCommandOption('D', false, "KEY=VALUE[,KEY=VALUE...]", "joined description", true);
+	private CommandOption _cont = new CommandOption("continue", 'C', false, null, "disable abort on exception");
+	private CommandOption _bomb = new CommandOption("bomb", 'B', false, null, "this option throws an exception") {
+		public void execute() throws Exception
+		{
+			throw new Exception("BOOM!");
+		}
+	};
+	private CommandOption _good = new CommandOption("good", 'G', false, null, "this option says hello") {
+		public void execute()
+		{
+			System.out.println("Hello!");
+		}
+	};
+	private CommandOption _joined = new JoinedCommandOption('D', false, "KEY=VALUE[,KEY=VALUE...]", "joined description", true);
 	
 	private CommandParser _parser = null;
 	private CommandOption[] _options = { _one, _two, _arg, _joined };
+	private CommandOption[] _killer = { _cont, _bomb, _good };
 
 	public static void main(String[] args)
 	{
@@ -64,6 +78,8 @@ class test2
 		_parser = new CommandParser("test1", "FILE...");
 		_parser.addCommandListener(
 			new DefaultCommandListener("options", _options));
+		_parser.addCommandListener(
+			new DefaultCommandListener("killer options", _killer));
 
 		_parser.parse(args);
 
@@ -73,6 +89,11 @@ class test2
 			new RequiresAnyOptionConstraint(3, _arg, 
 				new CommandOption[] { _one, _two }));
 		
+		if(_cont.getMatched())
+		{
+			_parser.setAbortExecuteOnError(false);
+		}
+
 		try
 		{
 			_parser.executeCommands();
