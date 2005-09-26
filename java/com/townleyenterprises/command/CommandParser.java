@@ -49,7 +49,7 @@ import java.util.Iterator;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.19 2004/11/28 20:15:27 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.20 2005/09/26 01:37:38 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -1036,6 +1036,7 @@ public final class CommandParser implements CommandListener
 			if(oh == null)
 			{
 				System.err.println(Strings.format("fParserErrUnknownSwitch", new Object[] { ch }));
+				usage();
 				return args.length;
 			}
 
@@ -1051,6 +1052,7 @@ public final class CommandParser implements CommandListener
 				else
 				{
 					System.err.println(Strings.format("fParserErrUnknownSwitch", new Object[] { ch }));
+					usage();
 					return args.length;
 				}
 			}
@@ -1077,6 +1079,7 @@ public final class CommandParser implements CommandListener
 				else if(oh.option.getExpectsArgument())
 				{
 					System.err.println(Strings.format("fParserErrInvalidCombo", new Object[] { sw }));
+					usage();
 					return args.length;
 				}
 			}
