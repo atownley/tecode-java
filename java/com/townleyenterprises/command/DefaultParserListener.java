@@ -51,7 +51,7 @@ import com.townleyenterprises.common.ResourceProvider;
  * This class implements the ParserListener interface to
  * provide the parser behavior expected by existing programs.
  *
- * @version $Id: DefaultParserListener.java,v 1.1 2005/09/21 23:03:38 atownley Exp $
+ * @version $Id: DefaultParserListener.java,v 1.2 2005/09/26 03:51:09 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -172,6 +172,7 @@ public class DefaultParserListener implements ParserListener
 	{
 		String sw = event.getString();
 		System.err.println(Strings.format("fParserErrInvalidCombo", new Object[] { sw }));
+		event.getParser().usage();
 	}
 
 	/**
@@ -203,6 +204,7 @@ public class DefaultParserListener implements ParserListener
 
 	public void onMissingArgument(OptionEvent event)
 	{
+		CommandParser parser = event.getParser();
 		CommandOption option = event.getOption();
 		String hlp = option.getHelp();
 		if(hlp == null || hlp.length() == 0)
@@ -214,16 +216,16 @@ public class DefaultParserListener implements ParserListener
 		if(name == null || name.length() == 0)
 		{
 			StringBuffer buf = new StringBuffer();
-//			buf.append(_sswitch);
+			buf.append(parser.getShortSwitch());
 			buf.append(option.getShortName());
 			name = buf.toString();
 		}
 		else
 		{
-			name = "unknown";
-//			StringBuffer buf = new StringBuffer(_lswitch);
-//			buf.append(name);
-//			name = buf.toString();
+			StringBuffer buf = new StringBuffer(
+					parser.getLongSwitch());
+			buf.append(name);
+			name = buf.toString();
 		}
 
 		if(_exitmissing)
@@ -277,14 +279,43 @@ public class DefaultParserListener implements ParserListener
 	public void onUnknownSwitch(ParseEvent event)
 	{
 		System.err.println(Strings.format("fParserErrUnknownSwitch", new Object[] { event.getString() }));
+		event.getParser().usage();
+	}
+
+	/**
+	 * This method is to ensure we have backward
+	 * compatibility with the existing CommandParser
+	 * behavior.
+	 *
+	 * @param val toggles the behavior
+	 * @param status the exit status for System.exit()
+	 */
+
+	public void setExitOnMissingArg(boolean val, int status)
+	{
+		_exitmissing = val;
+		_exitstatus = status;
+	}
+
+	/**
+	 * This method is used to configure the command parser to stop
+	 * executing commands when an unhandled exeception is thrown
+	 * by an option.
+	 *
+	 * @param val toggles the behavior
+	 */
+
+	public void setAbortExecuteOnError(boolean val)
+	{
+		_abortExecOnError = val;
 	}
 
 	/** determine if we're supposed to abort on exec error */
 	private boolean		_abortExecOnError = true;
 
 	/** if we're supposed to exit on missing arg */
-	private boolean		_exitmissing = true;
+	private boolean		_exitmissing = false;
 
 	/** the exit status for missing args */
-	private int		_exitstatus = -1;
+	private int		_exitstatus = 0;
 }

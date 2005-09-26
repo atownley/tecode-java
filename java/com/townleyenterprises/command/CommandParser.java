@@ -46,10 +46,15 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.townleyenterprises.command.event.ConstraintEvent;
+import com.townleyenterprises.command.event.OptionEvent;
+import com.townleyenterprises.command.event.OptionExceptionEvent;
+import com.townleyenterprises.command.event.ParseEvent;
+
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.20 2005/09/26 01:37:38 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.21 2005/09/26 03:51:09 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -460,12 +465,21 @@ public final class CommandParser implements CommandListener
 	 *
 	 * @param val toggles the behavior
 	 * @param status the exit status to pass to System.exit()
+	 * @deprecated As of the 3.0 version, this method is
+	 * deprecated.  The recommended way to migrate code is
+	 * to manipulate a {@link
+	 * com.townleyenterprises.command.ParserListener} instance directly.
 	 */
 
 	public void setExitOnMissingArg(boolean val, int status)
 	{
-		_exitmissing = val;
-		_exitstatus = status;
+		if(!(_parserl instanceof DefaultParserListener))
+		{
+			throw new RuntimeException(
+				Strings.get("sDeprecatedMethod"));
+		}
+
+		((DefaultParserListener)_parserl).setExitOnMissingArg(val, status);
 	}
 
 	/**
@@ -474,12 +488,23 @@ public final class CommandParser implements CommandListener
 	 * by an option.
 	 *
 	 * @param val toggles the behavior
-	 * @since 3.0
+	 * @deprecated This behavior of this method has been
+	 * removed from the CommandParser.  If you wish to
+	 * implement it, create a custom implementation of the
+	 * {@link
+	 * com.townleyenterprises.command.ParserListener}
+	 * interface instead.
 	 */
 
 	public void setAbortExecuteOnError(boolean val)
 	{
-		_abortExecOnError = val;
+		if(!(_parserl instanceof DefaultParserListener))
+		{
+			throw new RuntimeException(
+				Strings.get("sDeprecatedMethod"));
+		}
+
+		((DefaultParserListener)_parserl).setAbortExecuteOnError(val);
 	}
 
 	/**
@@ -512,9 +537,10 @@ public final class CommandParser implements CommandListener
 
 		for(Iterator i = _commands.iterator(); i.hasNext(); )
 		{
+			CommandOption opt = null;
 			try
 			{
-				CommandOption opt = (CommandOption)i.next();
+				opt = (CommandOption)i.next();
 				if(opt.getMatched())
 				{
 					opt.execute();
@@ -522,11 +548,10 @@ public final class CommandParser implements CommandListener
 			}
 			catch(Exception e)
 			{
-				if(!_abortExecOnError)
-				{
-					System.err.println(e);
-				}
-				else
+				OptionExceptionEvent evt = new
+					OptionExceptionEvent(this, 
+						opt, e);
+				if(!_parserl.onExecuteException(evt))
 				{
 					throw e;
 				}
@@ -560,6 +585,65 @@ public final class CommandParser implements CommandListener
 	}
 
 	/**
+	 * This method is used to retrieve the short switch
+	 * currently in use.
+	 *
+	 * @since 3.0
+	 */
+
+	public char getShortSwitch()
+	{
+		return _sswitch;
+	}
+
+	/**
+	 * This method is used to retrieve the long switch
+	 * currently in use.
+	 *
+	 * @since 3.0
+	 */
+
+	public String getLongSwitch()
+	{
+		return _lswitch;
+	}
+
+	/**
+	 * This method is used to retrieve the indicator for
+	 * the end of the argument list.
+	 *
+	 * @since 3.0
+	 */
+
+	public String getEndOfArgsIndicator()
+	{
+		return _eoargs;
+	}
+
+	/**
+	 * This method returns the current parser listener.
+	 * @since 3.0
+	 */
+
+	public ParserListener getParserListener()
+	{
+		return _parserl;
+	}
+
+	/**
+	 * This method is used to set the current parser
+	 * listener.
+	 *
+	 * @param listener the new listener
+	 * @since 3.0
+	 */
+
+	public void setPaserListener(ParserListener listener)
+	{
+		_parserl = listener;
+	}
+
+	/**
 	 * This method is used to check the constraints.
 	 */
 
@@ -573,10 +657,9 @@ public final class CommandParser implements CommandListener
 			OptionConstraint oc = (OptionConstraint)i.next();
 			if(!oc.isOK())
 			{
-				System.err.println(Strings.format("fParserConstraintFailure",
-					new Object[] { oc.getMessage() }));
-				usage();
-				System.exit(oc.getExitStatus());
+				ConstraintEvent event = new
+					ConstraintEvent(this, oc);
+				_parserl.onConstraintFailure(event);
 			}
 		}
 
@@ -603,6 +686,13 @@ public final class CommandParser implements CommandListener
 		OptionHolder sobj = (OptionHolder)_shortOpts.get(c);
 		if(lobj != null || sobj != null)
 		{
+			CommandOption dup = null;
+			if(lobj != null) dup = lobj.option;
+			if(sobj != null) dup = sobj.option;
+			OptionEvent event = new OptionEvent(this, opt);
+			if(!_parserl.onAddDuplicateOption(event, dup))
+				return;
+
 			String desc = null;
 			String sopt = null;
 			if(lobj != null)
@@ -615,11 +705,6 @@ public final class CommandParser implements CommandListener
 				sopt = c.toString();
 				desc = sobj.listener.getDescription();
 			}
-			System.err.println(Strings.format("fParserWarnOverride",
-					new Object[] {
-						sopt, desc,
-						l.getDescription()
-					}));
 		}
 
 		// set up the maps
@@ -666,24 +751,8 @@ public final class CommandParser implements CommandListener
 			name = buf.toString();
 		}
 
-		if(_exitmissing)
-		{
-			System.err.println(Strings.format("fParserErrMissingParam",
-					new Object[] {
-						name, hlp,
-						Strings.get("sExiting")
-					}));
-			usage();
-			System.exit(_exitstatus);
-		}
-		else
-		{
-			System.err.println(Strings.format("fParserErrMissingParam",
-					new Object[] {
-						name, hlp,
-						Strings.get("sIgnored")
-					}));
-		}
+		OptionEvent event = new OptionEvent(this, val.option);
+		_parserl.onMissingArgument(event);
 	}
 
 	/**
@@ -968,10 +1037,8 @@ public final class CommandParser implements CommandListener
 		// if we get here should have a value
 		if(val == null)
 		{
-			System.err.println(
-				Strings.format("fParserErrUnknownOption",
-					new Object[] { s } ));
-			usage();
+			ParseEvent event = new ParseEvent(this, s);
+			_parserl.onUnknownOption(event);
 			return args.length;
 		}
 
@@ -1035,8 +1102,8 @@ public final class CommandParser implements CommandListener
 			oh = (OptionHolder)_shortOpts.get(ch);
 			if(oh == null)
 			{
-				System.err.println(Strings.format("fParserErrUnknownSwitch", new Object[] { ch }));
-				usage();
+				ParseEvent event = new ParseEvent(this, ch.toString());
+				_parserl.onUnknownSwitch(event);
 				return args.length;
 			}
 
@@ -1051,8 +1118,8 @@ public final class CommandParser implements CommandListener
 				}
 				else
 				{
-					System.err.println(Strings.format("fParserErrUnknownSwitch", new Object[] { ch }));
-					usage();
+					ParseEvent event = new ParseEvent(this, ch.toString());
+					_parserl.onUnknownSwitch(event);
 					return args.length;
 				}
 			}
@@ -1078,8 +1145,8 @@ public final class CommandParser implements CommandListener
 				}
 				else if(oh.option.getExpectsArgument())
 				{
-					System.err.println(Strings.format("fParserErrInvalidCombo", new Object[] { sw }));
-					usage();
+					ParseEvent event = new ParseEvent(this, sw);
+					_parserl.onInvalidOptionCombination(event);
 					return args.length;
 				}
 			}
@@ -1151,4 +1218,7 @@ public final class CommandParser implements CommandListener
 
 	/** track if we've checked our constraints */
 	private boolean		_checkedConstraints = false;
+
+	/** the current command event listener */
+	private ParserListener	_parserl = new DefaultParserListener();
 }
