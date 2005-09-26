@@ -1,0 +1,17 @@
+README for the Command Parser Tests
+===================================
+
+This directory contains a set of external driver tests which verify
+the behavior of the Java command parser exit conditions.  The normal,
+unit tests are written in JUnit, but they cannot deal with all of the
+exit conditions very easily.
+
+Therefore, to ensure that I'm not breaking compatibility, a full
+validation of the command parser will include execution of the
+regression tests in this directory as well.
+
+To run the tests in this directory, you need Ruby >= 1.8.2 and my
+FunctionalQA module for Ruby which is available from anonymous CVS
+under te-code/functionalqa.
+
+$Id: README,v 1.1 2005/09/26 02:27:08 atownley Exp $
