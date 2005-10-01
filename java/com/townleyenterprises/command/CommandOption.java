@@ -49,12 +49,12 @@ import java.util.Iterator;
 /**
  * This class provides support for defining command-line arguments.
  *
- * @version $Id: CommandOption.java,v 1.6 2004/07/30 16:24:14 atownley Exp $
+ * @version $Id: CommandOption.java,v 1.7 2005/10/01 20:30:45 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
 
-public class CommandOption
+public class CommandOption implements InjectParser
 {
 	/**
 	 * This method is used to break up a <code>key=val</code>
@@ -333,6 +333,32 @@ public class CommandOption
 		return s;
 	}
 
+	/**
+	 * This method implements the InjectParser interface,
+	 * allowing the option to have a reference to the
+	 * current parser (and thus do things like get any
+	 * leftover arguments after the parsing was complete).
+	 *
+	 * @param parser the command parser
+	 */
+
+	public void injectParser(CommandParser parser)
+	{
+		_parser = parser;
+	}
+
+	/**
+	 * This method allows derived classes to access the
+	 * parser instance.
+	 *
+	 * @return the parser instance
+	 */
+
+	protected CommandParser getParser()
+	{
+		return _parser;
+	}
+
 	private final boolean	_hasarg;
 	private final boolean	_show;
 	private final Character	_shortName;
@@ -343,4 +369,5 @@ public class CommandOption
 
 	private String		_arg = null;
 	private boolean		_matched = false;
+	private CommandParser	_parser = null;
 }
