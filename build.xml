@@ -54,6 +54,7 @@
 	<property name="tests.lib.dir"	value="tests/lib"/>
 	<property name="tests.data.dir"	value="tests/data"/>
 	<property name="stamp.info"	value="${basedir}/version.properties"/>
+	<available file="${app.name}-ant.jar" property="have.buildstamp"/>
 
 	<target name="bootstrap">
 		<mkdir dir="${build.dir}"/>
@@ -79,19 +80,20 @@
 		<buildstamp versioninfo="${stamp.info}">
 			<path refid="stampfiles"/>
 		</buildstamp>
-		<property name="dist.dir"	value="${app.name}-${version}"/>
+		<property name="dist.dir"	value="${app.name}-${build.version}"/>
 	</target>
 
-	<target name="cmbuild" depends="bootstrap, distclean">
+	<target name="cmbuild" depends="distclean, bootstrap">
 		<!-- increment the build counter -->
 		<buildstamp versioninfo="${stamp.info}" count="true">
 			<path refid="stampfiles"/>
 		</buildstamp>
-		<property name="dist.dir"	value="${app.name}-${version}"/>
+		<property name="dist.dir"	value="${app.name}-${build.version}"/>
 
 		<echo message="Building ${build.version.project}: ${build.version} (Build ${build.version.count}; ${build.version.date})"/>
 
 		<!-- these must be called in this order -->
+		<antcall target="jar"/>
 		<antcall target="dist"/>
 		<antcall target="bin-dist"/>
 	</target>
@@ -131,7 +133,7 @@
 		</jar>
 	</target>
 
-	<target name="distdirs" >
+	<target name="distdirs">
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.dir}/lib" />
 		<mkdir dir="${dist.dir}/examples" />
@@ -141,7 +143,7 @@
 		<copy file="BUGS" todir="${dist.dir}" />
 		<copy file="TODO" todir="${dist.dir}" />
 		<copy file="ChangeLog" todir="${dist.dir}" />
-		<copy file="${build.version}" todir="${dist.dir}" />
+		<copy file="${stamp.info}" todir="${dist.dir}" />
 		<!--copy todir="${dist.dir}/lib">
 			<fileset dir="${lib.dir}"
 				includes="**/*.jar"/>
@@ -254,8 +256,12 @@
 		</delete>
 	</target>
 
-	<target name="distclean" depends="bootstrap,clean">
+	<target name="stamp-clean" if="have.buildstamp">
+  		<taskdef name="buildstamp" classname="com.townleyenterprises.ant.BuildStampTask" classpath="te-common-ant.jar"/>
 		<buildstamp clean="true"/>
+	</target>
+
+	<target name="distclean" depends="clean, stamp-clean">
 		<delete>
 			<fileset dir="${basedir}" includes="${app.name}*.zip"/>
 			<fileset dir="${basedir}" includes="${app.name}-ant.jar"/>
