@@ -49,7 +49,7 @@ import java.util.Iterator;
 /**
  * This class provides support for defining command-line arguments.
  *
- * @version $Id: CommandOption.java,v 1.7 2005/10/01 20:30:45 atownley Exp $
+ * @version $Id: CommandOption.java,v 1.8 2005/10/02 00:03:45 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -317,7 +317,7 @@ public class CommandOption implements InjectParser
 	}
 
 	/**
-	 * This method is used to return some sort of normailzed name
+	 * This method is used to return some sort of normalized name
 	 * for the option.
 	 *
 	 * @return a name
