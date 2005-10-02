@@ -50,7 +50,7 @@ import junit.framework.TestCase;
  * with successfully parsing the options.  Manual verification of the
  * formatting of the usage and help output will still be necessary.
  *
- * @version $Id: CommandParserTest.java,v 1.4 2005/02/06 21:03:10 atownley Exp $
+ * @version $Id: CommandParserTest.java,v 1.5 2005/10/02 03:18:20 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  */
 
@@ -279,7 +279,7 @@ public final class CommandParserTest extends TestCase
 		String[] args = new String[] { "--", "-1", "value", "-t", "--onlylong", "value" };
 		altp.parse(args);
 	
-		// this tests causes the argument parsing to stop at the '--'
+		// this test causes the argument parsing to stop at the '--'
 		assertFalse(opt1.getMatched());
 		assertFalse(opt2.getMatched());
 		assertFalse(opt3.getMatched());
