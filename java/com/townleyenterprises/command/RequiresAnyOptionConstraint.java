@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2004, Andrew S. Townley
+// Copyright (c) 2004-2005, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@ package com.townleyenterprises.command;
  * This class provides an implementation of a dependency constraint
  * between options.
  *
- * @version $Id: RequiresAnyOptionConstraint.java,v 1.2 2004/11/21 20:40:59 atownley Exp $
+ * @version $Id: RequiresAnyOptionConstraint.java,v 1.3 2005/10/02 03:20:47 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -94,7 +94,7 @@ public class RequiresAnyOptionConstraint extends OptionConstraint
 			return super.getMessage();
 
 		String s = getOption().getName();
-		StringBuffer buf = new StringBuffer(Strings.format("fRequiresAnyError", new Object[] { s }));
+		StringBuffer buf = new StringBuffer(formatResourceString("fRequiresAnyError", new Object[] { s }));
 
 		for(int i = 0; i < _deps.length; ++i)
 		{
@@ -108,7 +108,7 @@ public class RequiresAnyOptionConstraint extends OptionConstraint
 			{
 				if(i == _deps.length - 1)
 				{
-					buf.append(Strings.get("sRequiresAnyOr"));
+					buf.append(getResourceString("sRequiresAnyOr"));
 				}
 				else
 				{

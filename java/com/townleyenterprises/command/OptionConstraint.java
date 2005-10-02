@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2004, Andrew S. Townley
+// Copyright (c) 2004-2005, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -41,15 +41,18 @@
 
 package com.townleyenterprises.command;
 
+import com.townleyenterprises.common.InjectResourceManager;
+import com.townleyenterprises.common.ResourceManager;
+
 /**
  * This is the base class for all option constraints.
  *
- * @version $Id: OptionConstraint.java,v 1.1 2004/07/30 16:20:22 atownley Exp $
+ * @version $Id: OptionConstraint.java,v 1.2 2005/10/02 03:20:47 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
 
-public abstract class OptionConstraint
+public abstract class OptionConstraint implements InjectResourceManager
 {
 	/**
 	 * The constructor initializes the option being constrained,
@@ -92,7 +95,30 @@ public abstract class OptionConstraint
 		return _message;
 	}
 
+	public void injectResourceManager(ResourceManager resources)
+	{
+		_resources = resources;
+	}
+
+	protected String getResourceString(String key)
+	{
+		if(_resources == null)
+			return Strings.get(key);
+
+		return _resources.getString(key);
+	}
+
+	protected String formatResourceString(String key, Object[] args)
+	{
+		if(_resources == null)
+			return Strings.format(key, args);
+
+		return _resources.format(key, args);
+	}
+
 	private final CommandOption	_option;
 	private final String		_message;
 	private final int		_status;
+
+	private ResourceManager		_resources = null;
 }

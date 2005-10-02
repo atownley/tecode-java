@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2004, Andrew S. Townley
+// Copyright (c) 2004-2005, Andrew S. Townley
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@ package com.townleyenterprises.command;
  * This class provides an implementation of a mutual exclusion
  * constraint for two options.
  *
- * @version $Id: MutexOptionConstraint.java,v 1.1 2004/07/30 16:20:22 atownley Exp $
+ * @version $Id: MutexOptionConstraint.java,v 1.2 2005/10/02 03:20:47 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -92,7 +92,7 @@ public class MutexOptionConstraint extends OptionConstraint
 		if(_custmsg)
 			return super.getMessage();
 
-		return Strings.format("fMutexError", new Object[] {
+		return formatResourceString("fMutexError", new Object[] {
 				getOption().getName(),
 				_exoption.getName() });
 	}
