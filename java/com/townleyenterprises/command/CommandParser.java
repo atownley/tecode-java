@@ -54,7 +54,7 @@ import com.townleyenterprises.command.event.ParseEvent;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.22 2005/10/01 20:30:46 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.23 2005/10/02 00:05:58 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
@@ -631,6 +631,7 @@ public final class CommandParser
 				ConstraintEvent event = new
 					ConstraintEvent(this, oc);
 				_parserl.onConstraintFailure(event);
+				return;
 			}
 		}
 
@@ -702,7 +703,7 @@ public final class CommandParser
 	 * @param val the OptionHolder
 	 */
 
-	private void handleMissingArg(OptionHolder val)
+	private boolean handleMissingArg(OptionHolder val)
 	{
 		String hlp = val.option.getHelp();
 		if(hlp == null || hlp.length() == 0)
@@ -726,7 +727,7 @@ public final class CommandParser
 		}
 
 		OptionEvent event = new OptionEvent(this, val.option);
-		_parserl.onMissingArgument(event);
+		return _parserl.onMissingArgument(event);
 	}
 
 	/**
@@ -839,7 +840,8 @@ public final class CommandParser
 				arg = s.substring(idx + 1);
 				if(arg.length() == 0)
 				{
-					handleMissingArg(val);
+					if(!handleMissingArg(val))
+						return args.length;
 				}
 			}
 			else
@@ -850,8 +852,10 @@ public final class CommandParser
 				}
 				else
 				{
-					handleMissingArg(val);
-					return ++argc;
+					if(handleMissingArg(val))
+						return ++argc;
+					else
+						return args.length;
 				}
 
 				// FIXME:  needs to be handled
@@ -859,18 +863,16 @@ public final class CommandParser
 				if(arg.startsWith(_lswitch)
 						|| arg.charAt(0) == _sswitch)
 				{
-					handleMissingArg(val);
-					return ++argc;
+					if(handleMissingArg(val))
+						return ++argc;
+					else
+						return args.length;
 				}
 			}
 		}
 
-		// give the option a chance to do what it
-		// wants
-		val.option.optionMatched(arg);
-		
-		// notify the listeners
-		val.listener.optionMatched(val.option, arg);
+		if(!matchOption(val, arg))
+			return args.length;
 
 		return argc;
 	}
@@ -897,8 +899,8 @@ public final class CommandParser
 				if(i == 0)
 				{
 					arg = sw.substring(1);
-					oh.option.optionMatched(arg);
-					oh.listener.optionMatched(oh.option, arg);
+					if(!matchOption(oh, arg))
+						return 0;
 					break;
 				}
 				else
@@ -919,13 +921,15 @@ public final class CommandParser
 					}
 					else
 					{
-						handleMissingArg(oh);
+						if(!handleMissingArg(oh))
+							return args.length;
 					}
 
 					if(arg.startsWith(_lswitch)
 							|| arg.charAt(0) == _sswitch)
 					{
-						handleMissingArg(oh);
+						if(!handleMissingArg(oh))
+							return args.length;
 					}
 				}
 				else if(oh.option.getExpectsArgument())
@@ -937,11 +941,30 @@ public final class CommandParser
 			}
 
 			// match the option
-			oh.option.optionMatched(arg);
-			oh.listener.optionMatched(oh.option, arg);
+			if(!matchOption(oh, arg))
+				return 0;
 		}		
 
 		return argc;
+	}
+
+	private boolean matchOption(OptionHolder val, String arg)
+	{
+		// give the option a chance to do what it
+		// wants
+		try
+		{
+			val.option.optionMatched(arg);
+			
+			// notify the listeners
+			val.listener.optionMatched(val.option, arg);
+		}
+		catch(Throwable t)
+		{
+			OptionExceptionEvent oee = new OptionExceptionEvent(this, val.option, t);
+			return _parserl.onMatchException(oee);
+		}
+		return true;
 	}
 
 	/** the name of our application */
