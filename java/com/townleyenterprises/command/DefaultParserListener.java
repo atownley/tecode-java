@@ -51,7 +51,7 @@ import com.townleyenterprises.common.ResourceProvider;
  * This class implements the ParserListener interface to
  * provide the parser behavior expected by existing programs.
  *
- * @version $Id: DefaultParserListener.java,v 1.2 2005/09/26 03:51:09 atownley Exp $
+ * @version $Id: DefaultParserListener.java,v 1.3 2005/10/02 00:08:24 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -185,14 +185,13 @@ public class DefaultParserListener implements ParserListener
 	 *
 	 * @param event the event containing the option and
 	 * 	the exception
+	 * @return true to continue execution; false to abort
 	 */
 
-	public void onMatchException(OptionExceptionEvent event)
+	public boolean onMatchException(OptionExceptionEvent event)
 	{
-		// compatible behavior would be to abort, but
-		// we don't really want to do this going
-		// forward
-		event.getException().printStackTrace();
+		System.err.println(event.getException().getMessage());
+		return false;
 	}
 
 	/**
@@ -200,9 +199,10 @@ public class DefaultParserListener implements ParserListener
 	 * the argument it expects.
 	 *
 	 * @param the event containint the option
+	 * @return true to continue parsing; false to abort
 	 */
 
-	public void onMissingArgument(OptionEvent event)
+	public boolean onMissingArgument(OptionEvent event)
 	{
 		CommandParser parser = event.getParser();
 		CommandOption option = event.getOption();
@@ -246,6 +246,8 @@ public class DefaultParserListener implements ParserListener
 						Strings.get("sIgnored")
 					}));
 		}
+
+		return true;
 	}
 
 	/**

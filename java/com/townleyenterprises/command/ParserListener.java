@@ -60,7 +60,7 @@ import com.townleyenterprises.command.event.ParseEvent;
  * things where exiting the JVM aren't very nice.
  * </p>
  *
- * @version $Id: ParserListener.java,v 1.1 2005/09/21 23:03:38 atownley Exp $
+ * @version $Id: ParserListener.java,v 1.2 2005/10/02 00:08:15 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -138,18 +138,20 @@ public interface ParserListener
 	 *
 	 * @param event the event containing the option and
 	 * 	the exception
+	 * @return true to continue parsing; false to abort
 	 */
 
-	void onMatchException(OptionExceptionEvent event);
+	boolean onMatchException(OptionExceptionEvent event);
 
 	/**
 	 * This method is called when an option does not get
 	 * the argument it expects.
 	 *
 	 * @param the event containint the option
+	 * @return true to continue parsing; false to abort
 	 */
 
-	void onMissingArgument(OptionEvent event);
+	boolean onMissingArgument(OptionEvent event);
 
 	/**
 	 * This method is called when something which looks
