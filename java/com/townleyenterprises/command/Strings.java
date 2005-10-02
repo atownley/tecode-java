@@ -50,7 +50,7 @@ import com.townleyenterprises.common.Version;
  * This class is used to track all of the localized strings used for
  * messages in this package.
  *
- * @version $Id: Strings.java,v 1.3 2005/09/21 23:04:18 atownley Exp $
+ * @version $Id: Strings.java,v 1.4 2005/10/02 00:09:00 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -80,6 +80,11 @@ final class Strings
 	static void addResourceProvider(ResourceProvider res)
 	{
 		_resources.manage(res);
+	}
+
+	static ResourceManager getResourceManager()
+	{
+		return _resources;
 	}
 
 	static
