@@ -54,13 +54,20 @@ import com.townleyenterprises.command.event.ParseEvent;
 /**
  * This class provides support for parsing command-line arguments.
  *
- * @version $Id: CommandParser.java,v 1.23 2005/10/02 00:05:58 atownley Exp $
+ * @version $Id: CommandParser.java,v 1.24 2005/10/02 03:19:24 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 2.0
  */
 
 public final class CommandParser
 {
+	/**
+	 * This is a special exception thrown to abort parser
+	 * processing.
+	 */
+
+	private static class AbortAction extends RuntimeException {}
+
 	/**
 	 * This class is used to make life easier by mapping 3 things
 	 * at once.  If we match an argument, we automatically have
@@ -285,7 +292,15 @@ public final class CommandParser
 			}
 
 			// take care of the normal processing
-			i = processArg(i, args);
+			try
+			{
+				i = processArg(i, args);
+			}
+			catch(AbortAction e)
+			{
+				//e.printStackTrace();
+				break;
+			}
 		}
 	}
 
@@ -571,7 +586,7 @@ public final class CommandParser
 	 * @since 3.0
 	 */
 
-	public void setPaserListener(ParserListener listener)
+	public void setParserListener(ParserListener listener)
 	{
 		_parserl = listener;
 	}
@@ -825,7 +840,7 @@ public final class CommandParser
 		{
 			ParseEvent event = new ParseEvent(this, s);
 			_parserl.onUnknownOption(event);
-			return args.length;
+			throw new AbortAction();
 		}
 
 		String arg = null;
@@ -841,7 +856,9 @@ public final class CommandParser
 				if(arg.length() == 0)
 				{
 					if(!handleMissingArg(val))
-						return args.length;
+						throw new AbortAction();
+
+					return argc;
 				}
 			}
 			else
@@ -852,10 +869,10 @@ public final class CommandParser
 				}
 				else
 				{
-					if(handleMissingArg(val))
-						return ++argc;
-					else
-						return args.length;
+					if(!handleMissingArg(val))
+						throw new AbortAction();
+					
+					return --argc;
 				}
 
 				// FIXME:  needs to be handled
@@ -863,16 +880,16 @@ public final class CommandParser
 				if(arg.startsWith(_lswitch)
 						|| arg.charAt(0) == _sswitch)
 				{
-					if(handleMissingArg(val))
-						return ++argc;
-					else
-						return args.length;
+					if(!handleMissingArg(val))
+						throw new AbortAction();
+
+					return --argc;
 				}
 			}
 		}
 
 		if(!matchOption(val, arg))
-			return args.length;
+			throw new AbortAction();
 
 		return argc;
 	}
@@ -891,7 +908,7 @@ public final class CommandParser
 			{
 				ParseEvent event = new ParseEvent(this, ch.toString());
 				_parserl.onUnknownSwitch(event);
-				return args.length;
+				throw new AbortAction();
 			}
 
 			if(oh.option instanceof JoinedCommandOption)
@@ -900,14 +917,14 @@ public final class CommandParser
 				{
 					arg = sw.substring(1);
 					if(!matchOption(oh, arg))
-						return 0;
+						throw new AbortAction();
 					break;
 				}
 				else
 				{
 					ParseEvent event = new ParseEvent(this, ch.toString());
 					_parserl.onUnknownSwitch(event);
-					return args.length;
+					throw new AbortAction();
 				}
 			}
 			else
@@ -922,27 +939,30 @@ public final class CommandParser
 					else
 					{
 						if(!handleMissingArg(oh))
-							return args.length;
+							throw new AbortAction();
+						return --argc;
 					}
 
 					if(arg.startsWith(_lswitch)
 							|| arg.charAt(0) == _sswitch)
 					{
 						if(!handleMissingArg(oh))
-							return args.length;
+							throw new AbortAction();
+
+						return --argc;
 					}
 				}
 				else if(oh.option.getExpectsArgument())
 				{
 					ParseEvent event = new ParseEvent(this, sw);
 					_parserl.onInvalidOptionCombination(event);
-					return args.length;
+					throw new AbortAction();
 				}
 			}
 
 			// match the option
 			if(!matchOption(oh, arg))
-				return 0;
+				throw new AbortAction();
 		}		
 
 		return argc;
