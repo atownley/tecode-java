@@ -74,7 +74,7 @@ package com.townleyenterprises.command;
  * Ruud van Kersbergen.
  * </p>
  *
- * @version $Id: InjectParser.java,v 1.1 2005/10/01 20:30:46 atownley Exp $
+ * @version $Id: InjectParser.java,v 1.2 2005/10/02 00:09:31 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
@@ -88,5 +88,5 @@ public interface InjectParser
 	 * between options and a parser.
 	 */
 
-	public void injectParser(CommandParser parser);
+	void injectParser(CommandParser parser);
 }
