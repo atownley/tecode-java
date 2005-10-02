@@ -46,6 +46,7 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.townleyenterprises.common.ResourceManager;
 import com.townleyenterprises.command.event.ConstraintEvent;
 import com.townleyenterprises.command.event.OptionEvent;
 import com.townleyenterprises.command.event.OptionExceptionEvent;
@@ -56,13 +57,24 @@ import com.townleyenterprises.command.event.ParseEvent;
  * from the core parser and allows other implementations to be
  * more easily developed.
  *
- * @version $Id: DefaultAutoHelpListener.java,v 1.1 2005/10/01 20:30:46 atownley Exp $
+ * @version $Id: DefaultAutoHelpListener.java,v 1.2 2005/10/02 00:07:01 atownley Exp $
  * @author <a href="mailto:adz1092@yahoo.com">Andrew S. Townley</a>
  * @since 3.0
  */
 
 public class DefaultAutoHelpListener implements AutoHelpListener
 {
+	/**
+	 * Specify the autohelp default handler options
+	 */
+
+	private static CommandOption[] ahopts = {
+		new LocalizedCommandOption("help", '?', false,
+			"sParserOption"),
+		new LocalizedCommandOption("usage", (char)0, false,
+			"sParserUsage")
+	};
+
 	public DefaultAutoHelpListener()
 	{
 		this(true);
@@ -70,19 +82,26 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 
 	public DefaultAutoHelpListener(boolean exitOnHelp)
 	{
-		_exit = exitOnHelp;
+		this(null, exitOnHelp);
 	}
 
-	/**
-	 * Specify the autohelp default handler options
-	 */
-
-	private static CommandOption[] ahopts = {
-		new CommandOption("help", '?', false, null, 
-			Strings.get("sParserOptionHelp")),
-		new CommandOption("usage", (char)0, false, null,
-			Strings.get("sParserUsageHelp"))
-	};
+	public DefaultAutoHelpListener(ResourceManager res,
+				boolean exitOnHelp)
+	{
+		_resources = res;
+		_exit = exitOnHelp;
+		if(_resources == null)
+		{
+			_delegate = new LocalizedCommandListener(
+				Strings.getResourceManager(),
+				"sParserHelpOptionsDesc", ahopts);
+		}
+		else
+		{
+			_delegate = new LocalizedCommandListener(res,
+				"sParserHelpOptionsDesc", ahopts);
+		}
+	}
 
 	public void optionMatched(CommandOption opt, String arg)
 	{
@@ -101,12 +120,12 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 
 	public CommandOption[] getOptions()
 	{
-		return ahopts;
+		return _delegate.getOptions();
 	}
 
 	public String getDescription()
 	{
-		return Strings.get("sParserHelpOptionsDesc");
+		return _delegate.getDescription();
 	}
 
 	/**
@@ -116,7 +135,7 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 
 	public void help()
 	{
-		System.out.print(Strings.format("fParserUsage",
+		System.out.print(formatResourceString("fParserUsage",
 					new Object[] { _appname }));
 		if(_arghelp != null && _arghelp.length() != 0)
 		{
@@ -152,7 +171,7 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 
 	public void usage()
 	{
-		StringBuffer buf = new StringBuffer(Strings.get("sParserUsage"));
+		StringBuffer buf = new StringBuffer(getResourceString("sParserUsage"));
 		buf.append(_appname);
 
 		CommandListener[] listeners = _parser.getCommandListeners();
@@ -205,7 +224,7 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 					}
 					else
 					{
-						buf.append(Strings.get("sParserDefaultArg"));
+						buf.append(getResourceString("sParserDefaultArg"));
 					}
 				}
 				
@@ -287,6 +306,47 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 	}
 
 	/**
+	 * This method is a hook to allow for dynamic resource
+	 * resolution at the time the help is printed.  This
+	 * is designed to facilitate printing help in more
+	 * than one language at a time.
+	 * <p>
+	 * This implementation does not provide any mapping by
+	 * default because the preferred method is to
+	 * establish the resource mappings when the objects
+	 * are created.
+	 * </p>
+	 *
+	 * @param key the resource key
+	 * @return the resolved resource string
+	 */
+
+	protected String getResourceString(String key)
+	{
+		if(_resources != null)
+			return _resources.getString(key);
+
+		return Strings.get(key);
+	}
+
+	/**
+	 * This method is used to resolve the resource strings
+	 * and format them with the object list.
+	 *
+	 * @param key the resource key
+	 * @param args the object arguments
+	 * @return the message
+	 */
+
+	protected String formatResourceString(String key, Object[] args)
+	{
+		if(_resources != null)
+			return _resources.format(key, args);
+
+		return Strings.format(key, args);
+	}
+
+	/**
 	 * This method is responsible for printing the options block
 	 * for a given command listener.
 	 *
@@ -349,7 +409,7 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 				}
 				else
 				{
-					buf.append(Strings.get("sParserDefaultArg"));
+					buf.append(getResourceString("sParserDefaultArg"));
 				}
 			}
 
@@ -368,7 +428,7 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 			if(ad != null && ad.length() > 0)
 			{
 				buf.append(" (");
-				buf.append(Strings.get("lParserDefault"));
+				buf.append(getResourceString("lParserDefault"));
 				
 				if(val instanceof String)
 					buf.append("\"");
@@ -501,4 +561,10 @@ public class DefaultAutoHelpListener implements AutoHelpListener
 
 	/** the command parser because we need the switches */
 	private CommandParser	_parser = null;
+
+	/** the resource loader to use (overriding the default) */
+	private ResourceManager	_resources = null;
+
+	/** our option listener delegate */
+	private CommandListener	_delegate = null;
 }
